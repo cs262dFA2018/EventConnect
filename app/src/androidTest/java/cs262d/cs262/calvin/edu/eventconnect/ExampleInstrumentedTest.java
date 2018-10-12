@@ -1,4 +1,4 @@
-package cs262d.cs262.calvin.edu.projectprototypestart;
+package cs262d.cs262.calvin.edu.eventconnect;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("cs262d.cs262.calvin.edu.projectprototypestart", appContext.getPackageName());
+        assertEquals("cs262d.cs262.calvin.edu.cs262d.cs262.calvin.edu.eventconnect", appContext.getPackageName());
     }
 }

@@ -1,4 +1,4 @@
-package cs262d.cs262.calvin.edu.projectprototypestart;
+package cs262d.cs262.calvin.edu.eventconnect;
 
 import org.junit.Test;
 
