@@ -77,10 +77,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
     @Override
     public void onClick(Event clicked_event, String action) {
-        Animation animation = new AlphaAnimation(1.0f,0.0f);
-        animation.setDuration(500);
-
-
         switch (action){
             case "Expand Thy Card":
                 Toast.makeText(getActivity(), " Expanding Thy Card",
@@ -88,7 +84,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 break;
             case "Move Thy Card":
                 database.movePotentialEvent(clicked_event);
-                card_container.startAnimation(animation);
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
