@@ -1,4 +1,4 @@
-package cs262d.cs262.calvin.edu.eventconnect.tools;
+package edu.calvin.cs262.cs262d.eventconnect.tools;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import cs262d.cs262.calvin.edu.eventconnect.R;
-import cs262d.cs262.calvin.edu.eventconnect.views.TabFragment;
+import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.views.TabFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 

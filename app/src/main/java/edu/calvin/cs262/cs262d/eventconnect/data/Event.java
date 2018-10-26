@@ -1,4 +1,4 @@
-package cs262d.cs262.calvin.edu.eventconnect.data;
+package edu.calvin.cs262.cs262d.eventconnect.data;
 
 public class Event {
     private int current_interest, min_threshold, max_capacity;

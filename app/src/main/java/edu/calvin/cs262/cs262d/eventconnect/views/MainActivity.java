@@ -1,6 +1,5 @@
-package cs262d.cs262.calvin.edu.eventconnect.views;
+package edu.calvin.cs262.cs262d.eventconnect.views;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,8 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import cs262d.cs262.calvin.edu.eventconnect.R;
-import cs262d.cs262.calvin.edu.eventconnect.tools.PagerAdapter;
+import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 

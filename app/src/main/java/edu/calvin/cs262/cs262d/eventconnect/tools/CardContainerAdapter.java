@@ -1,7 +1,6 @@
-package cs262d.cs262.calvin.edu.eventconnect.tools;
+package edu.calvin.cs262.cs262d.eventconnect.tools;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,11 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.time.Instant;
 import java.util.ArrayList;
 
-import cs262d.cs262.calvin.edu.eventconnect.R;
-import cs262d.cs262.calvin.edu.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 
 /**an adapter class used by MainActivity's Fragments' Recycle Views.
  * This class manages the displaying and click handling of event cards
