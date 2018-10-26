@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
@@ -75,6 +77,9 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
     @Override
     public void onClick(Event clicked_event, String action) {
+        Animation animation = new AlphaAnimation(1.0f,0.0f);
+        animation.setDuration(500);
+
 
         switch (action){
             case "Expand Thy Card":
@@ -83,6 +88,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 break;
             case "Move Thy Card":
                 database.movePotentialEvent(clicked_event);
+                card_container.startAnimation(animation);
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
