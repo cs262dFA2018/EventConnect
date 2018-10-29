@@ -7,4 +7,6 @@
     <string name="tab_label_confirmed">Confirmed Events</string>
     <string name="interested">✅Interested</string>
     <string name="not_interested">❎Interested</string>
+    <string name="Event_Confirmed"> Event is now confirmed</string>
+    <string name="Expand_Card">Expand Thy Card</string>
 </resources>

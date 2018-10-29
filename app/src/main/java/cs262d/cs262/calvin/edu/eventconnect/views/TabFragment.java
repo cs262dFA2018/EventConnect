@@ -30,6 +30,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     private CardContainerAdapter card_container_adapter;
     private ArrayList<Event> event_data;
     private MockDatabase database;
+    private Context context;
 
     public TabFragment() {
         // Required empty public constructor
@@ -41,7 +42,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         super.onCreate(savedInstanceState);
         Bundle my_args = getArguments();
         //get the necessary resources to check which tab I am.
-        Context context = new WeakReference<Context>(getActivity().getApplicationContext()).get();
+        context = new WeakReference<Context>(getActivity().getApplicationContext()).get();
         database = MockDatabase.getInstance();
         //check which tab I am based on the tab name and what PagerAdapter.java told me I am
         if (context.getString(R.string.tab_label_potential).equals(getArguments().getString("Fragment_id"))) {
@@ -77,12 +78,12 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     public void onClick(Event clicked_event, String action) {
         switch (action){
             case "Expand Thy Card":
-                Toast.makeText(getActivity(), " Expanding Thy Card",
+                Toast.makeText(getActivity(), context.getString(R.string.Expand_Card),
                         Toast.LENGTH_SHORT).show();
                 break;
             case "Move Thy Card":
                 database.movePotentialEvent(clicked_event);
-                Toast.makeText(getActivity(),"Event Is Now Confirmed",
+                Toast.makeText(getActivity(),context.getString(R.string.Event_Confirmed),
                         Toast.LENGTH_LONG).show();
                 break;
             default:
