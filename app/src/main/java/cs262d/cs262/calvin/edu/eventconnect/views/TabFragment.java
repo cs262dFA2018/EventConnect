@@ -10,8 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
@@ -84,6 +82,8 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 break;
             case "Move Thy Card":
                 database.movePotentialEvent(clicked_event);
+                Toast.makeText(getActivity(),"Event Is Now Confirmed",
+                        Toast.LENGTH_LONG).show();
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
