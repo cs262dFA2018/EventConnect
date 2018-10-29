@@ -1,4 +1,4 @@
-package cs262d.cs262.calvin.edu.eventconnect;
+package edu.calvin.cs262.cs262d.eventconnect;
 
 import org.junit.Test;
 

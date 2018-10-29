@@ -1,4 +1,4 @@
-package cs262d.cs262.calvin.edu.eventconnect.data;
+package edu.calvin.cs262.cs262d.eventconnect.data;
 
 import java.util.ArrayList;
 

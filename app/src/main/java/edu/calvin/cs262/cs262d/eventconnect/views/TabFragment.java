@@ -1,4 +1,4 @@
-package cs262d.cs262.calvin.edu.eventconnect.views;
+package edu.calvin.cs262.cs262d.eventconnect.views;
 
 
 import android.content.Context;
@@ -15,10 +15,10 @@ import android.widget.Toast;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import cs262d.cs262.calvin.edu.eventconnect.R;
-import cs262d.cs262.calvin.edu.eventconnect.data.Event;
-import cs262d.cs262.calvin.edu.eventconnect.data.MockDatabase;
-import cs262d.cs262.calvin.edu.eventconnect.tools.CardContainerAdapter;
+import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
+import edu.calvin.cs262.cs262d.eventconnect.tools.CardContainerAdapter;
 
 
 /**
