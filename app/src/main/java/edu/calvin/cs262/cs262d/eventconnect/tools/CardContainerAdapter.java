@@ -30,6 +30,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     private Context context;
     private final String ExpandCard = "Expand Thy Card";
     private final String MoveCard = "Move Thy Card";
+    private final String UnmoveCard = "Un-move Thy Card";
 
     //the class containing this adapter may need to implement an onClick at the higher level
     public interface CardContainerAdapterOnClickHandler {
@@ -94,23 +95,52 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                 /*
                  *set text to check mark
                  */
-                event_clicked.setInterest();
-                event_clicked.incrementCurrentInterest();
-                if (event_clicked.shouldMove()){
-                    /*when we have enough interest, get data form data base and reset card
-                     */
-                    click_handler.onClick(event_clicked, MoveCard);
-                    event_clicked.clearMoved();
 
-                    Animation animation = new AlphaAnimation(1.0f,0.0f);
-                    animation.setDuration(animationTime);
-                    eventCard.startAnimation(animation);
+                /* If current interest is false, mark they're interested now
+                 */
+                if (!event_clicked.getInterest()) {
+                    event_clicked.setInterest();
+                    event_clicked.incrementCurrentInterest();
+                    if (event_clicked.shouldMove()) {
+                        /*when we have enough interest, get data form data base and reset card
+                         */
+                        click_handler.onClick(event_clicked, MoveCard);
+                        event_clicked.clearMoved();
 
-                    //Wait to remove the event from UI until animation finishes
-                    Runnable eventRemover = createRunnable(event_clicked);
-                    new Handler().postDelayed(eventRemover, animationTime);
+                        Animation animation = new AlphaAnimation(1.0f, 0.0f);
+                        animation.setDuration(animationTime);
+                        eventCard.startAnimation(animation);
+
+                        //Wait to remove the event from UI until animation finishes
+                        Runnable eventRemover = createRunnable(event_clicked);
+                        new Handler().postDelayed(eventRemover, animationTime);
+                    } else {
+                        interestedButton.setText(context.getString(R.string.interested));
+                    }
                 }
-                else { interestedButton.setText(context.getString(R.string.interested)); }
+                /* If current interest is true, mark they're not interested anymore
+                 */
+                else if (event_clicked.getInterest()) {
+                    event_clicked.clearInterest();
+                    event_clicked.decrementCurrentInterest();
+                    if (event_clicked.shouldMove()) {
+                        /* If too little interest, move card back to potential event
+                         */
+                        click_handler.onClick(event_clicked, UnmoveCard);
+                        event_clicked.clearMoved();
+
+                        //TODO: add animation here
+                        Animation animation = new AlphaAnimation(1.0f, 0.0f);
+                        animation.setDuration(animationTime);
+                        eventCard.startAnimation(animation);
+
+                        //Wait to remove the event from UI until animation finishes
+                        Runnable eventRemover = createRunnable(event_clicked);
+                        new Handler().postDelayed(eventRemover, animationTime);
+                    } else {
+                        interestedButton.setText(context.getString(R.string.not_interested));
+                    }
+                }
             }
         }
         // Had to use runnable b/c removeCard reset the UI before the Animation finished
