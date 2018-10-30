@@ -88,7 +88,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 break;
             case "Un-move Thy Card":
                 database.moveCompletedEvent(clicked_event);
-                Toast.makeText(getActivity(), "Event is no longer confirmed",
+                Toast.makeText(getActivity(), context.getString(R.string.Event_Unconfirmed),
                         Toast.LENGTH_LONG).show();
                 break;
             default:
