@@ -49,7 +49,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      * a viewholder to handle clicks that happen within the recycler view;
      * receives card clicks to open up the expanded event view
      * receives the card's "interested" button click
-     * TODO: write here what happens with the click (i.e. does it get passed up to the adapter, fragment, main activity?)
+     * handles clicks by expanding a card or marking interest
      */
 
     public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -92,9 +92,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                 click_handler.onClick(event_clicked, ExpandCard);
             }
             else if (view == interestedButton){
-                /*
-                 *set text to check mark
-                 */
 
                 /* If current interest is false, mark they're interested now
                  */
@@ -129,7 +126,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                         click_handler.onClick(event_clicked, UnmoveCard);
                         event_clicked.clearMoved();
 
-                        //TODO: add animation here
                         Animation animation = new AlphaAnimation(1.0f, 0.0f);
                         animation.setDuration(animationTime);
                         eventCard.startAnimation(animation);
