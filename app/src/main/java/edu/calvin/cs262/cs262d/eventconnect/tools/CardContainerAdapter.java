@@ -1,11 +1,15 @@
 package edu.calvin.cs262.cs262d.eventconnect.tools;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -50,6 +54,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView eventTitle, eventDescription;
         private Button interestedButton;
+        private CardView eventCard;
+        private final int animationTime = 500;
         /**
          * constructor
          * gives this viewholder access to a card's internal xml elements
@@ -57,12 +63,14 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
          **/
         public CardContainerAdapterViewHolder(View view) {
             super(view);
+            eventCard = view.findViewById(R.id.card_view);
             eventTitle = (TextView) view.findViewById(R.id.event_title);
             eventDescription = (TextView) view.findViewById(R.id.event_desc);
             interestedButton = (Button) view.findViewById(R.id.interested_button);
             eventTitle.setOnClickListener(this);
             eventDescription.setOnClickListener(this);
             interestedButton.setOnClickListener(this);
+
 
         }
 
@@ -93,10 +101,28 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                      */
                     click_handler.onClick(event_clicked, MoveCard);
                     event_clicked.clearMoved();
-                    removeCard(event_clicked);
+
+                    Animation animation = new AlphaAnimation(1.0f,0.0f);
+                    animation.setDuration(animationTime);
+                    eventCard.startAnimation(animation);
+
+                    //Wait to remove the event from UI until animation finishes
+                    Runnable eventRemover = createRunnable(event_clicked);
+                    new Handler().postDelayed(eventRemover, animationTime);
                 }
                 else { interestedButton.setText(context.getString(R.string.interested)); }
             }
+        }
+        // Had to use runnable b/c removeCard reset the UI before the Animation finished
+        private Runnable createRunnable(final Event e){
+
+            Runnable removeRunnable = new Runnable(){
+                public void run(){
+                    removeCard(e);
+                }
+            };
+            return removeRunnable;
+
         }
     }
 
@@ -146,11 +172,11 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         notifyDataSetChanged(); //a method inside of Recycler View.
     }
 
-    public void addCard(Event event){
+    private void addCard(Event event){
         cards.add(event);
         notifyDataSetChanged();
     }
-    public void removeCard(Event event){
+    private void removeCard(Event event){
         cards.remove(event);
         notifyDataSetChanged();
     }
