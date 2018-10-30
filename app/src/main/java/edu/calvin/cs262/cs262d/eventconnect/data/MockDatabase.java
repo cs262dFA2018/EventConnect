@@ -58,4 +58,8 @@ public class MockDatabase {
         return this.confirmedEventData;
     }
 
+    public void addEvent(Event event){
+        potentialEventData.add(event);
+    }
+
 }

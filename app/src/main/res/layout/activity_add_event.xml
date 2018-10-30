@@ -1,145 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.calvin.cs262.cs262d.eventconnect.views.AddEvent">
 
-    <ScrollView
-        android:layout_width="368dp"
-        android:layout_height="551dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/host_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/host_label" />
 
-            <TextView
-                android:id="@+id/host_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/host_label" />
+        <EditText
+            android:id="@+id/host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/host_hint"
+            android:inputType="textCapWords|textPersonName" />
 
-            <EditText
-                android:id="@+id/host"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/host_hint"
-                android:inputType="textCapWords|textPersonName" />
+        <TextView
+            android:id="@+id/title_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_label" />
 
-            <TextView
-                android:id="@+id/title_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/title_label" />
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/title_hint"
+            android:inputType="textCapWords" />
 
-            <EditText
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/title_hint"
-                android:inputType="textCapWords" />
+        <TextView
+            android:id="@+id/description_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/description_label" />
 
-            <TextView
-                android:id="@+id/description_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/description_label" />
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/description_hint"
+            android:inputType="textMultiLine" />
 
-            <EditText
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/description_hint"
-                android:inputType="textMultiLine" />
+        <TextView
+            android:id="@+id/date_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/date_label" />
 
-            <TextView
-                android:id="@+id/date_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/date_label" />
+        <EditText
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/date_hint"
+            android:inputType="date" />
 
-            <EditText
-                android:id="@+id/date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/date_hint"
-                android:inputType="date" />
+        <TextView
+            android:id="@+id/location_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/location_label" />
 
-            <TextView
-                android:id="@+id/location_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/location_label" />
+        <EditText
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/location_hint"
+            android:inputType="textPostalAddress" />
 
-            <EditText
-                android:id="@+id/location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/location_hint"
-                android:inputType="textPostalAddress" />
+        <TextView
+            android:id="@+id/cost_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cost_label" />
 
-            <TextView
-                android:id="@+id/cost_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cost_label" />
+        <EditText
+            android:id="@+id/cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/cost_hint"
+            android:inputType="numberDecimal" />
 
-            <EditText
-                android:id="@+id/cost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/cost_hint"
-                android:inputType="numberDecimal" />
+        <TextView
+            android:id="@+id/threshold_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/threshold_label" />
 
-            <TextView
-                android:id="@+id/threshold_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/threshold_label" />
+        <EditText
+            android:id="@+id/threshold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/threshold_hint"
+            android:inputType="number" />
 
-            <EditText
-                android:id="@+id/threshold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/threshold_hint"
-                android:inputType="number" />
+        <TextView
+            android:id="@+id/capacity_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/capacity_label" />
 
-            <TextView
-                android:id="@+id/capacity_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/capacity_label" />
+        <EditText
+            android:id="@+id/capacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/capacity_hint"
+            android:inputType="number" />
 
-            <EditText
-                android:id="@+id/capacity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/capacity_hint"
-                android:inputType="number" />
+        <TextView
+            android:id="@+id/category_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/category_label" />
 
-            <TextView
-                android:id="@+id/category_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/category_label" />
+        <Spinner
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-            <Spinner
-                android:id="@+id/category"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </ScrollView>
+        <Button
+            android:id="@+id/create_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_event"
+            android:onClick="onCreateEventClicked"/>
+    </LinearLayout>
+</ScrollView>
 
-</android.support.constraint.ConstraintLayout>
