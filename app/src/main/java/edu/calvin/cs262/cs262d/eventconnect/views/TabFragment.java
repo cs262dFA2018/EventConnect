@@ -90,6 +90,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 database.moveCompletedEvent(clicked_event);
                 Toast.makeText(getActivity(), "Event is no longer confirmed",
                         Toast.LENGTH_LONG).show();
+                break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
 

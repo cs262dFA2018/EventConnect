@@ -130,6 +130,13 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                         event_clicked.clearMoved();
 
                         //TODO: add animation here
+                        Animation animation = new AlphaAnimation(1.0f, 0.0f);
+                        animation.setDuration(animationTime);
+                        eventCard.startAnimation(animation);
+
+                        //Wait to remove the event from UI until animation finishes
+                        Runnable eventRemover = createRunnable(event_clicked);
+                        new Handler().postDelayed(eventRemover, animationTime);
                     } else {
                         interestedButton.setText(context.getString(R.string.not_interested));
                     }
