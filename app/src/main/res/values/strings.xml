@@ -10,4 +10,22 @@
     <string name="Event_Confirmed"> Event is now confirmed</string>
     <string name="Event_Unconfirmed">Event is no longer confirmed</string>
     <string name="Expand_Card">Expand Thy Card</string>
+    <string name="host_label">Your name</string>
+    <string name="host_hint">Your name to appear to others</string>
+    <string name="title_label">Title</string>
+    <string name="title_hint">Title of your event</string>
+    <string name="description_label">Description</string>
+    <string name="description_hint">Description of your event</string>
+    <string name="date_label">Date</string>
+    <string name="date_hint">Date of your event</string>
+    <string name="location_label">Location</string>
+    <string name="location_hint">Location of your event</string>
+    <string name="cost_label">Cost</string>
+    <string name="cost_hint">$1.00</string>
+    <string name="threshold_label">Threshold</string>
+    <string name="threshold_hint">How many people need to be interested for your event to happen?</string>
+    <string name="capacity_label">Capacity</string>
+    <string name="capacity_hint">What is the most amount of people that could attend?</string>
+    <string name="category_label">Category</string>
+    <string name="create_event">Create Event</string>
 </resources>

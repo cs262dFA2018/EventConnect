@@ -1,11 +1,13 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
@@ -87,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
                 //do nothing because re-selecting a tab is the same as selecting a tab, here.
             }
         });
+    }
+
+    public void addEventClicked(View view) {
+        Intent addEvent = new Intent(MainActivity.this, AddEvent.class);
+        MainActivity.this.startActivity(addEvent);
     }
 
 
