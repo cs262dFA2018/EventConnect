@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EventConnect.iml" filepath="$PROJECT_DIR$/EventConnect.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/EventConnect-app.iml" filepath="$PROJECT_DIR$/app/EventConnect-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/git-EventConnect.iml" filepath="$PROJECT_DIR$/git-EventConnect.iml" />
     </modules>
   </component>
 </project>
