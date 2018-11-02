@@ -28,4 +28,5 @@
     <string name="capacity_hint">What is the most amount of people that could attend?</string>
     <string name="category_label">Category</string>
     <string name="create_event">Create Event</string>
+    <string name="failed_transaction_manager">Sorry, but fragment manager could not be found. Aborting expanded card view.</string>
 </resources>

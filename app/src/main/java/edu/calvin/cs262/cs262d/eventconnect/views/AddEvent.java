@@ -13,16 +13,20 @@ import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
 
 public class AddEvent extends AppCompatActivity {
-    private EditText eventTitle;
-    private EditText eventDescription;
+    private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+        //access the UI Edit Texts
         eventTitle = (EditText) findViewById(R.id.title);
         eventDescription = (EditText) findViewById(R.id.description);
+        eventHost = (EditText) findViewById(R.id.host);
+        eventDate = (EditText) findViewById(R.id.date);
+        eventLocation = (EditText) findViewById(R.id.location);
+        eventCost = (EditText) findViewById(R.id.cost);
 
         //setup toolbar bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -48,11 +52,24 @@ public class AddEvent extends AppCompatActivity {
     }
 
     public void onCreateEventClicked(View view) {
+        //access the data from the UI elements
         String title = eventTitle.getText().toString();
         String desc = eventDescription.getText().toString();
+        String host = eventHost.getText().toString();
+        String loc = eventLocation.getText().toString();
+        String date = eventDate.getText().toString();
+        double cost = Double.parseDouble(eventCost.getText().toString());
+
+        //store the data from the UI elements
         Event event = new Event();
         event.setTitle(title);
         event.setDescription(desc);
+        event.setHost(host);
+        event.setLocation(loc);
+        event.setDate(date);
+        event.setCost(cost);
+
+        //access and update the database.
         MockDatabase database = MockDatabase.getInstance();
         database.addEvent(event);
         finish();
