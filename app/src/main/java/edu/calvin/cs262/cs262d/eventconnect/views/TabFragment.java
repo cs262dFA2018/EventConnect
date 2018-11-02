@@ -4,7 +4,10 @@ package edu.calvin.cs262.cs262d.eventconnect.views;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -72,14 +75,19 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         return frag_layout;
     }
 
-    /** Overriding click handling for the card_container_adapter **/
 
+    //the class implementing this is responsible for summoning dialogFragments.
+    //IMPORTANT: MAIN ACTIVITY SHOULD BE THE ONLY ACTIVITY TO EVER CALL THIS.
+    public interface CardExpansionHandler {
+        void showExpandedCard(Event event);
+    }
+
+    /** Overriding click handling for the card_container_adapter **/
     @Override
     public void onClick(Event clicked_event, String action) {
         switch (action){
             case "Expand Thy Card":
-                Toast.makeText(getActivity(), context.getString(R.string.Expand_Card),
-                        Toast.LENGTH_SHORT).show();
+                showExpandedCard(clicked_event);
                 break;
             case "Move Thy Card":
                 database.movePotentialEvent(clicked_event);
@@ -96,5 +104,34 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
         }
 
+    }
+
+    /**implemented for TabFragment, this method summons an expanded card view
+     * @param event, the event clicked on by the user
+     * Postcondition: an ExpandedCard is summoned and displayed for the user
+     */
+    public void showExpandedCard(Event event) {
+        //the following code is based on https://developer.android.com/reference/android/app/DialogFragment
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        try {
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            Fragment prev = fm.findFragmentByTag("dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
+
+            // Create and show the expanded card.
+            ExpandedCard newExpansion = ExpandedCard.newInstance(event);
+            newExpansion.show(ft, "dialog");
+        } catch (java.lang.NullPointerException ne) {
+            //log the problem to the console and notify the user that a problem happened.
+            ne.printStackTrace();
+            Toast.makeText(getActivity(), context.getString(R.string.failed_transaction_manager),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -91,12 +91,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**starts up the AddEvent activity**/
     public void addEventClicked(View view) {
         Intent addEvent = new Intent(MainActivity.this, AddEvent.class);
         MainActivity.this.startActivity(addEvent);
     }
-
-
-
-
 }

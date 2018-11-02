@@ -71,6 +71,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
             eventTitle.setOnClickListener(this);
             eventDescription.setOnClickListener(this);
             interestedButton.setOnClickListener(this);
+            interestedButton.setEnabled(true);
 
 
         }
@@ -101,6 +102,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                     if (event_clicked.shouldMove()) {
                         /*when we have enough interest, get data form data base and reset card
                          */
+                        interestedButton.setEnabled(false);
                         click_handler.onClick(event_clicked, MoveCard);
                         event_clicked.clearMoved();
 
@@ -123,6 +125,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                     if (event_clicked.shouldMove()) {
                         /* If too little interest, move card back to potential event
                          */
+                        interestedButton.setEnabled(false);
                         click_handler.onClick(event_clicked, UnmoveCard);
                         event_clicked.clearMoved();
 
@@ -180,6 +183,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         Event current_card = cards.get(position);
         card_holder.eventTitle.setText(current_card.getTitle());
         card_holder.eventDescription.setText(current_card.getDescription());
+        card_holder.interestedButton.setEnabled(true);
         if(current_card.getInterest()){
             card_holder.interestedButton.setText(context.getString(R.string.interested));
         }
