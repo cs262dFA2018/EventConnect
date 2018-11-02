@@ -1,145 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.calvin.cs262.cs262d.eventconnect.views.AddEvent">
+    android:orientation="vertical"
+    tools:context="edu.calvin.cs262.cs262d.eventconnect.views.AddEvent"
 
-    <LinearLayout
+    >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-        <TextView
-            android:id="@+id/host_label"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/host_label" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/host"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/host_hint"
-            android:inputType="textCapWords|textPersonName" />
+            <TextView
+                android:id="@+id/host_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/host_label" />
 
-        <TextView
-            android:id="@+id/title_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title_label" />
+            <EditText
+                android:id="@+id/host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/host_hint"
+                android:inputType="textCapWords|textPersonName" />
 
-        <EditText
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/title_hint"
-            android:inputType="textCapWords" />
+            <TextView
+                android:id="@+id/title_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_label" />
 
-        <TextView
-            android:id="@+id/description_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/description_label" />
+            <EditText
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/title_hint"
+                android:inputType="textCapWords" />
 
-        <EditText
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/description_hint"
-            android:inputType="textMultiLine" />
+            <TextView
+                android:id="@+id/description_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/description_label" />
 
-        <TextView
-            android:id="@+id/date_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/date_label" />
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/description_hint"
+                android:inputType="textMultiLine" />
 
-        <EditText
-            android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/date_hint"
-            android:inputType="date" />
+            <TextView
+                android:id="@+id/date_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date_label" />
 
-        <TextView
-            android:id="@+id/location_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/location_label" />
+            <EditText
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/date_hint"
+                android:inputType="date" />
 
-        <EditText
-            android:id="@+id/location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/location_hint"
-            android:inputType="textPostalAddress" />
+            <TextView
+                android:id="@+id/location_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/location_label" />
 
-        <TextView
-            android:id="@+id/cost_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cost_label" />
+            <EditText
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/location_hint"
+                android:inputType="textPostalAddress" />
 
-        <EditText
-            android:id="@+id/cost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/cost_hint"
-            android:inputType="numberDecimal" />
+            <TextView
+                android:id="@+id/cost_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cost_label" />
 
-        <TextView
-            android:id="@+id/threshold_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/threshold_label" />
+            <EditText
+                android:id="@+id/cost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/cost_hint"
+                android:inputType="numberDecimal" />
 
-        <EditText
-            android:id="@+id/threshold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/threshold_hint"
-            android:inputType="number" />
+            <TextView
+                android:id="@+id/threshold_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/threshold_label" />
 
-        <TextView
-            android:id="@+id/capacity_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/capacity_label" />
+            <EditText
+                android:id="@+id/threshold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/threshold_hint"
+                android:inputType="number" />
 
-        <EditText
-            android:id="@+id/capacity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/capacity_hint"
-            android:inputType="number" />
+            <TextView
+                android:id="@+id/capacity_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/capacity_label" />
 
-        <TextView
-            android:id="@+id/category_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/category_label" />
+            <EditText
+                android:id="@+id/capacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/capacity_hint"
+                android:inputType="number" />
 
-        <Spinner
-            android:id="@+id/category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/category_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/category_label" />
 
-        <Button
-            android:id="@+id/create_event"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/create_event"
-            android:onClick="onCreateEventClicked"/>
-    </LinearLayout>
-</ScrollView>
+            <Spinner
+                android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/create_event"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/create_event"
+                android:onClick="onCreateEventClicked"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
 
