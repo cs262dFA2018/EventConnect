@@ -2,10 +2,8 @@ package edu.calvin.cs262.cs262d.eventconnect.data;
 
 public class Event {
     private int current_interest, min_threshold, max_capacity;
-    private String title, description;
-    private boolean confirmed;
-    private boolean needs_to_move;
-    private boolean interest;
+    private String title, description, location;
+    private boolean confirmed, needs_to_move, interest;
 
     public Event() {
         current_interest = 0;
