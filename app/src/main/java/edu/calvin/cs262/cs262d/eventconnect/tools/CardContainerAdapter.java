@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -145,12 +143,12 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         // Had to use runnable b/c removeCard reset the UI before the Animation finished
         private Runnable createRunnable(final Event e){
 
-            Runnable removeRunnable = new Runnable(){
+            //this runnable simply calls removeCard.
+            return new Runnable(){
                 public void run(){
                     removeCard(e);
                 }
             };
-            return removeRunnable;
 
         }
     }
