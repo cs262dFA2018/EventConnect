@@ -58,7 +58,9 @@ public class AddEvent extends AppCompatActivity {
         String host = eventHost.getText().toString();
         String loc = eventLocation.getText().toString();
         String date = eventDate.getText().toString();
-        double cost = Double.parseDouble(eventCost.getText().toString());
+        double cost;
+        try {cost = Double.parseDouble(eventCost.getText().toString());}
+        catch (java.lang.NumberFormatException e) {cost = 0;}
 
         //store the data from the UI elements
         Event event = new Event();
