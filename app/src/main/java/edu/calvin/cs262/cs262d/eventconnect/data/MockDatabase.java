@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class MockDatabase {
     private ArrayList<Event> potentialEventData, confirmedEventData;
     private static MockDatabase uniqueInstance = null;
-    private static final String Birthday = "We welcome everyone to Joe's birthday party." +
-            "Please join us as Joe turns 7 today. There will be cake, pinata, and a bounce house." +
+    private static final String Birthday = "We welcome everyone to Joe's birthday party. " +
+            "Please join us as Joe turns 7 today. There will be cake, pinata, and a bounce house. " +
             "Presents are welcomed, but not required.";
 
     private static final String funeral = "Please join us in the celebration of Joe's life. Joseph David " +
             "Anderson lost his life last week, oct 24th 2018 after loosing a short battle with a bouncy castle at his party. " +
-            "He was loved by his" + "friends, family, and pets. He will be missed, but lets not focus" +
+            "He was loved by his " + "friends, family, and pets. He will be missed, but let's not focus " +
             "on the negatives but on the positives of his life";
 
     private static final String GroceryOuting = "Does anyone want to get some groceries at Aldi's? I'm lonely and I need some new friends, " +
