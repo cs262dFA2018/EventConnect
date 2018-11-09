@@ -13,7 +13,7 @@ import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
 
 public class AddEvent extends AppCompatActivity {
-    private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost;
+    private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity;
 
 
     @Override
@@ -27,6 +27,8 @@ public class AddEvent extends AppCompatActivity {
         eventDate = (EditText) findViewById(R.id.date);
         eventLocation = (EditText) findViewById(R.id.location);
         eventCost = (EditText) findViewById(R.id.cost);
+        eventThreshold = (EditText) findViewById(R.id.threshold);
+        eventCapacity = (EditText) findViewById(R.id.capacity);
 
         //setup toolbar bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,6 +55,7 @@ public class AddEvent extends AppCompatActivity {
 
     public void onCreateEventClicked(View view) {
         //access the data from the UI elements
+        //TODO: Enforce a title and description??
         String title = eventTitle.getText().toString();
         String desc = eventDescription.getText().toString();
         String host = eventHost.getText().toString();
@@ -61,6 +64,13 @@ public class AddEvent extends AppCompatActivity {
         double cost;
         try {cost = Double.parseDouble(eventCost.getText().toString());}
         catch (java.lang.NumberFormatException e) {cost = 0;}
+        int threshold;
+        int capacity;
+        //TODO: prevent user from putting illegal threshold and capacity in.
+        try {threshold = (int) Math.floor(Double.parseDouble(eventCost.getText().toString()));}
+        catch (java.lang.NumberFormatException e) {threshold = 1;}
+        try {capacity = (int) Math.floor(Double.parseDouble(eventCapacity.getText().toString()));}
+        catch (java.lang.NumberFormatException e) {capacity = -1;}
 
         //store the data from the UI elements
         Event event = new Event();
@@ -70,8 +80,11 @@ public class AddEvent extends AppCompatActivity {
         event.setLocation(loc);
         event.setDate(date);
         event.setCost(cost);
+        event.setMinThreshold(threshold);
+        event.setMaxCapacity(capacity);
 
         //access and update the database.
+        //TODO: Make sure data is valid. Else, send a toast about the required fields
         MockDatabase database = MockDatabase.getInstance();
         database.addEvent(event);
         finish();

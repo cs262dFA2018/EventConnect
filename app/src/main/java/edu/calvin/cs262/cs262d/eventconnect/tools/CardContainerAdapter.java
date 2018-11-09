@@ -64,16 +64,15 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
          **/
         public CardContainerAdapterViewHolder(View view) {
             super(view);
-            eventCard = view.findViewById(R.id.card_view);
+            eventCard = (CardView) view.findViewById(R.id.card_view);
             eventTitle = (TextView) view.findViewById(R.id.event_title);
             eventDescription = (TextView) view.findViewById(R.id.event_desc);
             interestedButton = (Button) view.findViewById(R.id.interested_button);
+            eventCard.setOnClickListener(this);
             eventTitle.setOnClickListener(this);
             eventDescription.setOnClickListener(this);
             interestedButton.setOnClickListener(this);
             interestedButton.setEnabled(true);
-
-
         }
 
         /**
@@ -86,13 +85,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         @Override
         public void onClick(View view) {
             Event event_clicked = cards.get(getAdapterPosition());
-            if (view == eventTitle || view == eventDescription){
-                /* show toast
-                 * for next deliverable, show full event view
-                 */
-                click_handler.onClick(event_clicked, ExpandCard);
-            }
-            else if (view == interestedButton){
+            if (view == interestedButton){
 
                 /* If current interest is false, mark they're interested now
                  */
@@ -140,17 +133,22 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                         interestedButton.setText(context.getString(R.string.not_interested));
                     }
                 }
+            } else if (view == eventTitle || view == eventDescription || view == eventCard){
+                /* show toast
+                 * also display the expanded event view
+                 */
+                click_handler.onClick(event_clicked, ExpandCard);
             }
         }
         // Had to use runnable b/c removeCard reset the UI before the Animation finished
         private Runnable createRunnable(final Event e){
 
-            Runnable removeRunnable = new Runnable(){
+            //this runnable simply calls removeCard.
+            return new Runnable(){
                 public void run(){
                     removeCard(e);
                 }
             };
-            return removeRunnable;
 
         }
     }

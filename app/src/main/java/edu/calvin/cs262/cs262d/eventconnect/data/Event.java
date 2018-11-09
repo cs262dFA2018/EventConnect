@@ -92,7 +92,8 @@ public class Event {
     public int getMinThreshold() {return min_threshold;}
 
     public void setMinThreshold(int new_threshold) {
-        if (new_threshold > 0 && new_threshold <= max_capacity) {
+        //new threshold must be positive and within the max capacity (unless max capacity is -1, in which case it can be anything positive.
+        if (new_threshold > 0 && (new_threshold <= max_capacity || max_capacity == -1)) {
             min_threshold = new_threshold;
         } else {
             throw new RuntimeException("ERROR: attempt to set min threshold to an illegal state.");
