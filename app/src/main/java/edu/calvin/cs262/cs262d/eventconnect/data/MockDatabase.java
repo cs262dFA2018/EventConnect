@@ -25,6 +25,8 @@ public class MockDatabase {
         event.setDate("11/8/2018");
         event.setCost(0.00);
         event.setLocation("Playworld");
+        event.setMinThreshold(10);
+        event.setMaxCapacity(50);
         event.setDescription(Birthday );
         potentialEventData.add(event);
 
