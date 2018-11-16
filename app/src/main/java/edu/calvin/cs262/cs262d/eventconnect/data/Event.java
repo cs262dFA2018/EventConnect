@@ -2,17 +2,20 @@ package edu.calvin.cs262.cs262d.eventconnect.data;
 
 public class Event {
     private int current_interest, min_threshold, max_capacity;
-    private String title, description;
-    private boolean confirmed;
-    private boolean needs_to_move;
-    private boolean interest;
+    private String title, description, host, location, date;
+    private boolean confirmed, needs_to_move, interest;
+    private double cost;
 
     public Event() {
+        cost = 0;
         current_interest = 0;
         min_threshold = 1;
         max_capacity = -1;
         title = "";
         description = "";
+        host = "";
+        location = "";
+        date = "";
         confirmed = false;
         needs_to_move = false;
         interest = false;
@@ -22,6 +25,19 @@ public class Event {
     public void setTitle(String new_title) {title = new_title;}
     public String getDescription() {return description;}
     public void setDescription(String new_description) {description = new_description;}
+    public String getHost() {return host;}
+    public void setHost(String new_host) {host = new_host;}
+    public String getLocation() {return location;}
+    public void setLocation(String new_location) {location = new_location;}
+    public double getCost() {return cost;}
+    public void setCost(double new_cost) {
+        if (new_cost < 0) { throw new RuntimeException("ERROR: cost was negative.");
+        } else { cost = new_cost; }
+    }
+    public String getDate() {return date;}
+    public void setDate(String new_date) {date = new_date;}
+
+
     public int getCurrentInterest() {return current_interest;}
     public boolean shouldMove() {return needs_to_move;}
 
@@ -76,7 +92,9 @@ public class Event {
     public int getMinThreshold() {return min_threshold;}
 
     public void setMinThreshold(int new_threshold) {
-        if (new_threshold > 0 && new_threshold <= max_capacity) {
+
+        //new threshold must be positive and within the max capacity (unless max capacity is -1, in which case it can be anything positive.
+        if (new_threshold > 0 && (new_threshold <= max_capacity || max_capacity == -1)) {
             min_threshold = new_threshold;
         } else {
             throw new RuntimeException("ERROR: attempt to set min threshold to an illegal state.");
