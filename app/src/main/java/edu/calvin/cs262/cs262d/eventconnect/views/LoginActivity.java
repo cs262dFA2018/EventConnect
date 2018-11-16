@@ -213,7 +213,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //makes sure email ends with .com or .edu
-        return email.endsWith(".com") || email.endsWith(".edu");
+        return email.contains("@") && email.endsWith(".com") || email.endsWith(".edu");
     }
 
     private boolean isPasswordValid(String password) {
