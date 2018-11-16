@@ -118,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
              * Because LoginActivity launches as singleTask (see manifest), this will not create multiple
              * copies of startActivity. Although better practice suggests using finish(), here finish() usually
              * exited the application instead of navigating to the parent LoginActivity.
-             * //todo: this feature needs to be tested with DoNotKeepBackgroundActivities and NoBackgroundTasks in developer options.
-             * -Littlesnowman88
              */
             startActivity(mainToLogin);
         }
