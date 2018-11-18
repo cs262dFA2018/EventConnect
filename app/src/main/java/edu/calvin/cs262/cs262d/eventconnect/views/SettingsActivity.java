@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -143,6 +142,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         AppThemeChanger.handleThemeChange(this, currentTheme);
         currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
+
         super.onCreate(savedInstanceState);
         setupActionBar();
     }

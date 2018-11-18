@@ -23,7 +23,7 @@
     </style>
 
     <!-- Base (DayNight) application theme. -->
-    <style name="AppThemeDayNight" parent="Theme.AppCompat.DayNight">
+    <style name="AppThemeDayNight" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

@@ -57,12 +57,14 @@
     <string-array name="pref_dark_mode_titles">
         <item>Light Theme</item>
         <item>Dark Theme</item>
-        <item>Day/Night Toggle</item>
+        <!--Commenting out Auto until I get more time later. -Littlesnowman88
+        <item>Day/Night Toggle</item>-->
     </string-array>
     <string-array name="pref_dark_mode_values">
         <item>Light</item>
         <item>Dark</item>
-        <item>auto</item>
+        <!--Commenting out Auto until I get more time later. -Littlesnowman88
+        <item>Auto</item>-->
     </string-array>
 
     <!-- Example settings for Data & Sync -->
