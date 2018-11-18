@@ -1,7 +1,9 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -75,6 +77,26 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         return frag_layout;
     }
 
+    /**
+     * Overriding long click handling for the card_container_adapter
+     * Currently not in use, but could be figured out for future use
+     * TODO: use or remove this code
+     *
+     * @param clicked_event event clicked by the user
+     * @param action what to do with the event
+     */
+    @Override
+    public void onLongClick(Event clicked_event, String action) {
+        switch (action){
+            case "Delete Event":
+                Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Attempt),
+                        Toast.LENGTH_LONG).show();
+                break;
+            default:
+                throw new RuntimeException("Error: In TabFragment, Long Click Action Not Recognized");
+        }
+    }
+
 
     //the class implementing this is responsible for summoning dialogFragments.
     //IMPORTANT: MAIN ACTIVITY SHOULD BE THE ONLY ACTIVITY TO EVER CALL THIS.
@@ -97,6 +119,27 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
             case "Un-move Thy Card":
                 database.moveCompletedEvent(clicked_event);
                 Toast.makeText(getActivity(), context.getString(R.string.Event_Unconfirmed),
+                        Toast.LENGTH_LONG).show();
+                break;
+            case "Delete Event":
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(R.string.delete_confirm);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // actually delete the event
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // back out
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+
+
+                database.deleteEvent(clicked_event);
+                Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Attempt),
                         Toast.LENGTH_LONG).show();
                 break;
             default:

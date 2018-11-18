@@ -76,6 +76,29 @@ public class MockDatabase {
             }
         }
     }
+    public void deleteEvent (Event eventToDelete) {
+        int num_events = potentialEventData.size();
+        boolean eventFound = false;
+        Event event;
+        for (int i=0; i < num_events; i++) {
+            event = potentialEventData.get(i);
+            if (event == eventToDelete) {
+                potentialEventData.remove(event);
+                num_events--;
+                eventFound = true;
+            }
+        }
+        if (!eventFound) {
+            for (int i=0; i < num_events; i++) {
+                event = confirmedEventData.get(i);
+                if (event == eventToDelete) {
+                    confirmedEventData.remove(event);
+                    num_events--;
+                    eventFound = true;
+                }
+            }
+        }
+    }
 
     public ArrayList<Event> getPotentialEventData(){
         return this.potentialEventData;

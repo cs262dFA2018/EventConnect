@@ -12,6 +12,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -31,10 +32,12 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     private final String ExpandCard = "Expand Thy Card";
     private final String MoveCard = "Move Thy Card";
     private final String UnmoveCard = "Un-move Thy Card";
+    private final String DeleteCard = "Delete Event";
 
     //the class containing this adapter may need to implement an onClick at the higher level
     public interface CardContainerAdapterOnClickHandler {
         void onClick(Event clicked_event, String action );
+        void onLongClick(Event clicked_event, String action);
     }
 
     /**
@@ -52,10 +55,11 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      * handles clicks by expanding a card or marking interest
      */
 
-    public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView eventTitle, eventDescription;
         private Button interestedButton;
         private CardView eventCard;
+        private Button deleteButton;
         private final int animationTime = 500;
         /**
          * constructor
@@ -68,11 +72,14 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
             eventTitle = (TextView) view.findViewById(R.id.event_title);
             eventDescription = (TextView) view.findViewById(R.id.event_desc);
             interestedButton = (Button) view.findViewById(R.id.interested_button);
+            deleteButton = (Button) view.findViewById(R.id.delete_button);
             eventCard.setOnClickListener(this);
             eventTitle.setOnClickListener(this);
             eventDescription.setOnClickListener(this);
             interestedButton.setOnClickListener(this);
             interestedButton.setEnabled(true);
+            deleteButton.setOnClickListener(this);
+            deleteButton.setEnabled(true);
         }
 
         /**
@@ -138,6 +145,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                  * also display the expanded event view
                  */
                 click_handler.onClick(event_clicked, ExpandCard);
+            } else if (view == deleteButton) {
+                click_handler.onClick(event_clicked, DeleteCard);
             }
         }
         // Had to use runnable b/c removeCard reset the UI before the Animation finished
@@ -150,6 +159,18 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                 }
             };
 
+        }
+
+        /**
+         * onLongClick for deleting event. Not sure why this needs to be a boolean?
+         * Also currently, app does not detect long clicks, but leaving this in here for now
+         * TODO: either figure this out or remove it
+         */
+        @Override
+        public boolean onLongClick(View view) {
+            Event event_clicked = cards.get(getAdapterPosition());
+            click_handler.onLongClick(event_clicked, DeleteCard);
+            return true;
         }
     }
 
