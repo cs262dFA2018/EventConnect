@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--action bar menu for MainActivity.java-->
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="edu.calvin.cs262.cs262d.eventconnect.views.MainActivity"
+    >
+
+    <!--Settings button-->
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings_label"
+        android:icon="@drawable/ic_settings_white_24dp"
+        app:showAsAction="always"
+        />
+
+</menu>

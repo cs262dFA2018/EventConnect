@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "cs262d.cs262.cs262.cs262d.cs262d.cs262.cs262.cs262d.eventconnect"
+        applicationId "edu.calvin.cs262.cs262d.eventconnect"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1

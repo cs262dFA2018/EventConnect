@@ -178,7 +178,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         boolean cancel = false;
         View focusView = null;
-
+        /* TODO: REMOVE THIS COMMENT BLOCK HEADER AND TAIL ONCE READY TO PULL REQUEST.
         // Check for a valid password, if the user entered one.
         if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
@@ -197,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
 
         }
-
+        */
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.

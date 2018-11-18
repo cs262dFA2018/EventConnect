@@ -8,9 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import edu.calvin.cs262.cs262d.eventconnect.R;
 
 /**
  * A {@link android.preference.PreferenceActivity} which implements and proxies the necessary calls
@@ -33,11 +37,21 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         getDelegate().onPostCreate(savedInstanceState);
     }
 
-    public ActionBar getSupportActionBar() {
-        return getDelegate().getSupportActionBar();
-    }
+    public ActionBar getSupportActionBar() { return getDelegate().getSupportActionBar(); }
 
     public void setSupportActionBar(@Nullable Toolbar toolbar) {
+        /*setup action bar
+         * thanks to https://gldraphael.com/blog/adding-a-toolbar-to-preference-activity/ for
+         *  fixing the padding issue (toolbar hovered over some settings)
+         *  NOTE: actual code is combination of author (Galdin) and comment reply by
+         *  Shankara Narayana T.S.
+         */
+        //set padding to fix hovering-over-preferences problem
+        LinearLayout layout = (LinearLayout) getListView().getParent().getParent();
+        int horizontalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
+        int verticalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
+        int topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) getResources().getDimension(R.dimen.activity_vertical_margin) + 30, getResources().getDisplayMetrics());
+        layout.setPadding(horizontalMargin, topMargin, horizontalMargin, verticalMargin);
         getDelegate().setSupportActionBar(toolbar);
     }
 

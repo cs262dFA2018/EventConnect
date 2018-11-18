@@ -139,6 +139,9 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                  */
                 click_handler.onClick(event_clicked, ExpandCard);
             }
+
+
+
         }
         // Had to use runnable b/c removeCard reset the UI before the Animation finished
         private Runnable createRunnable(final Event e){

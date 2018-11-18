@@ -1,5 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!-- these preference UI elements are under the "notifications" settings category-->
     <!-- A 'parent' preference, which enables/disables child preferences (below)
          when checked/unchecked. -->
     <SwitchPreference

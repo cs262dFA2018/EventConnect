@@ -12,19 +12,26 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.view.ViewGroup;
 
-import cs262d.cs262.cs262.cs262d.cs262d.cs262.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.R;
 
 import java.util.List;
 
 /**
+ * Following documentation provided by Littlesnowman88:
+ * A settings Activity based on the Android studio Settings Activity Template.
+ *
+ * Following header documentation provided by Android Studio:
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
  * settings are split by category, with category headers shown to the left of
@@ -79,7 +86,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         preference.setSummary(name);
                     }
                 }
-
+            //TODO: ADD PREFERENCE SUMMARY SETTING FOR CHECKBOX PREFERENCE.
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -119,6 +126,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
+    /**
+     * ON CREATE IS DOWN HERE
+     * NOTE: this is for the whole settings activity.
+     * To access individual preference UI elements, use the fragments made below.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,13 +139,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
+     * Set up the action bar to show the Settings Label, a back arrow, and not hovering over settings.
+     * @author Littlesnowman88
      */
     private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        /*setup action bar
+         * thanks to https://gldraphael.com/blog/adding-a-toolbar-to-preference-activity/ for
+         *  getting the layout inflater
+         */
+        //get the toolbar layout before finding the ui element
+        getLayoutInflater().inflate(R.layout.settings_toolbar, (ViewGroup)findViewById(android.R.id.content));
+        //get the UI element
+        Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+
+        //set the support action bar
+        setSupportActionBar(toolbar);
+        //then set up toolbar/actionbar's up navigation
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setHomeButtonEnabled(true);
         }
     }
 
@@ -141,15 +167,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             if (!super.onMenuItemSelected(featureId, item)) {
-                NavUtils.navigateUpFromSameTask(this);
+//                NavUtils.navigateUpFromSameTask(this);
+                finish();
             }
             return true;
         }
         return super.onMenuItemSelected(featureId, item);
     }
 
+    /* NOTE FROM LITTLESNOWMAN88:
+     * The following three functions were built by Android Studio.
+     * They handle check for multipane capability, settings categories,
+     * and preference fragments.
+     */
+
     /**
      * {@inheritDoc}
+     * Checks to see if device can handle multiple panes or not
      */
     @Override
     public boolean onIsMultiPane() {
@@ -158,6 +192,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     /**
      * {@inheritDoc}
+     * loads the settings categories seen on the first page
+     * These are found in pref_headers.xml under res -> xml
      */
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -168,6 +204,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     /**
      * This method stops fragment injection in malicious applications.
      * Make sure to deny any unknown fragments here.
+     * IMPORTANT: If you add settings categories, update this method! -Littlesnowman88
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
@@ -176,31 +213,50 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName);
     }
 
+
+    /*NOTE FROM LITTLESNOWMAN88:
+     * The following sections of code are used for multi-pane settings UIs (such as on tablets).
+     * If you add general settings to the first settings screen, ADD SETTINGS CATEGORIES BELOW.
+     */
+
     /**
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
+     * Modified by: Littlesnowman88
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
+        private SwitchPreference prefDarkMode;
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
 
+            //access dark mode preference - Littlesnowman88
+            prefDarkMode = (SwitchPreference) findPreference("theme_preference");
+            prefDarkMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+               @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                   boolean dark_state = Boolean.valueOf(newValue.toString());
+                   prefDarkMode.setChecked(dark_state);
+                   return true;
+               }
+            });
+
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
         }
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+//                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(), SettingsActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);
@@ -230,7 +286,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+//                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(), SettingsActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);
@@ -260,7 +317,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+//                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(), SettingsActivity.class));
                 return true;
             }
             return super.onOptionsItemSelected(item);

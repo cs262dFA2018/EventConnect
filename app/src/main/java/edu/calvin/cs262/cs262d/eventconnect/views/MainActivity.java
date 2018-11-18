@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -17,7 +18,7 @@ import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 public class MainActivity extends AppCompatActivity {
 
     private Context context;
-    private Intent mainToLogin;
+    private Intent mainToLogin, mainToSettings;
     private String currentUser;
 
     @Override
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
         mainToLogin  = new Intent(context, LoginActivity.class);
+        mainToSettings = new Intent(context, SettingsActivity.class);
 
         currentUser = getIntent().getStringExtra("UserID");
 
@@ -104,29 +106,47 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /** creates the action bar option items in MainActivity
+     * inflates the menu so a user can click on settings
+     * @author Littlesnowman88
+     * @param menu, the action bar menu
+     * @return handled by AppCompatActivity
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     /** called whenever the user presses the up button or any menu item on MainActivity's toolbar
      * On the up button pressed, the app "returns" to the login activity
+     * On settings button pressed, the Settings activity is launched.
      * @param item, the menu item clicked by the user
-     * @return handled by AppCompatActivity, I think.
-     * @author: Littlesnowman88
+     * @return handled by AppCompatActivity
+     * @author Littlesnowman88
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            /*IMPORTANT:
-             * Because LoginActivity launches as singleTask (see manifest), this will not create multiple
-             * copies of startActivity. Although better practice suggests using finish(), here finish() usually
-             * exited the application instead of navigating to the parent LoginActivity.
-             */
-            startActivity(mainToLogin);
+        switch(id) {
+            case android.R.id.home:
+                /*IMPORTANT:
+                 * Because LoginActivity launches as singleTask (see manifest), this will not create multiple
+                 * copies of startActivity. Although better practice suggests using finish(), here finish() usually
+                 * exited the application instead of navigating to the parent LoginActivity.
+                 */
+                startActivity(mainToLogin);
+
+            case R.id.action_settings:
+                //Open the settings activity
+                startActivity(mainToSettings);
         }
         return super.onOptionsItemSelected(item);
     }
 
     /** called when the user presses the back button.
      * On back button pressed, the app "returns" to the login activity
-     * @author: Littlesnowman88
+     * @author Littlesnowman88
      */
     @Override
     public void onBackPressed() {

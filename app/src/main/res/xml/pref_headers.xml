@@ -1,6 +1,6 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- These settings headers are only used on tablets. -->
+    <!-- These headers are the clickable settings items that open up preference screens.. -->
 
     <header
         android:fragment="edu.calvin.cs262.cs262d.eventconnect.views.SettingsActivity$GeneralPreferenceFragment"
