@@ -2,7 +2,9 @@ package edu.calvin.cs262.cs262d.eventconnect.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,9 +23,16 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     private Intent mainToLogin, mainToSettings;
     private String currentUser;
+    private String currentTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //access shared preferences for theme setting first.
+        //MUST BE HANDLED BEFORE setContentView is called--in this case, before super.onCreate is called
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        AppThemeChanger.handleThemeChange(this, currentTheme);
+        currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
@@ -136,10 +146,12 @@ public class MainActivity extends AppCompatActivity {
                  * exited the application instead of navigating to the parent LoginActivity.
                  */
                 startActivity(mainToLogin);
+                break;
 
             case R.id.action_settings:
                 //Open the settings activity
                 startActivity(mainToSettings);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

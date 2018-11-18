@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
@@ -52,10 +53,12 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         int verticalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
         int topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) getResources().getDimension(R.dimen.activity_vertical_margin) + 30, getResources().getDisplayMetrics());
         layout.setPadding(horizontalMargin, topMargin, horizontalMargin, verticalMargin);
+        //once padding is set, assign the action bar
         getDelegate().setSupportActionBar(toolbar);
     }
 
     @Override
+    @NonNull
     public MenuInflater getMenuInflater() {
         return getDelegate().getMenuInflater();
     }

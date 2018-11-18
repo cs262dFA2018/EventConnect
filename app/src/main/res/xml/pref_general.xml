@@ -12,11 +12,17 @@
         android:singleLine="true"
         android:title="@string/pref_title_display_name" />
 
-    <SwitchPreference
+    <!--Dark mode Preference: Light, Dark, and DayNight-->
+    <ListPreference
         android:id="@+id/theme_preference"
-        android:defaultValue="false"
+        android:defaultValue="Light"
+        android:entries="@array/pref_dark_mode_titles"
+        android:entryValues="@array/pref_dark_mode_values"
         android:key="theme_preference"
-        android:title="Dark Mode"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/dark_pref_title"
         />
+
 
 </PreferenceScreen>

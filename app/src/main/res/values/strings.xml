@@ -29,8 +29,6 @@
     <string name="category_label">Category</string>
     <string name="create_event">Create Event</string>
     <string name="failed_transaction_manager">Sorry, but fragment manager could not be found. Aborting expanded card view.</string>
-    <!--Strings related to settings-->
-    <string name="settings_label">Settings</string>
 
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>
@@ -48,12 +46,24 @@
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
+    <string name="settings_label">Settings</string>
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_display_name">Display name</string>
 
     <!--ADD DARK MODE STRINGS HERE-->
+    <string name="dark_pref_title">Dark Mode Settings</string>
+    <string-array name="pref_dark_mode_titles">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+        <item>Day/Night Toggle</item>
+    </string-array>
+    <string-array name="pref_dark_mode_values">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>auto</item>
+    </string-array>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 import edu.calvin.cs262.cs262d.eventconnect.tools.LoginHandler;
 
 /**
@@ -56,17 +59,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private UserLoginTask mAuthTask = null;
 
+    //app theme setting string
+    String currentTheme;
+
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
     private Context context;
-
     private Button mEmailSignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //access shared preferences for theme setting first.
+        //MUST BE HANDLED BEFORE setContentView is called--in this case, before super.onCreate is called
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        AppThemeChanger.handleThemeChange(this, currentTheme);
+        currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = getApplicationContext();

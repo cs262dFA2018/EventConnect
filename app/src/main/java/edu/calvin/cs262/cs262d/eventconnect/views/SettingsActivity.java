@@ -3,6 +3,7 @@ package edu.calvin.cs262.cs262d.eventconnect.views;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -24,7 +25,9 @@ import android.support.v4.app.NavUtils;
 import android.view.ViewGroup;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +46,8 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+
+    private String currentTheme;
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -86,7 +91,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         preference.setSummary(name);
                     }
                 }
-            //TODO: ADD PREFERENCE SUMMARY SETTING FOR CHECKBOX PREFERENCE.
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -134,6 +138,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //access shared preferences for theme setting first.
+        //MUST BE HANDLED BEFORE setContentView is called--in this case, before super.onCreate is called
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        AppThemeChanger.handleThemeChange(this, currentTheme);
+        currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
         super.onCreate(savedInstanceState);
         setupActionBar();
     }
@@ -167,7 +176,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             if (!super.onMenuItemSelected(featureId, item)) {
-//                NavUtils.navigateUpFromSameTask(this);
                 finish();
             }
             return true;
@@ -226,7 +234,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
-        private SwitchPreference prefDarkMode;
+        private ListPreference prefDarkMode;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -234,12 +243,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
 
             //access dark mode preference - Littlesnowman88
-            prefDarkMode = (SwitchPreference) findPreference("theme_preference");
+            prefDarkMode = (ListPreference) findPreference("theme_preference");
             prefDarkMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                   boolean dark_state = Boolean.valueOf(newValue.toString());
-                   prefDarkMode.setChecked(dark_state);
+                   //if theme has changed, recreate Settings Activity to apply a changed theme
+                   if (AppThemeChanger.shouldChangeTheme(getActivity(), newValue.toString())) {
+                       getActivity().recreate();
+                   }
+                   //FIXME: shared preference summaries here are actually disappearing.
+                   //set UI text
+                   String theme_state = newValue.toString();
+                   prefDarkMode.setSummary(theme_state);
                    return true;
                }
             });
@@ -255,7 +270,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-//                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(), SettingsActivity.class));
                 return true;
             }
@@ -286,7 +300,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-//                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(), SettingsActivity.class));
                 return true;
             }
@@ -317,7 +330,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-//                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(), SettingsActivity.class));
                 return true;
             }
