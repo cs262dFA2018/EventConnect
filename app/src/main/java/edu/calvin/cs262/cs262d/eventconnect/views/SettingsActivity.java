@@ -33,6 +33,7 @@ import java.util.List;
  * A settings Activity based on the Android studio Settings Activity Template.
  * The settings activity includes PreferenceFragments for various settings categories
  * The settings activity also holds an onPreferenceChangedListener.
+ * IMPORTANT: if preferences are added, removed, or in some cases renamed, the application must be reinstalled.
  *
  * Following header documentation provided by Android Studio:
  * A {@link PreferenceActivity} that presents a set of application settings. On
