@@ -69,6 +69,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private Context context;
     private Button mEmailSignInButton;
 
+    /**
+     * onCreate builds the LoginActivity screen
+     * first, determines the theme for the login screen
+     * then, does some normal activity onCreate stuff
+     * then accesses UI and sets listeners
+     * @param savedInstanceState the last known state of LoginActivity
+     * @author OneTrueAsian
+     * @author Littlesnowman88 (theme settings)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //access shared preferences for theme setting first.
@@ -391,6 +400,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             startMain.putExtra("UserID", LoginID);
             startActivity(startMain);
         }
+    }
+
+    /**
+     * closes the app when the user presses Android's back arrow
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
 

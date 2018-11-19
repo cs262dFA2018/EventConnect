@@ -25,6 +25,15 @@ public class MainActivity extends AppCompatActivity {
     private String currentUser;
     private String currentTheme;
 
+    /**
+     * creates the Main Activity:
+     * builds UI with dark mode or light mode
+     * establishes connection with loginActivity and settingsActivity
+     * builds an action bar
+     * builds the tabs for event cards
+     * @param savedInstanceState the last known state of MainActivity
+     * @author Littlesnowman88
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //access shared preferences for theme setting first.
@@ -33,12 +42,16 @@ public class MainActivity extends AppCompatActivity {
         AppThemeChanger.handleThemeChange(this, currentTheme);
         currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
 
+        //handle some normal MainActivity creation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
+
+        //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
         mainToSettings = new Intent(context, SettingsActivity.class);
 
+        //save the currently logged-in user
         currentUser = getIntent().getStringExtra("UserID");
 
         //setup action bar
@@ -68,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
      *               and the strings tab_label_potential and tab_label_confirmed exist
      *               in strings.xml
      * Postcondition: Tabs are created for the Main Activity
+     * @author Littlesnowman88
      */
     private void buildTabs(TabLayout tabs) {
         //Build the tabs.
@@ -86,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
      * Then gives ViewPager the adapter.
      * Then creates and sets a tab listener, handling the various possible clicks
      * Postcondition: the user can swap between tabs once this function completes.
+     * @author Littlesnowman88
      */
     private void buildPagerAdapter(TabLayout tabs) {
         // Using PagerAdapter to manage page views in fragments.
@@ -118,9 +133,9 @@ public class MainActivity extends AppCompatActivity {
 
     /** creates the action bar option items in MainActivity
      * inflates the menu so a user can click on settings
-     * @author Littlesnowman88
      * @param menu, the action bar menu
      * @return handled by AppCompatActivity
+     * @author Littlesnowman88
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,11 +156,12 @@ public class MainActivity extends AppCompatActivity {
         switch(id) {
             case android.R.id.home:
                 /*IMPORTANT:
-                 * Because LoginActivity launches as singleTask (see manifest), this will not create multiple
-                 * copies of startActivity. Although better practice suggests using finish(), here finish() usually
-                 * exited the application instead of navigating to the parent LoginActivity.
+                 * Because LoginActivity launches as singleTask (see manifest),
+                 * this will not create multiple copies of startActivity.
+                 * Furthermore, finish() will ensure that MainActivity is ended.
                  */
                 startActivity(mainToLogin);
+                finish();
                 break;
 
             case R.id.action_settings:
@@ -163,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startActivity(mainToLogin);
+        finish();
     }
 
     /**starts up the AddEvent activity**/
