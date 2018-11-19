@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -207,6 +206,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.pref_headers, target);
+        //now access shared preferences to determine if black or white is needed
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String night_mode = sharedPrefs.getString("theme_preference", "Light");
+        //if black is needed, set icons to black
+        if (night_mode.equals("Light")) {
+            target.get(0).iconRes = R.drawable.ic_info_black_24dp;
+            target.get(1).iconRes = R.drawable.ic_notifications_black_24dp;
+            target.get(2).iconRes = R.drawable.ic_sync_black_24dp;
+        }
+        //else if white is needed, set icons to white
+        else if (night_mode.equals("Dark")) {
+            target.get(0).iconRes = R.drawable.ic_info_white_24dp;
+            target.get(1).iconRes = R.drawable.ic_notifications_white_24dp;
+            target.get(2).iconRes = R.drawable.ic_sync_white_24dp;
+        }
     }
 
     /**
@@ -236,34 +250,38 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static class GeneralPreferenceFragment extends PreferenceFragment {
         private ListPreference prefDarkMode;
 
+        private Preference.OnPreferenceChangeListener themePrefListener;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
 
-            //access dark mode preference - Littlesnowman88
-            prefDarkMode = (ListPreference) findPreference("theme_preference");
-            prefDarkMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-               @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                   //if theme has changed, recreate Settings Activity to apply a changed theme
-                   if (AppThemeChanger.shouldChangeTheme(getActivity(), newValue.toString())) {
-                       getActivity().recreate();
-                   }
-                   //FIXME: shared preference summaries here are actually disappearing.
-                   //set UI text
-                   String theme_state = newValue.toString();
-                   prefDarkMode.setSummary(theme_state);
-                   return true;
-               }
-            });
+            Preference themePref = findPreference("theme_preference");
+            themePref.setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            //if theme has changed, recreate Settings Activity to apply a changed theme
+                            if (AppThemeChanger.shouldChangeTheme(getActivity(), newValue.toString())) {
+                                getActivity().recreate();
+                            }
+                            return true;
+                        }
+                    }
+            );
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("example_text"));
+            // Override the SettingsActivity Preference listener but still provide same functionality
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(findPreference("theme_preference"),
+                    PreferenceManager
+                            .getDefaultSharedPreferences(themePref.getContext())
+                            .getString(themePref.getKey(), ""));
         }
 
         @Override
