@@ -31,7 +31,7 @@
     <string name="failed_transaction_manager">Sorry, but fragment manager could not be found. Aborting expanded card view.</string>
 
     <!-- Strings related to login -->
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Event Connect</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (Required)</string>
     <string name="action_sign_in">Sign in</string>
