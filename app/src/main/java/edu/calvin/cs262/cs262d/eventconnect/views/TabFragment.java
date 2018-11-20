@@ -141,7 +141,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
      */
     public void deleteEvent(Event clicked_event) {
         database.deleteEvent(clicked_event);
-        //TODO: Potentially change this function call to one that handles animation. Depends on what ksn7 does in CardContainerAdapter
         card_container_adapter.deleteEvent(clicked_event);
         //display a message to the user, confirming the deletion of an event
         Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Worked),

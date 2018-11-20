@@ -12,9 +12,23 @@ import java.lang.ref.WeakReference;
  * Class does not extend AlertDialog because AlertDialog doesn't have a default constructor
  */
 public class ConfirmDialog {
+
+    /**
+     * Confirmation Alert Dialog to confirm user wants to delete an event
+     *
+     * @param message message for the dialog to display
+     * @param confirmationWord user presses "delete" to delete
+     * @param base_context context to run in, here the current UI activity
+     * @param confirm Runnable that deletes the event
+     * @param cancel Runnable with no content (does nothing)
+     */
     public ConfirmDialog(String message, String confirmationWord, Context base_context, final Runnable confirm, final Runnable cancel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new WeakReference<Context>(base_context).get());
+
+        // set message on the dialog
         builder.setMessage(message);
+
+        // set positive button to "delete", then link it to the runnable that deletes the event
         builder.setPositiveButton(confirmationWord, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -23,6 +37,8 @@ public class ConfirmDialog {
                 }
             }
         });
+
+        // set the negative button to "cancel", then link it to the runnable that does nothing
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -31,6 +47,8 @@ public class ConfirmDialog {
                 }
             }
         });
+
+        // show the dialog once its fully built
         builder.create().show();
 
     }
