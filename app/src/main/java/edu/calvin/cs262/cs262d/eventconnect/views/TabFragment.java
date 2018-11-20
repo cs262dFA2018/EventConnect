@@ -77,27 +77,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         return frag_layout;
     }
 
-    /**
-     * Overriding long click handling for the card_container_adapter
-     * Currently not in use, but could be figured out for future use
-     * TODO: use or remove this code
-     *
-     * @param clicked_event event clicked by the user
-     * @param action what to do with the event
-     */
-    @Override
-    public void onLongClick(Event clicked_event, String action) {
-        switch (action){
-            case "Delete Event":
-                Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Worked),
-                        Toast.LENGTH_LONG).show();
-                break;
-            default:
-                throw new RuntimeException("Error: In TabFragment, Long Click Action Not Recognized");
-        }
-    }
-
-
     //the class implementing this is responsible for summoning dialogFragments.
     //IMPORTANT: MAIN ACTIVITY SHOULD BE THE ONLY ACTIVITY TO EVER CALL THIS.
     public interface CardExpansionHandler {

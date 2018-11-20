@@ -38,7 +38,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     //the class containing this adapter may need to implement an onClick at the higher level
     public interface CardContainerAdapterOnClickHandler {
         void onClick(Event clicked_event, String action );
-        void onLongClick(Event clicked_event, String action);
     }
 
     /**
@@ -56,7 +55,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      * handles clicks by expanding a card or marking interest
      */
 
-    public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener { //TODO: DELETE THIS IMPLEMENTS-->, View.OnLongClickListener {
+    public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView eventTitle, eventDescription;
         private Button interestedButton;
         private CardView eventCard;
@@ -86,7 +85,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         /**
          * this onClick(View v) is called by the recycler view's child views at click
          *
-         * @param View v, a View that was clicked on a card (ex: text views, the "interested" button)
+         * @param view v, a View that was clicked on a card (ex: text views, the "interested" button)
          * once the clicked item type has been determined, this viewholder calls Adapter's
          * click_handler.onClick(), passing relevant information
          */
@@ -164,19 +163,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                 }
             };
         }
-
-        //TODO: BEFORE PULL REQUEST, LITTLESNOWMAN88 OPTS FOR DELETING THIS CODE
-//        /**
-//         * onLongClick for deleting event. Not sure why this needs to be a boolean?
-//         * Also currently, app does not detect long clicks, but leaving this in here for now
-//         * TODO: either figure this out or remove it
-//         */
-//        @Override
-//        public boolean onLongClick(View view) {
-//            Event event_clicked = cards.get(getAdapterPosition());
-//            click_handler.onLongClick(event_clicked, DeleteCard);
-//            return true;
-//        }
     }
 
 
