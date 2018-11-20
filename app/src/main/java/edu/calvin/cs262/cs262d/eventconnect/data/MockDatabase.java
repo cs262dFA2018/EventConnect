@@ -88,6 +88,7 @@ public class MockDatabase {
                 eventFound = true;
             }
         }
+        num_events = confirmedEventData.size();
         if (!eventFound) {
             for (int i=0; i < num_events; i++) {
                 event = confirmedEventData.get(i);
@@ -97,6 +98,9 @@ public class MockDatabase {
                     eventFound = true;
                 }
             }
+        }
+        if (!eventFound) {
+            throw new RuntimeException("ERROR: tried to delete an event not in the database");
         }
     }
 

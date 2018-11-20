@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.views.TabFragment;
 
 /**an adapter class used by MainActivity's Fragments' Recycle Views.
  * This class manages the displaying and click handling of event cards
@@ -140,15 +141,17 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                         interestedButton.setText(context.getString(R.string.not_interested));
                     }
                 }
-            } else if (view == eventTitle || view == eventDescription || view == eventCard){
+            } else if (view == deleteButton) {
+                click_handler.onClick(event_clicked, DeleteCard);
+            } else if (view == eventTitle || view == eventDescription || view == eventCard) {
                 /* show toast
                  * also display the expanded event view
                  */
                 click_handler.onClick(event_clicked, ExpandCard);
-            } else if (view == deleteButton) {
-                click_handler.onClick(event_clicked, DeleteCard);
             }
+
         }
+
         // Had to use runnable b/c removeCard reset the UI before the Animation finished
         private Runnable createRunnable(final Event e){
 
@@ -225,7 +228,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         cards.add(event);
         notifyDataSetChanged();
     }
-    private void removeCard(Event event){
+
+    public void removeCard(Event event){
         cards.remove(event);
         notifyDataSetChanged();
     }

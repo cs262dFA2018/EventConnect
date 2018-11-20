@@ -36,6 +36,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     private ArrayList<Event> event_data;
     private MockDatabase database;
     private Context context;
+    boolean event_deleted = false;
 
     public TabFragment() {
         // Required empty public constructor
@@ -89,7 +90,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     public void onLongClick(Event clicked_event, String action) {
         switch (action){
             case "Delete Event":
-                Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Attempt),
+                Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Worked),
                         Toast.LENGTH_LONG).show();
                 break;
             default:
@@ -106,7 +107,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
     /** Overriding click handling for the card_container_adapter **/
     @Override
-    public void onClick(Event clicked_event, String action) {
+    public void onClick(final Event clicked_event, String action) {
         switch (action){
             case "Expand Thy Card":
                 showExpandedCard(clicked_event);
@@ -122,31 +123,51 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                         Toast.LENGTH_LONG).show();
                 break;
             case "Delete Event":
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(R.string.delete_confirm);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // actually delete the event
+                //make two runnables
+                //make a new confirmDialog
+                //pass in the stuffs
+                //create and save instance of confirm dialog
+                //have confirm dialog extend alert dialog, so you can still do things like setMessage and setPositiveButton
+                //(you might have to make ConfirmDialog implement DialogInterface.OnClickListener() )
+                //REMEMBER, your runnable is effectively the onClick. The trick: linking that to the button click.
+
+                //then, check your eventDeleted varaible to see what you should return. Or better, just return eventDeleted.
+
+                Runnable deleteRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        deleteEvent(clicked_event);
                     }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // back out
-                    }
-                });
+                };
 
-                AlertDialog dialog = builder.create();
+                Runnable cancelRunnable = new Runnable() {
+                    @Override
+                    public void run() {}
+                };
+
+                //TODO: possibly put in a check here that the activity in the background hasn't finished? Need a weak reference and "isFinishing"
+                new ConfirmDialog("Are you sure you want to delete this event?", "delete",
+                        context, deleteRunnable, cancelRunnable);
+                if (event_deleted) {
+                    //TODO: animate the event deletion
+                }
 
 
-                database.deleteEvent(clicked_event);
-                Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Attempt),
-                        Toast.LENGTH_LONG).show();
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
 
         }
 
+    }
+
+    //DEFINE RUNNABLE FUNCTIONS HERE, setting your TabFragment eventDeleted boolean inside of the runnable function.
+    public void deleteEvent(Event clicked_event) {
+        database.deleteEvent(clicked_event);
+        card_container_adapter.removeCard(clicked_event);
+        Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Worked),
+                Toast.LENGTH_LONG).show();
+        event_deleted = true;
     }
 
     /**implemented for TabFragment, this method summons an expanded card view

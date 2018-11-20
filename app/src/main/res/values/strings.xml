@@ -10,7 +10,7 @@
     <string name="Event_Confirmed"> Event is now confirmed</string>
     <string name="Event_Unconfirmed">Event is no longer confirmed</string>
     <string name="Expand_Card">Expand Thy Card</string>
-    <string name="Delete_Event_Attempt">You attempted to delete the event</string>
+    <string name="Delete_Event_Worked">Event Deleted</string>
     <string name="host_label">Hosted By</string>
     <string name="host_hint">Your name to appear to others</string>
     <string name="title_label">Title</string>
