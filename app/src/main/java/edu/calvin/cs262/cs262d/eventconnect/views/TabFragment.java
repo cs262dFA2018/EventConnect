@@ -36,7 +36,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     private ArrayList<Event> event_data;
     private MockDatabase database;
     private Context context;
-    boolean event_deleted = false;
 
     public TabFragment() {
         // Required empty public constructor
@@ -105,7 +104,13 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         void showExpandedCard(Event event);
     }
 
-    /** Overriding click handling for the card_container_adapter **/
+    /** Overriding click handling for the card_container_adapter
+     * @param clicked_event the Event that a user clicked on. Determined in CardContainerAdapter.ViewHolder
+     * @param action, the action passed up by CardContainerAdapter.ViewHolder to be performed.
+     * @author Littlesnowman88
+     * @author OneTrueAsian
+     * @author ksn7
+     */
     @Override
     public void onClick(final Event clicked_event, String action) {
         switch (action){
@@ -123,36 +128,24 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                         Toast.LENGTH_LONG).show();
                 break;
             case "Delete Event":
-                //make two runnables
-                //make a new confirmDialog
-                //pass in the stuffs
-                //create and save instance of confirm dialog
-                //have confirm dialog extend alert dialog, so you can still do things like setMessage and setPositiveButton
-                //(you might have to make ConfirmDialog implement DialogInterface.OnClickListener() )
-                //REMEMBER, your runnable is effectively the onClick. The trick: linking that to the button click.
-
-                //then, check your eventDeleted varaible to see what you should return. Or better, just return eventDeleted.
-
+                //create the action for the alert Dialog's "delete" option
                 Runnable deleteRunnable = new Runnable() {
                     @Override
                     public void run() {
                         deleteEvent(clicked_event);
                     }
                 };
-
+                //create the non-action for the alert Dialog's "cancel" option
                 Runnable cancelRunnable = new Runnable() {
                     @Override
                     public void run() {}
                 };
 
-                //TODO: possibly put in a check here that the activity in the background hasn't finished? Need a weak reference and "isFinishing"
+                //context must be getActivity because the alert dialog can be created in only an Activity context or a Service context.
+                //cannot use TabFragment's instance of context, and cannot use getContext() because these provide Application Contexts.
                 new ConfirmDialog("Are you sure you want to delete this event?", "delete",
-                        context, deleteRunnable, cancelRunnable);
-                if (event_deleted) {
-                    //TODO: animate the event deletion
-                }
-
-
+                        getActivity(), deleteRunnable, cancelRunnable);
+                //wait to actually delete the event until the deleteRunnable calls deleteEvent
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
@@ -161,13 +154,19 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
     }
 
-    //DEFINE RUNNABLE FUNCTIONS HERE, setting your TabFragment eventDeleted boolean inside of the runnable function.
+    /**
+     * called by onClick's runnable object, deleteEvent deletes an event from the database and the UI.
+     * @param clicked_event the event that a user confirmed to delete
+     * @author ksn7
+     * @author Littlesnowman88
+     */
     public void deleteEvent(Event clicked_event) {
         database.deleteEvent(clicked_event);
-        card_container_adapter.removeCard(clicked_event);
+        //TODO: Potentially change this function call to one that handles animation. Depends on what ksn7 does in CardContainerAdapter
+        card_container_adapter.deleteEvent(clicked_event);
+        //display a message to the user, confirming the deletion of an event
         Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Worked),
                 Toast.LENGTH_LONG).show();
-        event_deleted = true;
     }
 
     /**implemented for TabFragment, this method summons an expanded card view

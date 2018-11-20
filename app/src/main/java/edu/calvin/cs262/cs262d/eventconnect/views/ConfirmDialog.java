@@ -4,14 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Confirmation Alert Dialog for checking the user meant to delete an event
  * Code borrowed from https://github.com/LightSys/emailhelper-2/blob/master/app/src/main/java/org/lightsys/emailhelper/ConfirmDialog.java
  * Class does not extend AlertDialog because AlertDialog doesn't have a default constructor
  */
 public class ConfirmDialog {
-    public ConfirmDialog(String message, String confirmationWord, Context context, final Runnable confirm, final Runnable cancel) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    public ConfirmDialog(String message, String confirmationWord, Context base_context, final Runnable confirm, final Runnable cancel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new WeakReference<Context>(base_context).get());
         builder.setMessage(message);
         builder.setPositiveButton(confirmationWord, new DialogInterface.OnClickListener() {
             @Override

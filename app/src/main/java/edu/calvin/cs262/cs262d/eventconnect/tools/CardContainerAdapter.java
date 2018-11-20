@@ -56,7 +56,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      * handles clicks by expanding a card or marking interest
      */
 
-    public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener { //TODO: DELETE THIS IMPLEMENTS-->, View.OnLongClickListener {
         private TextView eventTitle, eventDescription;
         private Button interestedButton;
         private CardView eventCard;
@@ -86,7 +86,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         /**
          * this onClick(View v) is called by the recycler view's child views at click
          *
-         * @param: View v, a View that was clicked on a card (ex: text views, the "interested" button)
+         * @param View v, a View that was clicked on a card (ex: text views, the "interested" button)
          * once the clicked item type has been determined, this viewholder calls Adapter's
          * click_handler.onClick(), passing relevant information
          */
@@ -107,13 +107,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                         click_handler.onClick(event_clicked, MoveCard);
                         event_clicked.clearMoved();
 
-                        Animation animation = new AlphaAnimation(1.0f, 0.0f);
-                        animation.setDuration(animationTime);
-                        eventCard.startAnimation(animation);
-
-                        //Wait to remove the event from UI until animation finishes
-                        Runnable eventRemover = createRunnable(event_clicked);
-                        new Handler().postDelayed(eventRemover, animationTime);
+                        //remove the event card from this UI
+                        deleteCard(event_clicked);
                     } else {
                         interestedButton.setText(context.getString(R.string.interested));
                     }
@@ -129,14 +124,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                         interestedButton.setEnabled(false);
                         click_handler.onClick(event_clicked, UnmoveCard);
                         event_clicked.clearMoved();
-
-                        Animation animation = new AlphaAnimation(1.0f, 0.0f);
-                        animation.setDuration(animationTime);
-                        eventCard.startAnimation(animation);
-
-                        //Wait to remove the event from UI until animation finishes
-                        Runnable eventRemover = createRunnable(event_clicked);
-                        new Handler().postDelayed(eventRemover, animationTime);
+                        //remove the event card from this UI
+                        deleteCard(event_clicked);
                     } else {
                         interestedButton.setText(context.getString(R.string.not_interested));
                     }
@@ -149,32 +138,45 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                  */
                 click_handler.onClick(event_clicked, ExpandCard);
             }
+        }
 
+        /**
+         * deleteCard takes a corresponding Event object and removes the event's card from the current UI
+         * @param event_clicked the Event Object whose card needs to be removed
+         * @author Littlesnowman88
+         */
+        public void deleteCard(Event event_clicked) {
+            Animation animation = new AlphaAnimation(1.0f, 0.0f);
+            animation.setDuration(animationTime);
+            eventCard.startAnimation(animation);
+
+            //Wait to remove the event from UI until animation finishes
+            Runnable eventRemover = createRunnable(event_clicked);
+            new Handler().postDelayed(eventRemover, animationTime);
         }
 
         // Had to use runnable b/c removeCard reset the UI before the Animation finished
         private Runnable createRunnable(final Event e){
-
             //this runnable simply calls removeCard.
             return new Runnable(){
                 public void run(){
                     removeCard(e);
                 }
             };
-
         }
 
-        /**
-         * onLongClick for deleting event. Not sure why this needs to be a boolean?
-         * Also currently, app does not detect long clicks, but leaving this in here for now
-         * TODO: either figure this out or remove it
-         */
-        @Override
-        public boolean onLongClick(View view) {
-            Event event_clicked = cards.get(getAdapterPosition());
-            click_handler.onLongClick(event_clicked, DeleteCard);
-            return true;
-        }
+        //TODO: BEFORE PULL REQUEST, LITTLESNOWMAN88 OPTS FOR DELETING THIS CODE
+//        /**
+//         * onLongClick for deleting event. Not sure why this needs to be a boolean?
+//         * Also currently, app does not detect long clicks, but leaving this in here for now
+//         * TODO: either figure this out or remove it
+//         */
+//        @Override
+//        public boolean onLongClick(View view) {
+//            Event event_clicked = cards.get(getAdapterPosition());
+//            click_handler.onLongClick(event_clicked, DeleteCard);
+//            return true;
+//        }
     }
 
 
@@ -229,8 +231,19 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         notifyDataSetChanged();
     }
 
-    public void removeCard(Event event){
+    private void removeCard(Event event){
         cards.remove(event);
         notifyDataSetChanged();
+    }
+
+    public void deleteEvent(Event event) {
+        /*
+        TODO: find some way of telling this event's corresponding view holder to run deleteCard;
+        TODO: Then this call to removeCard(event) can be deleted.
+        Key problem: How to access an instance of View Holder; then, how to access the right instance?
+        Possible help: cards[index] might match the indexing of ViewHolder, if an array or list of
+        current view holders exists
+        */
+        removeCard(event);
     }
 }
