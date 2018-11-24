@@ -82,7 +82,7 @@ public class Event {
 
     public void setMaxCapacity(int new_capacity) throws RuntimeException{
         if (new_capacity == -1 || (new_capacity > 0 && new_capacity > current_interest
-                && new_capacity > min_threshold)) {
+                && new_capacity >= min_threshold)) {
             max_capacity = new_capacity;
         } else {
             throw new RuntimeException("ERROR: attempt to set max capacity to an illegal state.");

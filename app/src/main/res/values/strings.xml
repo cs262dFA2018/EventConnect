@@ -45,8 +45,8 @@
     </string>
 
     <!-- Invalid Threshold messages -->
-    <string name = "error_invalid_MaxNumber"> Invalid Threshold, Threshold cannot be
-    0 or lower than Min threshold</string>
+    <string name = "error_invalid_MaxNumber"> Invalid Capacity, Capacity cannot be
+    0 or lower than Min Threshold</string>
 
     <string name = "error_invalid_MinNumber"> Invalid Threshold, Threshold cannot be
     0 or bigger than Max Capacity</string>

@@ -76,11 +76,11 @@ public class AddEvent extends AppCompatActivity {
             event.setMinThreshold(threshold);
             }
         catch (java.lang.NumberFormatException e) {
-            eventThreshold.setError(getString(R.string.error_invalid_MinNumber));
+            eventThreshold.setError(getString(R.string.error_invalid_number));
             return;
         }
         catch (RuntimeException e){
-            eventThreshold.setError(getString(R.string.error_invalid_number));
+            eventThreshold.setError(getString(R.string.error_invalid_MinNumber));
             return;
         }
 
@@ -95,11 +95,11 @@ public class AddEvent extends AppCompatActivity {
                 capacity = -1;
             }}
         catch (java.lang.NumberFormatException e) {
-            eventCapacity.setError(getString(R.string.error_invalid_MaxNumber));
+            eventCapacity.setError(getString(R.string.error_invalid_number));
             return;
         }
         catch (RuntimeException e){
-            eventThreshold.setError(getString(R.string.error_invalid_number));
+            eventCapacity.setError(getString(R.string.error_invalid_MaxNumber));
             return;
         }
 
