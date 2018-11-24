@@ -10,6 +10,7 @@
     <string name="Event_Confirmed"> Event is now confirmed</string>
     <string name="Event_Unconfirmed">Event is no longer confirmed</string>
     <string name="Expand_Card">Expand Thy Card</string>
+    <string name="Delete_Event_Worked">Event Deleted</string>
     <string name="host_label">Hosted By</string>
     <string name="host_hint">Your name to appear to others</string>
     <string name="title_label">Title</string>
@@ -29,11 +30,13 @@
     <string name="category_label">Category</string>
     <string name="create_event">Create Event</string>
     <string name="failed_transaction_manager">Sorry, but fragment manager could not be found. Aborting expanded card view.</string>
-    <string name="title_activity_login">Event Connect</string>
+    <string name="delete_event">Delete Event</string>
+    <string name="delete_confirm">Are you sure you want to delete this event?</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (Required)</string>
-    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in">Event Connect</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -42,4 +45,5 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
 </resources>
