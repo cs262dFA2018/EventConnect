@@ -1,7 +1,9 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -75,16 +77,21 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         return frag_layout;
     }
 
-
     //the class implementing this is responsible for summoning dialogFragments.
     //IMPORTANT: MAIN ACTIVITY SHOULD BE THE ONLY ACTIVITY TO EVER CALL THIS.
     public interface CardExpansionHandler {
         void showExpandedCard(Event event);
     }
 
-    /** Overriding click handling for the card_container_adapter **/
+    /** Overriding click handling for the card_container_adapter
+     * @param clicked_event the Event that a user clicked on. Determined in CardContainerAdapter.ViewHolder
+     * @param action, the action passed up by CardContainerAdapter.ViewHolder to be performed.
+     * @author Littlesnowman88
+     * @author OneTrueAsian
+     * @author ksn7
+     */
     @Override
-    public void onClick(Event clicked_event, String action) {
+    public void onClick(final Event clicked_event, String action) {
         switch (action){
             case "Expand Thy Card":
                 showExpandedCard(clicked_event);
@@ -99,10 +106,44 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 Toast.makeText(getActivity(), context.getString(R.string.Event_Unconfirmed),
                         Toast.LENGTH_LONG).show();
                 break;
+            case "Delete Event":
+                //create the action for the alert Dialog's "delete" option
+                Runnable deleteRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        deleteEvent(clicked_event);
+                    }
+                };
+                //create the non-action for the alert Dialog's "cancel" option
+                Runnable cancelRunnable = new Runnable() {
+                    @Override
+                    public void run() {}
+                };
+
+                //context must be getActivity because the alert dialog can be created in only an Activity context or a Service context.
+                //cannot use TabFragment's instance of context, and cannot use getContext() because these provide Application Contexts.
+                new ConfirmDialog("Are you sure you want to delete this event?", "delete",
+                        getActivity(), deleteRunnable, cancelRunnable);
+                //wait to actually delete the event until the deleteRunnable calls deleteEvent
+                break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
         }
 
+    }
+
+    /**
+     * called by onClick's runnable object, deleteEvent deletes an event from the database and the UI.
+     * @param clicked_event the event that a user confirmed to delete
+     * @author ksn7
+     * @author Littlesnowman88
+     */
+    public void deleteEvent(Event clicked_event) {
+        database.deleteEvent(clicked_event);
+        card_container_adapter.deleteEvent(clicked_event);
+        //display a message to the user, confirming the deletion of an event
+        Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Worked),
+                Toast.LENGTH_LONG).show();
     }
 
     /**implemented for TabFragment, this method summons an expanded card view
