@@ -75,11 +75,33 @@ public class AddEvent extends AppCompatActivity {
         try {threshold = (int) Math.floor(Double.parseDouble(eventThreshold.getText().toString()));
             event.setMinThreshold(threshold);
             }
-        catch (java.lang.NumberFormatException e) {eventThreshold.setError(getString(R.string.error_invalid_MinNumber));}
-        catch (RuntimeException e){eventThreshold.setError(getString(R.string.error_invalid_number));}
+        catch (java.lang.NumberFormatException e) {
+            eventThreshold.setError(getString(R.string.error_invalid_MinNumber));
+            return;
+        }
+        catch (RuntimeException e){
+            eventThreshold.setError(getString(R.string.error_invalid_number));
+            return;
+        }
 
-        try {capacity = (int) Math.floor(Double.parseDouble(eventCapacity.getText().toString()));}
-        catch (java.lang.NumberFormatException e) {capacity = -1;}
+        try {String capacityText = eventCapacity.getText().toString();
+            // if the capacity is not an empty string, turn it into a number
+            if (!capacityText.equals("")){
+                capacity = (int) Math.floor(Double.parseDouble(capacityText));
+                event.setMaxCapacity(capacity);
+            }
+            // other wise set to -1 which mean there is no max capacity
+            else {
+                capacity = -1;
+            }}
+        catch (java.lang.NumberFormatException e) {
+            eventCapacity.setError(getString(R.string.error_invalid_MaxNumber));
+            return;
+        }
+        catch (RuntimeException e){
+            eventThreshold.setError(getString(R.string.error_invalid_number));
+            return;
+        }
 
         //store the data from the UI elements
         event.setTitle(title);
@@ -88,9 +110,7 @@ public class AddEvent extends AppCompatActivity {
         event.setLocation(loc);
         event.setDate(date);
         event.setCost(cost);
-        //event.setMinThreshold(threshold);
-        event.setMaxCapacity(capacity);
-        
+
         //access and update the database.
         //TODO: Make sure data is valid. Else, send a toast about the required fields
         MockDatabase database = MockDatabase.getInstance();

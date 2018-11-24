@@ -80,7 +80,7 @@ public class Event {
 
     public int getMaxCapacity() {return max_capacity;}
 
-    public void setMaxCapacity(int new_capacity) {
+    public void setMaxCapacity(int new_capacity) throws RuntimeException{
         if (new_capacity == -1 || (new_capacity > 0 && new_capacity > current_interest
                 && new_capacity > min_threshold)) {
             max_capacity = new_capacity;
