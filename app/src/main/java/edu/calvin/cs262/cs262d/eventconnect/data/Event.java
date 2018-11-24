@@ -62,7 +62,6 @@ public class Event {
                 confirmed = true;
                 needs_to_move =true;
             }
-
         } else {
             throw new RuntimeException("ERROR: current_interest exceeded max_capacity.");
         }
@@ -82,7 +81,8 @@ public class Event {
     public int getMaxCapacity() {return max_capacity;}
 
     public void setMaxCapacity(int new_capacity) {
-        if (new_capacity == -1 || (new_capacity > 0 && new_capacity > current_interest && new_capacity > min_threshold)) {
+        if (new_capacity == -1 || (new_capacity > 0 && new_capacity > current_interest
+                && new_capacity > min_threshold)) {
             max_capacity = new_capacity;
         } else {
             throw new RuntimeException("ERROR: attempt to set max capacity to an illegal state.");
@@ -91,13 +91,13 @@ public class Event {
 
     public int getMinThreshold() {return min_threshold;}
 
-    public void setMinThreshold(int new_threshold) {
+    public void setMinThreshold(int new_threshold) throws RuntimeException {
 
         //new threshold must be positive and within the max capacity (unless max capacity is -1, in which case it can be anything positive.
         if (new_threshold > 0 && (new_threshold <= max_capacity || max_capacity == -1)) {
             min_threshold = new_threshold;
         } else {
-            throw new RuntimeException("ERROR: attempt to set min threshold to an illegal state.");
+             throw new RuntimeException("ERROR: attempt to set min threshold to an illegal state.");
         }
     }
 

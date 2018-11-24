@@ -44,6 +44,16 @@
         completions."
     </string>
 
+    <!-- Invalid Threshold messages -->
+    <string name = "error_invalid_MaxNumber"> Invalid Threshold, Threshold cannot be
+    0 or lower than Min threshold</string>
+
+    <string name = "error_invalid_MinNumber"> Invalid Threshold, Threshold cannot be
+    0 or bigger than Max Capacity</string>
+
+    <string name = "error_invalid_number">Cannot create event with this number</string>
+
+
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
     <string name="settings_label">Settings</string>

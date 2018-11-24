@@ -39,6 +39,7 @@ public class AddEvent extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setHomeButtonEnabled(true);
         }
+
     }
 
     /*unless access to the settings activity is added from here,
@@ -61,28 +62,35 @@ public class AddEvent extends AppCompatActivity {
         String host = eventHost.getText().toString();
         String loc = eventLocation.getText().toString();
         String date = eventDate.getText().toString();
+        Event event = new Event();
+
         double cost;
         try {cost = Double.parseDouble(eventCost.getText().toString());}
         catch (java.lang.NumberFormatException e) {cost = 0;}
+
         int threshold;
         int capacity;
+
         //TODO: prevent user from putting illegal threshold and capacity in.
-        try {threshold = (int) Math.floor(Double.parseDouble(eventCost.getText().toString()));}
-        catch (java.lang.NumberFormatException e) {threshold = 1;}
+        try {threshold = (int) Math.floor(Double.parseDouble(eventThreshold.getText().toString()));
+            event.setMinThreshold(threshold);
+            }
+        catch (java.lang.NumberFormatException e) {eventThreshold.setError(getString(R.string.error_invalid_MinNumber));}
+        catch (RuntimeException e){eventThreshold.setError(getString(R.string.error_invalid_number));}
+
         try {capacity = (int) Math.floor(Double.parseDouble(eventCapacity.getText().toString()));}
         catch (java.lang.NumberFormatException e) {capacity = -1;}
 
         //store the data from the UI elements
-        Event event = new Event();
         event.setTitle(title);
         event.setDescription(desc);
         event.setHost(host);
         event.setLocation(loc);
         event.setDate(date);
         event.setCost(cost);
-        event.setMinThreshold(threshold);
+        //event.setMinThreshold(threshold);
         event.setMaxCapacity(capacity);
-
+        
         //access and update the database.
         //TODO: Make sure data is valid. Else, send a toast about the required fields
         MockDatabase database = MockDatabase.getInstance();
