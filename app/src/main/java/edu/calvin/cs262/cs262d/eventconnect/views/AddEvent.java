@@ -59,9 +59,9 @@ public class AddEvent extends AppCompatActivity {
         //TODO: Enforce a title and description??
         String title = eventTitle.getText().toString();
         String desc = eventDescription.getText().toString();
-        String host = eventHost.getText().toString();
         String loc = eventLocation.getText().toString();
         String date = eventDate.getText().toString();
+        String host = eventHost.getText().toString();
         Event event = new Event();
 
         double cost;
@@ -106,8 +106,27 @@ public class AddEvent extends AppCompatActivity {
         //store the data from the UI elements
         event.setTitle(title);
         event.setDescription(desc);
-        event.setHost(host);
-        event.setLocation(loc);
+
+        try { String hostText = eventHost.getText().toString();
+            if (!hostText.equals("")){
+                event.setHost(host);
+            } else {
+                eventHost.setError(getString(R.string.error_empty_host));
+                return;
+            }
+        }
+        catch (RuntimeException e){}
+
+        try { String locationText = eventLocation.getText().toString();
+            if(!locationText.equals("")){
+                event.setLocation(loc);
+            } else{
+                eventLocation.setError(getString(R.string.error_empty_location));
+                return;
+            }
+        }
+        catch (RuntimeException e){}
+
         event.setDate(date);
         event.setCost(cost);
 
