@@ -67,8 +67,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:clickable="true"
+                android:editable="false"
                 android:hint="@string/date_hint"
-                android:inputType="date" />
+                />
 
             <TextView
                 android:id="@+id/location_label"
