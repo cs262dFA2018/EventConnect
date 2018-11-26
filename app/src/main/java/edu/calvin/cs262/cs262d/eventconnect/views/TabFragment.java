@@ -128,7 +128,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
-
         }
 
     }

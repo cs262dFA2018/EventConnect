@@ -2,31 +2,56 @@ package edu.calvin.cs262.cs262d.eventconnect.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     private Context context;
-    private Intent mainToLogin;
+    private Intent mainToLogin, mainToSettings;
     private String currentUser;
+    private String currentTheme;
 
+    /**
+     * creates the Main Activity:
+     * builds UI with dark mode or light mode
+     * establishes connection with loginActivity and settingsActivity
+     * builds an action bar
+     * builds the tabs for event cards
+     * @param savedInstanceState the last known state of MainActivity
+     * @author Littlesnowman88
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //access shared preferences for theme setting first.
+        //MUST BE HANDLED BEFORE setContentView is called--in this case, before super.onCreate is called
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        AppThemeChanger.handleThemeChange(this, currentTheme);
+        currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
+
+        //handle some normal MainActivity creation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-        mainToLogin  = new Intent(context, LoginActivity.class);
 
+        //establish connection with other activities
+        mainToLogin  = new Intent(context, LoginActivity.class);
+        mainToSettings = new Intent(context, SettingsActivity.class);
+
+        //save the currently logged-in user
         currentUser = getIntent().getStringExtra("UserID");
 
         //setup action bar
@@ -56,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
      *               and the strings tab_label_potential and tab_label_confirmed exist
      *               in strings.xml
      * Postcondition: Tabs are created for the Main Activity
+     * @author Littlesnowman88
      */
     private void buildTabs(TabLayout tabs) {
         //Build the tabs.
@@ -74,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
      * Then gives ViewPager the adapter.
      * Then creates and sets a tab listener, handling the various possible clicks
      * Postcondition: the user can swap between tabs once this function completes.
+     * @author Littlesnowman88
      */
     private void buildPagerAdapter(TabLayout tabs) {
         // Using PagerAdapter to manage page views in fragments.
@@ -104,33 +131,55 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /** creates the action bar option items in MainActivity
+     * inflates the menu so a user can click on settings
+     * @param menu, the action bar menu
+     * @return handled by AppCompatActivity
+     * @author Littlesnowman88
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     /** called whenever the user presses the up button or any menu item on MainActivity's toolbar
      * On the up button pressed, the app "returns" to the login activity
+     * On settings button pressed, the Settings activity is launched.
      * @param item, the menu item clicked by the user
-     * @return handled by AppCompatActivity, I think.
-     * @author: Littlesnowman88
+     * @return handled by AppCompatActivity
+     * @author Littlesnowman88
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            /*IMPORTANT:
-             * Because LoginActivity launches as singleTask (see manifest), this will not create multiple
-             * copies of startActivity. Although better practice suggests using finish(), here finish() usually
-             * exited the application instead of navigating to the parent LoginActivity.
-             */
-            startActivity(mainToLogin);
+        switch(id) {
+            case android.R.id.home:
+                /*IMPORTANT:
+                 * Because LoginActivity launches as singleTask (see manifest),
+                 * this will not create multiple copies of startActivity.
+                 * Furthermore, finish() will ensure that MainActivity is ended.
+                 */
+                startActivity(mainToLogin);
+                finish();
+                break;
+
+            case R.id.action_settings:
+                //Open the settings activity
+                startActivity(mainToSettings);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     /** called when the user presses the back button.
      * On back button pressed, the app "returns" to the login activity
-     * @author: Littlesnowman88
+     * @author Littlesnowman88
      */
     @Override
     public void onBackPressed() {
         startActivity(mainToLogin);
+        finish();
     }
 
     /**starts up the AddEvent activity**/

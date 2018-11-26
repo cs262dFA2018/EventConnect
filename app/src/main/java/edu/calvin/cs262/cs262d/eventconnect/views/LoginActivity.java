@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 import edu.calvin.cs262.cs262d.eventconnect.tools.LoginHandler;
 
 /**
@@ -56,17 +59,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private UserLoginTask mAuthTask = null;
 
+    //app theme setting string
+    String currentTheme;
+
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
     private Context context;
-
     private Button mEmailSignInButton;
 
+    /**
+     * onCreate builds the LoginActivity screen
+     * first, determines the theme for the login screen
+     * then, does some normal activity onCreate stuff
+     * then accesses UI and sets listeners
+     * @param savedInstanceState the last known state of LoginActivity
+     * @author OneTrueAsian
+     * @author Littlesnowman88 (theme settings)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //access shared preferences for theme setting first.
+        //MUST BE HANDLED BEFORE setContentView is called--in this case, before super.onCreate is called
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        AppThemeChanger.handleThemeChange(this, currentTheme);
+        currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = getApplicationContext();
@@ -178,7 +198,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         boolean cancel = false;
         View focusView = null;
-
         // Check for a valid password, if the user entered one.
         if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
@@ -197,7 +216,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
 
         }
-
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -213,7 +231,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //makes sure email ends with .com or .edu
-        return email.contains("@") && email.endsWith(".com") || email.endsWith(".edu");
+        return email.contains("@") && (email.endsWith(".com") || email.endsWith(".edu"));
     }
 
     private boolean isPasswordValid(String password) {
@@ -381,6 +399,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             startMain.putExtra("UserID", LoginID);
             startActivity(startMain);
         }
+    }
+
+    /**
+     * closes the app when the user presses Android's back arrow
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
 

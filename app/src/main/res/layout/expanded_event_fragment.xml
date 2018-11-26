@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--the contents for the DialogFragment expanded card view-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
@@ -12,23 +13,27 @@
     android:paddingBottom="@dimen/activity_tall_vertical_margin"
     >
 
+    <!--a parent view so that contents are scrollable-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
 
+        <!-- a container for the textviews in the expanded event view -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
 
+            <!-- host label -->
             <TextView
                 android:id="@+id/host_label_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/host_label" />
 
+            <!-- host name -->
             <TextView
                 android:id="@+id/host_text"
                 android:layout_width="match_parent"
@@ -36,12 +41,14 @@
                 android:ems="10"
                 />
 
+            <!-- title label -->
             <TextView
                 android:id="@+id/title_label_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/title_label" />
 
+            <!-- title -->
             <TextView
                 android:id="@+id/title_text"
                 android:layout_width="match_parent"
@@ -49,12 +56,14 @@
                 android:ems="10"
                 />
 
+            <!-- description label -->
             <TextView
                 android:id="@+id/description_label_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/description_label" />
 
+            <!-- description -->
             <TextView
                 android:id="@+id/description_text"
                 android:layout_width="match_parent"
@@ -62,12 +71,14 @@
                 android:ems="10"
                 />
 
+            <!-- date label -->
             <TextView
                 android:id="@+id/date_label_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
 
+            <!-- date -->
             <TextView
                 android:id="@+id/date_text"
                 android:layout_width="match_parent"
@@ -75,12 +86,14 @@
                 android:ems="10"
                 />
 
+            <!-- location label  -->
             <TextView
                 android:id="@+id/location_label_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
 
+            <!-- location -->
             <TextView
                 android:id="@+id/location_text"
                 android:layout_width="match_parent"
@@ -88,12 +101,14 @@
                 android:ems="10"
                 />
 
+            <!-- cost label -->
             <TextView
                 android:id="@+id/cost_label_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
 
+            <!-- cost -->
             <TextView
                 android:id="@+id/cost_text"
                 android:layout_width="match_parent"
