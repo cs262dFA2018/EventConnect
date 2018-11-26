@@ -20,41 +20,40 @@ import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
 
 public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity;
-    Calendar calendar = Calendar.getInstance();
+    private Calendar calendar;
+    private DatePickerDialog.OnDateSetListener date;
 
-    // initialize a DatePickerDialog set to name date for the onClickListener
-    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-        /**
-         *
-         * @param view
-         * @param year
-         * @param monthOfYear
-         * @param dayOfMonth
-         */
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, monthOfYear);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            updateLabel();
-        }
-    };
-
-    /**
-     *
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
         //access the UI Edit Texts
 
+        // initialize a DatePickerDialog set to name date for the onClickListener
+        calendar = Calendar.getInstance();
+        date = new DatePickerDialog.OnDateSetListener() {
+            /**
+             *
+             * @param view
+             * @param year
+             * @param monthOfYear
+             * @param dayOfMonth
+             */
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+        };
+
         eventTitle = (EditText) findViewById(R.id.title);
         eventDescription = (EditText) findViewById(R.id.description);
         eventHost = (EditText) findViewById(R.id.host);
         eventDate = (EditText) findViewById(R.id.date);
+
         // onClick listener for eventDate to pull up the calendar widget
         eventDate.setOnClickListener(new View.OnClickListener() {
             /**
@@ -113,20 +112,24 @@ public class AddEvent extends AppCompatActivity {
         //TODO: Enforce a title and description??
         String title = eventTitle.getText().toString();
         String desc = eventDescription.getText().toString();
-        String loc = eventLocation.getText().toString();
-        //String date = eventDate.getText().toString();
-        String host = eventHost.getText().toString();
+        String loc;
+        String host;
+        String date = eventDate.getText().toString();
         Event event = new Event();
 
         double cost;
-        try {cost = Double.parseDouble(eventCost.getText().toString());}
-        catch (java.lang.NumberFormatException e) {cost = 0;}
+        try {
+            cost = Double.parseDouble(eventCost.getText().toString());
+        }
+        catch (java.lang.NumberFormatException e) {
+            cost = 0;
+        }
 
         int threshold;
         final int capacity;
 
-        //TODO: prevent user from putting illegal threshold and capacity in.
-        try {threshold = (int) Math.floor(Double.parseDouble(eventThreshold.getText().toString()));
+        try {
+            threshold = (int) Math.floor(Double.parseDouble(eventThreshold.getText().toString()));
             event.setMinThreshold(threshold);
             }
         catch (java.lang.NumberFormatException e) {
@@ -138,7 +141,8 @@ public class AddEvent extends AppCompatActivity {
             return;
         }
 
-        try {String capacityText = eventCapacity.getText().toString();
+        try {
+            String capacityText = eventCapacity.getText().toString();
             // if the capacity is not an empty string, turn it into a number
             if (!capacityText.equals("")){
                 capacity = (int) Math.floor(Double.parseDouble(capacityText));
@@ -147,7 +151,8 @@ public class AddEvent extends AppCompatActivity {
             // other wise set to -1 which mean there is no max capacity
             else {
                 capacity = -1;
-            }}
+            }
+        }
         catch (java.lang.NumberFormatException e) {
             eventCapacity.setError(getString(R.string.error_invalid_number));
             return;
@@ -161,31 +166,33 @@ public class AddEvent extends AppCompatActivity {
         event.setTitle(title);
         event.setDescription(desc);
 
-        try { String hostText = eventHost.getText().toString();
-            if (!hostText.equals("")){
+        try {
+            host = eventHost.getText().toString();
+            if (!host.equals("")){
                 event.setHost(host);
             } else {
                 eventHost.setError(getString(R.string.error_empty_host));
                 return;
             }
         }
-        catch (RuntimeException e){}
+        catch (RuntimeException e){} // remember this catch block if we ever throw a runtimeException in the Event class for event.setHost(host)
 
-        try { String locationText = eventLocation.getText().toString();
-            if(!locationText.equals("")){
+        try {
+            loc = eventLocation.getText().toString();
+            if(!loc.equals("")){
                 event.setLocation(loc);
             } else{
                 eventLocation.setError(getString(R.string.error_empty_location));
                 return;
             }
         }
-        catch (RuntimeException e){}
+        catch (RuntimeException e){}// remember this catch block if we ever throw a runtimeException in the Event class for event.setLocation(loc)
 
-        //event.setDate(date);
+        event.setDate(date);
         event.setCost(cost);
 
         //access and update the database.
-        //TODO: Make sure data is valid. Else, send a toast about the required fields
+
         MockDatabase database = MockDatabase.getInstance();
         database.addEvent(event);
         finish();
@@ -193,7 +200,7 @@ public class AddEvent extends AppCompatActivity {
 
     /**
      * This method updates the onClick listener for the calendar
-     * widget, setting it to the MM/dd/yy format and Local US date
+     * widget, updating it to the MM/dd/yy format and Local US date
      **/
     private void updateLabel(){
         String DateFormat = "MM/dd/yy";
