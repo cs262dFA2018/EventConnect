@@ -77,6 +77,45 @@ public class MockDatabase {
         }
     }
 
+    /**
+     * deleteEvent removes an event from the database
+     *
+     * @param eventToDelete passed in event that needs to be deleted
+     */
+    public void deleteEvent (Event eventToDelete) {
+
+        // Iterate through the potential events, and delete the event if its found
+        int num_events = potentialEventData.size();
+        boolean eventFound = false;
+        Event event;
+        for (int i=0; i < num_events; i++) {
+            event = potentialEventData.get(i);
+            if (event == eventToDelete) {
+                potentialEventData.remove(event);
+                num_events--;
+                eventFound = true;
+            }
+        }
+
+        // If the event was not found in the potential events, check the confirmed events
+        num_events = confirmedEventData.size();
+        if (!eventFound) {
+            for (int i=0; i < num_events; i++) {
+                event = confirmedEventData.get(i);
+                if (event == eventToDelete) {
+                    confirmedEventData.remove(event);
+                    num_events--;
+                    eventFound = true;
+                }
+            }
+        }
+
+        // If the event was not found anywhere, throw an error
+        if (!eventFound) {
+            throw new RuntimeException("ERROR: tried to delete an event not in the database");
+        }
+    }
+
     public ArrayList<Event> getPotentialEventData(){
         return this.potentialEventData;
     }
