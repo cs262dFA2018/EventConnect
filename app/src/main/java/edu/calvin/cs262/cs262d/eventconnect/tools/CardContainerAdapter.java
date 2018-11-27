@@ -12,13 +12,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
-import edu.calvin.cs262.cs262d.eventconnect.views.TabFragment;
+
 
 /**an adapter class used by MainActivity's Fragments' Recycle Views.
  * This class manages the displaying and click handling of event cards
