@@ -2,7 +2,7 @@ package edu.calvin.cs262.cs262d.eventconnect.data;
 
 public class Event {
     private int current_interest, min_threshold, max_capacity;
-    private String title, description, host, location, date;
+    private String title, description, host, location, date, category;
     private boolean confirmed, needs_to_move, interest;
     private double cost;
 
@@ -16,6 +16,7 @@ public class Event {
         host = "";
         location = "";
         date = "";
+        category = "";
         confirmed = false;
         needs_to_move = false;
         interest = false;
@@ -37,6 +38,10 @@ public class Event {
     public String getDate() {return date;}
     public void setDate(String new_date) {date = new_date;}
 
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String new_category){category = new_category;}
 
     public int getCurrentInterest() {return current_interest;}
     public boolean shouldMove() {return needs_to_move;}

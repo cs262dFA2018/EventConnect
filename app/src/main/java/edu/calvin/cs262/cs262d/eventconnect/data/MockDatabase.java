@@ -26,6 +26,7 @@ public class MockDatabase {
         event.setCost(0.00);
         event.setLocation("Playworld");
         event.setDescription(Birthday );
+        event.setCategory("Party");
         potentialEventData.add(event);
 
         Event event1 = new Event();
@@ -34,6 +35,7 @@ public class MockDatabase {
         event1.setDate("11/9/2018");
         event1.setCost(5.00);
         event1.setLocation("Clark Funeral Home");
+        event1.setCategory("Funeral");
         event1.setDescription(funeral);
         potentialEventData.add(event1);
 
@@ -45,6 +47,7 @@ public class MockDatabase {
         event2.setLocation("Aldi's");
         event2.setMinThreshold(2);
         event2.setMaxCapacity(50);
+        event2.setCategory("Shopping");
         event2.setDescription(GroceryOuting);
         potentialEventData.add(event2);
     }

@@ -128,5 +128,19 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="category">Category</string>
+    <!-- Spinner dta for catagory -->
+
+    <string-array name="event_cat">
+        <item></item>
+        <item>Party</item>
+        <item>Study</item>
+        <item>Trip</item>
+        <item>Meeting</item>
+        <item>Funeral</item>
+        <item>Shopping</item>
+        <item>Concert</item>
+        <item>Practice</item>
+    </string-array>
 
 </resources>

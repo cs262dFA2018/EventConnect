@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,6 +24,7 @@ public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity;
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener date;
+    private Spinner eventCat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,18 @@ public class AddEvent extends AppCompatActivity {
         eventThreshold = (EditText) findViewById(R.id.threshold);
         eventCapacity = (EditText) findViewById(R.id.capacity);
 
+        eventCat = (Spinner) findViewById(R.id.event_cat);
+
+        //https://developer.android.com/guide/topics/ui/controls/spinner#java
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> cat_adapter = ArrayAdapter.createFromResource(this,
+                R.array.event_cat, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        cat_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        eventCat.setAdapter(cat_adapter);
+
+
         //setup toolbar bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -109,11 +124,11 @@ public class AddEvent extends AppCompatActivity {
      */
     public void onCreateEventClicked(View view) {
         //access the data from the UI elements
-        //TODO: Enforce a title and description??
         String title = eventTitle.getText().toString();
         String desc = eventDescription.getText().toString();
         String loc;
         String host;
+        String cat;
         String date = eventDate.getText().toString();
         Event event = new Event();
 
@@ -187,6 +202,12 @@ public class AddEvent extends AppCompatActivity {
             }
         }
         catch (RuntimeException e){}// remember this catch block if we ever throw a runtimeException in the Event class for event.setLocation(loc)
+
+        try{
+            cat = eventCat.getSelectedItem().toString();
+            event.setCategory(cat);
+        }
+        catch (RuntimeException e){}
 
         event.setDate(date);
         event.setCost(cost);
