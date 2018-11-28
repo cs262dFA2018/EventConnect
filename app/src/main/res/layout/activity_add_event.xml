@@ -69,6 +69,7 @@
                 android:ems="10"
                 android:clickable="true"
                 android:editable="false"
+                android:focusable="false"
                 android:hint="@string/date_hint"
                 />
 

@@ -56,6 +56,8 @@
     <string name = "error_invalid_number">Cannot create event with this number</string>
     <string name= "error_empty_host" >Host cannot be empty</string>
     <string name="error_empty_location">Location is required</string>
+    <string name="error_invalid_date">Invalid start date</string>
+    <string name="error_empty_date">Date cannot be empty</string>
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>

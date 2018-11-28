@@ -1,6 +1,7 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,6 +24,8 @@ public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity;
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener date;
+    private DatePicker datePicker;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +36,10 @@ public class AddEvent extends AppCompatActivity {
         // initialize a DatePickerDialog set to name date for the onClickListener
         calendar = Calendar.getInstance();
         date = new DatePickerDialog.OnDateSetListener() {
-            /**
-             *
-             * @param view
-             * @param year
-             * @param monthOfYear
-             * @param dayOfMonth
-             */
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
+                //datePicker.setMinDate(System.currentTimeMillis());
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -68,6 +66,7 @@ public class AddEvent extends AppCompatActivity {
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
         eventLocation = (EditText) findViewById(R.id.location);
         eventCost = (EditText) findViewById(R.id.cost);
         eventThreshold = (EditText) findViewById(R.id.threshold);
@@ -114,6 +113,7 @@ public class AddEvent extends AppCompatActivity {
         String desc = eventDescription.getText().toString();
         String loc;
         String host;
+        Long date2;
         String date = eventDate.getText().toString();
         Event event = new Event();
 
@@ -188,9 +188,25 @@ public class AddEvent extends AppCompatActivity {
         }
         catch (RuntimeException e){}// remember this catch block if we ever throw a runtimeException in the Event class for event.setLocation(loc)
 
-        event.setDate(date);
-        event.setCost(cost);
+        //todo: compare for valid dates and set toast to alert user
+        /**
+        try{
+            date2 = datePicker.getMinDate();
+            if (calendar.getTime() > calendar.getMinimum(Calendar.getInstance()) && !date.equals("")) {
+                Toast.makeText(this, context.getString(R.string.error_invalid_date),
+                        Toast.LENGTH_LONG).show();
+            } else {
+                eventDate.setError(getString(R.string.error_invalid_date));
+                return;
+            }
 
+        }
+
+        catch (RuntimeException e){}
+         **/
+
+        event.setCost(cost);
+        event.setDate(date);
         //access and update the database.
 
         MockDatabase database = MockDatabase.getInstance();

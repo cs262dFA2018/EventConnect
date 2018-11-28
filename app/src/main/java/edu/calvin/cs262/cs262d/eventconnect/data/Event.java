@@ -35,7 +35,6 @@ public class Event {
         } else { cost = new_cost; }
     }
     public String getDate() {return date;}
-    public void setDate(String new_date) {date = new_date;}
 
 
     public int getCurrentInterest() {return current_interest;}
@@ -100,6 +99,15 @@ public class Event {
              throw new RuntimeException("ERROR: attempt to set min threshold to an illegal state.");
         }
     }
+    public void setDate(String new_date) {
+        //if(Integer.parseInt(new_date) > Integer.parseInt(date)){
+            date = new_date;
+        //} else {
+        //    throw new RuntimeException("Error: attempted to set invalid date");
+        //}
+
+    }
+
 
     public void clearMoved(){ needs_to_move = false; }
     public boolean getInterest(){return interest;}
