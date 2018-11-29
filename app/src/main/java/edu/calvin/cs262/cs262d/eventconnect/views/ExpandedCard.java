@@ -19,9 +19,9 @@ import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 public class ExpandedCard extends DialogFragment {
 
     private TextView hostLabel, hostView, titleLabel, titleView, descriptionLabel, descriptionView,
-        dateLabel, dateView, locationLabel, locationView, costLabel, costView;
+            dateLabel, dateView, locationLabel, locationView, costLabel, costView, timeLabel, timeView;
     private boolean interested;
-    private String title, description, host, location, date;
+    private String title, description, host, location, date, time;
     private double cost;
 
     /**
@@ -39,6 +39,7 @@ public class ExpandedCard extends DialogFragment {
         args.putString("location", event.getLocation());
         args.putString("date", event.getDate());
         args.putDouble("cost", event.getCost());
+        args.putString("time", event.getTime());
 
         ec.setArguments(args);
 
@@ -50,23 +51,50 @@ public class ExpandedCard extends DialogFragment {
         super.onCreate(savedInstanceState);
         //access the event Data
         Bundle args = getArguments();
-        try {title = args.getString("title");}
-        catch (java.lang.NullPointerException ne) {title = "";}
-        try {description = args.getString("description");}
-        catch (java.lang.NullPointerException ne) {description = "";}
-        try {host = args.getString("host");}
-        catch (java.lang.NullPointerException ne) {host = "";}
-        try {interested = args.getBoolean("interested");}
-        catch (java.lang.NullPointerException ne) {interested = false;}
-        try {location = args.getString("location");}
-        catch (java.lang.NullPointerException ne) {location = "";}
-        try {date = args.getString("date");}
-        catch (java.lang.NullPointerException ne) {date = "";}
-        try {cost = args.getDouble("cost");}
-        catch (java.lang.NullPointerException ne) {cost = 0;}
+        try {
+            title = args.getString("title");
+        } catch (java.lang.NullPointerException ne) {
+            title = "";
+        }
+        try {
+            description = args.getString("description");
+        } catch (java.lang.NullPointerException ne) {
+            description = "";
+        }
+        try {
+            host = args.getString("host");
+        } catch (java.lang.NullPointerException ne) {
+            host = "";
+        }
+        try {
+            interested = args.getBoolean("interested");
+        } catch (java.lang.NullPointerException ne) {
+            interested = false;
+        }
+        try {
+            location = args.getString("location");
+        } catch (java.lang.NullPointerException ne) {
+            location = "";
+        }
+        try {
+            date = args.getString("date");
+        } catch (java.lang.NullPointerException ne) {
+            date = "";
+        }
+        try {
+            cost = args.getDouble("cost");
+        } catch (java.lang.NullPointerException ne) {
+            cost = 0;
+        }
+        try {
+            time = args.getString("time");
+        } catch (java.lang.NullPointerException ne){
+            time ="";
+        }
 
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,6 +118,9 @@ public class ExpandedCard extends DialogFragment {
         locationView = (TextView) view.findViewById(R.id.location_text);
         costLabel = (TextView) view.findViewById(R.id.cost_label_text);
         costView = (TextView) view.findViewById(R.id.cost_text);
+        timeLabel = (TextView) view.findViewById(R.id.time_label_text);
+        timeView = (TextView) view.findViewById(R.id.time_text);
+
         //TODO: Floating interested button
 
         //set UI text
@@ -101,6 +132,8 @@ public class ExpandedCard extends DialogFragment {
         descriptionView.setText(description);
         dateLabel.setText(getString(R.string.date_label));
         dateView.setText(date);
+        timeLabel.setText(getString(R.string.time_label));
+        timeView.setText(time);
         locationLabel.setText(getString(R.string.location_label));
         locationView.setText(location);
         costLabel.setText(getString(R.string.cost_label));

@@ -86,6 +86,21 @@
                 android:ems="10"
                 />
 
+            <!-- Time label-->
+            <TextView
+                android:id="@+id/time_label_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <!-- time -->
+            <TextView
+                android:id="@+id/time_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                />
+
             <!-- location label  -->
             <TextView
                 android:id="@+id/location_label_text"
