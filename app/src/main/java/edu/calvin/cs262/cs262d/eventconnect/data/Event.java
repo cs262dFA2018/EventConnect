@@ -1,8 +1,21 @@
 package edu.calvin.cs262.cs262d.eventconnect.data;
 
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import android.widget.Toast;
+
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+import edu.calvin.cs262.cs262d.eventconnect.R;
+
 public class Event {
     private int current_interest, min_threshold, max_capacity;
-    private String title, description, host, location, date;
+    private String title, description, host, location;
+    private  Calendar date;
     private boolean confirmed, needs_to_move, interest;
     private double cost;
 
@@ -15,7 +28,7 @@ public class Event {
         description = "";
         host = "";
         location = "";
-        date = "";
+        date = Calendar.getInstance();
         confirmed = false;
         needs_to_move = false;
         interest = false;
@@ -34,12 +47,20 @@ public class Event {
         if (new_cost < 0) { throw new RuntimeException("ERROR: cost was negative.");
         } else { cost = new_cost; }
     }
-    public String getDate() {return date;}
-    public void setDate(String new_date) {date = new_date;}
+    public String getTime(){
+        String DateFormat = "HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(DateFormat, Locale.US);
+        return sdf.format(date.getTime());
+    }
 
-
+    public String getDate() {
+        String DateFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(DateFormat, Locale.US);
+        return sdf.format(date.getTime());
+    }
     public int getCurrentInterest() {return current_interest;}
     public boolean shouldMove() {return needs_to_move;}
+
 
     /** for methods that change current_interest, min_threshold, and max_capacity,
      * I have placed logic blocks that force the program to crash if values go invalid.
@@ -98,6 +119,34 @@ public class Event {
             min_threshold = new_threshold;
         } else {
              throw new RuntimeException("ERROR: attempt to set min threshold to an illegal state.");
+        }
+    }
+
+    public void setDate(String new_date) throws RuntimeException, ParseException {
+        final Calendar calendar = Calendar.getInstance();
+        String DateFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(DateFormat, Locale.US);
+
+        calendar.setTime(sdf.parse(new_date));
+
+        if (calendar.before(Calendar.getInstance()) && date.equals("")) {
+            throw new RuntimeException("ERROR: attempt to set date to before current time");
+        } else {
+            date = calendar;
+        }
+    }
+
+    public void setTime(String new_time) throws ParseException{
+        final Calendar calendar = Calendar.getInstance();
+        String DateFormat = "hh:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(DateFormat, Locale.US);
+
+        calendar.setTime(sdf.parse(new_time));
+
+        if (calendar.before(Calendar.getInstance()) && date.equals("")) {
+            throw new RuntimeException("ERROR: attempt to set Time to before current time");
+        } else {
+            date = calendar;
         }
     }
 
