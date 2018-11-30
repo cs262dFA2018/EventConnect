@@ -69,9 +69,26 @@
                 android:ems="10"
                 android:clickable="true"
                 android:editable="false"
+                android:focusable="false"
                 android:hint="@string/date_hint"
                 />
 
+            <TextView
+                android:id="@+id/time_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/time_label" />
+
+            <EditText
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="@string/time_hint"
+                />
             <TextView
                 android:id="@+id/location_label"
                 android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package edu.calvin.cs262.cs262d.eventconnect.data;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class MockDatabase {
@@ -22,7 +23,16 @@ public class MockDatabase {
         Event event = new Event();
         event.setHost("Brenda Anderson");
         event.setTitle("Happy Birthday Joe! ");
-        event.setDate("11/8/2018");
+        try {
+            event.setDate("11/8/2018");
+        }
+        catch (ParseException e){}
+        catch (RuntimeException re) {}
+        try {
+            event.setTime("8:30");
+        }
+        catch (ParseException e){}
+        catch (RuntimeException re) {}
         event.setCost(0.00);
         event.setLocation("Playworld");
         event.setDescription(Birthday );
@@ -31,7 +41,16 @@ public class MockDatabase {
         Event event1 = new Event();
         event1.setTitle("Joe's Funeral");
         event1.setHost("Brenda Anderson");
-        event1.setDate("11/9/2018");
+        try {
+            event1.setDate("11/9/2018");
+        }
+        catch (ParseException e){}
+        catch (RuntimeException re) {}
+        try {
+            event1.setTime("12:10");
+        }
+        catch (ParseException e){}
+        catch (RuntimeException re) {}
         event1.setCost(5.00);
         event1.setLocation("Clark Funeral Home");
         event1.setDescription(funeral);
@@ -40,7 +59,16 @@ public class MockDatabase {
         Event event2 = new Event();
         event2.setTitle("Grocery Shopping");
         event2.setHost("Dave Anderson");
-        event2.setDate("11/9/2018");
+        try {
+            event2.setDate("11/9/2018");
+        }
+        catch (ParseException e){}
+        catch (RuntimeException re) {}
+        try {
+            event2.setTime("16:00");
+        }
+        catch (ParseException e){}
+        catch (RuntimeException re) {}
         event2.setCost(10.00);
         event2.setLocation("Aldi's");
         event2.setMinThreshold(2);
