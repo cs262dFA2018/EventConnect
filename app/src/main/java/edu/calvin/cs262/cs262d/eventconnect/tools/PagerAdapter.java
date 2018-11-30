@@ -20,6 +20,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         context = app_context;
     }
 
+    /**
+     * getItem sets up the potential and confirmed events tab
+     * @param position tells which tab should be open
+     * @return the Fragment that contains the event cards
+     */
     @Override
     public Fragment getItem(int position) {
         /* android documentation strongly suggests passing information to the fragment with a Bundle,
