@@ -248,7 +248,7 @@ public class MockDatabase {
      * @author Littlesnomwan88
      */
     private void placeEvent(Event event) {
-        if (!event.isConfirmed()) {
+        if (!event.checkConfirmed()) {
             potentialEventData.add(event);
         } else {
             confirmedEventData.add(event);

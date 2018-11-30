@@ -183,6 +183,7 @@ public class Event {
 
     /**
      * Sets minimum threshold, should it need to change
+     *
      * @param new_threshold new value for threshold
      * @throws RuntimeException throws an error if attempted to set to an illegal state
      */
@@ -298,9 +299,24 @@ public class Event {
 
     /**
      * isConfirmed tells the app which tab this event needs to be in.
+     *
      * @return confirmed false = potentialEvent, true = confirmedEvent
      * @author Littlesnowman88
      */
-    public boolean isConfirmed() {return confirmed;}
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    /**
+     * checkConfirmed checks the current interest count against the minimum threshold
+     * also sets confirmed to true or false, based on the return value's conditions.
+     *
+     * @return true if current interest >= threshold, false otherwise
+     * @author Littlesnowman88
+     */
+    public boolean checkConfirmed() {
+        confirmed = (current_interest >= min_threshold);
+        return confirmed;
+    }
 }
 
