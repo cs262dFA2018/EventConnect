@@ -134,9 +134,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                  */
                 click_handler.onClick(event_clicked, ExpandCard);
             }
-
-
-
         }
 
         /**

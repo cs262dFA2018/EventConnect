@@ -31,7 +31,7 @@ public class NetworkUtils {
      * OR, a localized error message if connection failed.
      * @author Littlesnowman88
      */
-    static String getEventInfo(String endpoint) throws RuntimeException {
+    public static String getEventInfo(String endpoint) throws RuntimeException {
         //build necessary web-related components outside try-catch scope
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -92,7 +92,8 @@ public class NetworkUtils {
                 }
             }
         }
-        Log.d(LOG_TAG, (eventJSONString != null) ? eventJSONString : "JSON STRING IS NULL, BADNESS");
+        //Although I normally delete debug statements, I will leave this here because it REALLY helps with debugging. -LS88
+        //Log.d(LOG_TAG, (eventJSONString != null) ? eventJSONString : "JSON STRING IS NULL, BADNESS");
         return eventJSONString;
     }
 }

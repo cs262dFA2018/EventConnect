@@ -251,7 +251,7 @@ public class AddEvent extends AppCompatActivity {
         if (!errorFound) { //if all required event information is entered and information is validated:
             //access and update the database.
             MockDatabase database = MockDatabase.getInstance();
-            database.addEvent(event);
+            database.addNewEvent(event);
             finish();
         }
     }

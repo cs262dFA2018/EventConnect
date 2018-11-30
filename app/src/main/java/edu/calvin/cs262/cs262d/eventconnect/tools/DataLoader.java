@@ -18,8 +18,9 @@ public class DataLoader extends AsyncTaskLoader<String> {
     /**
      * Constructor: passes context to AsyncTaskLoader and saves the requested
      *
-     * @param context the "screen" that created this AsyncTaskLoader
+     * @param context  the "screen" that created this AsyncTaskLoader
      * @param endpoint the database API endpoint attached at the end of the base url
+     * @author Littlesnowman88
      */
     public DataLoader(@NonNull Context context, String endpoint) {
         super(context);
