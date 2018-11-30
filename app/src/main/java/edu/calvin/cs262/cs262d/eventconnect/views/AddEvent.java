@@ -52,6 +52,10 @@ public class AddEvent extends AppCompatActivity {
         eventHost = (EditText) findViewById(R.id.host);
         eventDate = (EditText) findViewById(R.id.date);
         eventTime = (EditText) findViewById(R.id.time);
+        eventLocation = (EditText) findViewById(R.id.location);
+        eventCost = (EditText) findViewById(R.id.cost);
+        eventThreshold = (EditText) findViewById(R.id.threshold);
+        eventCapacity = (EditText) findViewById(R.id.capacity);
 
         // onClick listener for eventDate to pull up the calendar widget
         eventDate.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +74,7 @@ public class AddEvent extends AppCompatActivity {
             }
         });
 
-        // initialize a DatePickerDialog set to name date for the onClickListener
+        // initialize a DatePickerDialog and set name to date for the onClickListener
         calendar = Calendar.getInstance();
         date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -83,6 +87,7 @@ public class AddEvent extends AppCompatActivity {
             }
         };
 
+        // onClick listener for eventTime to pull up the time picker widget
         eventTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +98,7 @@ public class AddEvent extends AppCompatActivity {
             }
         });
 
+        // initialize a TimePickerDialog and set name to date for the onClickListener
         Time = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -101,10 +107,6 @@ public class AddEvent extends AppCompatActivity {
                 updateTime();
             }
         };
-        eventLocation = (EditText) findViewById(R.id.location);
-        eventCost = (EditText) findViewById(R.id.cost);
-        eventThreshold = (EditText) findViewById(R.id.threshold);
-        eventCapacity = (EditText) findViewById(R.id.capacity);
 
         //setup toolbar bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -136,6 +138,8 @@ public class AddEvent extends AppCompatActivity {
     }
 
     /**
+     * Onclick for creating the event when the "create event" button is clicked,
+     * setting the time, date, title, etc.
      * @param view
      */
     public void onCreateEventClicked(View view) {
@@ -266,7 +270,10 @@ public class AddEvent extends AppCompatActivity {
         eventDate.setText(sdf.format(calendar.getTime()));
 
     }
-
+    /**
+     * This method updates the onClick listener for the time
+     * widget, updating it to the HH:mm format and Local US date
+     **/
     public void updateTime() {
         String TimeFormat = "HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(TimeFormat, Locale.US);
