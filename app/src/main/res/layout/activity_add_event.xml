@@ -27,13 +27,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            <!-- Host Label -->
             <TextView
                 android:id="@+id/host_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/host_label" />
 
+            <!-- Host Edit Text-->
             <EditText
                 android:id="@+id/host"
                 android:layout_width="match_parent"
@@ -42,12 +43,14 @@
                 android:hint="@string/host_hint"
                 android:inputType="textCapWords|textPersonName" />
 
+            <!-- Title Label -->
             <TextView
                 android:id="@+id/title_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/title_label" />
 
+            <!--Title Edit Text Label -->
             <EditText
                 android:id="@+id/title"
                 android:layout_width="match_parent"
@@ -56,12 +59,14 @@
                 android:hint="@string/title_hint"
                 android:inputType="textCapWords" />
 
+            <!-- Date Label Text -->
             <TextView
                 android:id="@+id/date_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/date_label" />
 
+            <!-- Date Edit Text Label -->
             <EditText
                 android:id="@+id/date"
                 android:layout_width="match_parent"
@@ -73,12 +78,14 @@
                 android:hint="@string/date_hint"
                 />
 
+            <!-- Time Label -->
             <TextView
                 android:id="@+id/time_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/time_label" />
 
+            <!--Time Edit Text Label-->
             <EditText
                 android:id="@+id/time"
                 android:layout_width="match_parent"
@@ -89,12 +96,15 @@
                 android:focusable="false"
                 android:hint="@string/time_hint"
                 />
+
+            <!-- Location Label -->
             <TextView
                 android:id="@+id/location_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/location_label" />
 
+            <!-- location Edit Text -->
             <EditText
                 android:id="@+id/location"
                 android:layout_width="match_parent"
@@ -103,12 +113,14 @@
                 android:hint="@string/location_hint"
                 android:inputType="textPostalAddress" />
 
+            <!-- Event Cost Label -->
             <TextView
                 android:id="@+id/cost_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/cost_label" />
 
+            <!--Event Cost Edit Text Label -->
             <EditText
                 android:id="@+id/cost"
                 android:layout_width="match_parent"
@@ -117,12 +129,14 @@
                 android:hint="@string/cost_hint"
                 android:inputType="numberDecimal" />
 
+            <!-- Minimum Threshold Label -->
             <TextView
                 android:id="@+id/threshold_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/threshold_label" />
 
+            <!-- Minimum Threshold Edit Text -->
             <EditText
                 android:id="@+id/threshold"
                 android:layout_width="match_parent"
@@ -131,12 +145,14 @@
                 android:hint="@string/threshold_hint"
                 android:inputType="number" />
 
+            <!-- Max Capacity Label -->
             <TextView
                 android:id="@+id/capacity_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/capacity_label" />
 
+            <!-- Max Capacity Edit Text -->
             <EditText
                 android:id="@+id/capacity"
                 android:layout_width="match_parent"
@@ -145,23 +161,27 @@
                 android:hint="@string/capacity_hint"
                 android:inputType="number" />
 
+            <!-- Category Label -->
             <TextView
                 android:id="@+id/category_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category_label" />
 
+            <!-- Category Spinner Label -->
             <Spinner
                 android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <!-- Description Label -->
             <TextView
                 android:id="@+id/description_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/description_label" />
 
+            <!-- Description Edit Text -->
             <EditText
                 android:id="@+id/description"
                 android:layout_width="match_parent"
@@ -170,6 +190,7 @@
                 android:hint="@string/description_hint"
                 android:inputType="textMultiLine" />
 
+            <!-- Create Event Button Label -->
             <Button
                 android:id="@+id/create_event"
                 android:layout_width="match_parent"
