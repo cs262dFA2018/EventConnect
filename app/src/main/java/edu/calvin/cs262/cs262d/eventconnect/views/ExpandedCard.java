@@ -26,6 +26,8 @@ public class ExpandedCard extends DialogFragment {
 
     /**
      * Create a new instance of ExpandedCard, providing arguments from an Event
+     *
+     * @param event event data to put on expanded card
      */
     static ExpandedCard newInstance(Event event) {
         ExpandedCard ec = new ExpandedCard();
@@ -46,6 +48,11 @@ public class ExpandedCard extends DialogFragment {
         return ec;
     }
 
+    /**
+     * onCreate sets up the ExpandedCard view
+     *
+     * @param savedInstanceState bundle of event data
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,12 +102,26 @@ public class ExpandedCard extends DialogFragment {
 
     }
 
+    /**
+     * onCreateView uses an inflater to set up the expanded card view
+     *
+     * @param inflater layout inflator to use
+     * @param container view group for the expanded card
+     * @param savedInstanceState expanded card data
+     * @return result of inflater
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.expanded_event_fragment, container, false);
     }
 
+    /**
+     * Applies data to the expanded card
+     *
+     * @param view view the expanded card is in
+     * @param savedInstanceState expanded card data
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -160,6 +181,9 @@ public class ExpandedCard extends DialogFragment {
          */
     }
 
+    /**
+     * onResume shows the already created expanded card view
+     */
     @Override
     public void onResume() {
         super.onResume();

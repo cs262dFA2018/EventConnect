@@ -26,6 +26,9 @@ import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 
+/**
+ * AddEvent is the activity for adding a new event
+ */
 public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity, eventTime;
     private Calendar calendar;
@@ -34,6 +37,11 @@ public class AddEvent extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener Time;
     private String currentTheme;
 
+    /**
+     * onCreate initializes the AddEvent activity
+     *
+     * @param savedInstanceState bundle passed in when the activity is created
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -58,7 +66,8 @@ public class AddEvent extends AppCompatActivity {
             /**
              * onClick for activating the calendar widget
              * once the date EditText is clicked
-             * @param view
+             *
+             * @param view the view the onClick coordinates with
              */
             @Override
             public void onClick(View view) {
@@ -123,8 +132,9 @@ public class AddEvent extends AppCompatActivity {
      */
 
     /**
-     * @param item
-     * @return
+     * Calls the correct routine for the selected item or finishes the activity
+     * @param item selected item from the menu
+     * @return result of the super call for the selected item
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -136,7 +146,9 @@ public class AddEvent extends AppCompatActivity {
     }
 
     /**
-     * @param view
+     * turns entered data into an Event in the database
+     *
+     * @param view the viewholder for the event cards
      */
     public void onCreateEventClicked(View view) {
         boolean errorFound = false;
