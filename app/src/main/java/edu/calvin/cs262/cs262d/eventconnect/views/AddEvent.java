@@ -86,6 +86,14 @@ public class AddEvent extends AppCompatActivity {
         // initialize a DatePickerDialog and set name to date for the onClickListener
         calendar = Calendar.getInstance();
         date = new DatePickerDialog.OnDateSetListener() {
+          /**
+             * onDateSet stores the date information from the Date Picker
+             *
+             * @param view
+             * @param year
+             * @param monthOfYear
+             * @param dayOfMonth
+             */
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
@@ -135,6 +143,7 @@ public class AddEvent extends AppCompatActivity {
 
     /**
      * Calls the correct routine for the selected item or finishes the activity
+     *
      * @param item selected item from the menu
      * @return result of the super call for the selected item
      */
@@ -150,7 +159,11 @@ public class AddEvent extends AppCompatActivity {
     /**
      * Onclick for creating a database event object when the "create event" button is clicked,
      * setting the time, date, title, etc.
+     *
      * @param view the viewholder for the event cards
+     * Onclick for creating a database event object when the "create event" button is clicked,
+     * setting the time, date, title, etc.
+     *
      */
     public void onCreateEventClicked(View view) {
         boolean errorFound = false;
