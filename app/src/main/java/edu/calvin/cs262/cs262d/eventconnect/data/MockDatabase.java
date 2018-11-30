@@ -27,10 +27,12 @@ public class MockDatabase {
             event.setDate("11/8/2018");
         }
         catch (ParseException e){}
+        catch (RuntimeException re) {}
         try {
             event.setTime("8:30");
         }
         catch (ParseException e){}
+        catch (RuntimeException re) {}
         event.setCost(0.00);
         event.setLocation("Playworld");
         event.setDescription(Birthday );
@@ -43,10 +45,12 @@ public class MockDatabase {
             event1.setDate("11/9/2018");
         }
         catch (ParseException e){}
+        catch (RuntimeException re) {}
         try {
             event1.setTime("12:10");
         }
         catch (ParseException e){}
+        catch (RuntimeException re) {}
         event1.setCost(5.00);
         event1.setLocation("Clark Funeral Home");
         event1.setDescription(funeral);
@@ -59,10 +63,12 @@ public class MockDatabase {
             event2.setDate("11/9/2018");
         }
         catch (ParseException e){}
+        catch (RuntimeException re) {}
         try {
             event2.setTime("16:00");
         }
         catch (ParseException e){}
+        catch (RuntimeException re) {}
         event2.setCost(10.00);
         event2.setLocation("Aldi's");
         event2.setMinThreshold(2);

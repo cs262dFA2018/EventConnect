@@ -3,6 +3,8 @@ package edu.calvin.cs262.cs262d.eventconnect.views;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +24,7 @@ import java.util.Locale;
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
+import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 
 public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity, eventTime;
@@ -28,13 +32,21 @@ public class AddEvent extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener date;
     private Context context;
     private TimePickerDialog.OnTimeSetListener Time;
+    private String currentTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //access shared preferences for theme setting first.
+        //MUST BE HANDLED BEFORE setContentView is called--in this case, before super.onCreate is called
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        AppThemeChanger.handleThemeChange(this, currentTheme);
+        currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
-        //access the UI Edit Texts
 
+        //access the UI Edit Texts
         eventTitle = (EditText) findViewById(R.id.title);
         eventDescription = (EditText) findViewById(R.id.description);
         eventHost = (EditText) findViewById(R.id.host);
@@ -76,7 +88,7 @@ public class AddEvent extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar CurrentTime = Calendar.getInstance();
                 TimePickerDialog timePicker = new TimePickerDialog(AddEvent.this, Time,
-                        CurrentTime.HOUR, CurrentTime.MINUTE, true);
+                        CurrentTime.get(Calendar.HOUR_OF_DAY), CurrentTime.get(Calendar.MINUTE), true);
                 timePicker.show();
             }
         });
@@ -84,7 +96,7 @@ public class AddEvent extends AppCompatActivity {
         Time = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                calendar.set(Calendar.HOUR, hourOfDay);
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
                 updateTime();
             }
@@ -127,105 +139,121 @@ public class AddEvent extends AppCompatActivity {
      * @param view
      */
     public void onCreateEventClicked(View view) {
-
-        String title = eventTitle.getText().toString();
-        String desc = eventDescription.getText().toString();
-        String loc;
+        boolean errorFound = false;
         String host;
+        String title = eventTitle.getText().toString();
         String date = eventDate.getText().toString();
         String time = eventTime.getText().toString();
-        Event event = new Event();
-
+        String loc;
         double cost;
-        try {
-            cost = Double.parseDouble(eventCost.getText().toString());
-        } catch (java.lang.NumberFormatException e) {
-            cost = 0;
-        }
-
         int threshold;
         final int capacity;
+        String desc = eventDescription.getText().toString();
 
-        try {
-            threshold = (int) Math.floor(Double.parseDouble(eventThreshold.getText().toString()));
-            event.setMinThreshold(threshold);
-        } catch (java.lang.NumberFormatException e) {
-            eventThreshold.setError(getString(R.string.error_invalid_number));
-            return;
-        } catch (RuntimeException e) {
-            eventThreshold.setError(getString(R.string.error_invalid_MinNumber));
-            return;
-        }
+        Event event = new Event();
 
-        try {
-            String capacityText = eventCapacity.getText().toString();
-            // if the capacity is not an empty string, turn it into a number
-            if (!capacityText.equals("")) {
-                capacity = (int) Math.floor(Double.parseDouble(capacityText));
-                event.setMaxCapacity(capacity);
-            }
-            // other wise set to -1 which mean there is no max capacity
-            else {
-                capacity = -1;
-            }
-        } catch (java.lang.NumberFormatException e) {
-            eventCapacity.setError(getString(R.string.error_invalid_number));
-            return;
-        } catch (RuntimeException e) {
-            eventCapacity.setError(getString(R.string.error_invalid_MaxNumber));
-            return;
-        }
-
-        //store the data from the UI elements
-        event.setTitle(title);
-        event.setDescription(desc);
-
+        //EVENT HOST
         try {
             host = eventHost.getText().toString();
             if (!host.equals("")) {
                 event.setHost(host);
             } else {
                 eventHost.setError(getString(R.string.error_empty_host));
-                return;
+                errorFound=true;
             }
         } catch (RuntimeException e) {
         } // remember this catch block if we ever throw a runtimeException in the Event class for event.setHost(host)
 
+        //EVENT TITLE
+        event.setTitle(title);
+
+        //EVENT DATE
+        try {
+            event.setDate(date);
+            eventDate.setError(null); //clear any possible error messages since EditText is hidden behind a dialog.
+        } catch (ParseException e) {
+            eventDate.setError(getString(R.string.error_empty_date));
+            errorFound=true;
+        } catch (RuntimeException e) {
+            // this should not run because previous dates are disabled
+            eventDate.setError(getString(R.string.error_invalid_date));
+            errorFound=true;
+        }
+
+        //EVENT TIME
+        try {
+            event.setTime(time);
+            eventTime.setError(null); //clear any possible error messages since EditText is hidden behind a dialog.
+        } catch (ParseException e) {
+            eventTime.setError(getString(R.string.error_empty_time));
+            errorFound=true;
+        } catch (RuntimeException e) {
+            eventTime.setError(getString(R.string.error_invalid_time));
+            Toast.makeText(AddEvent.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            errorFound=true;
+        }
+
+        //EVENT LOCATION
         try {
             loc = eventLocation.getText().toString();
             if (!loc.equals("")) {
                 event.setLocation(loc);
             } else {
                 eventLocation.setError(getString(R.string.error_empty_location));
-                return;
+                errorFound=true;
             }
         } catch (RuntimeException e) {
         }// remember this catch block if we ever throw a runtimeException in the Event class for event.setLocation(loc)
 
+        //EVENT COST
         try {
-            event.setDate(date);
-        } catch (ParseException e) {
-            eventDate.setError(getString(R.string.error_empty_date));
-        } catch (RuntimeException e) {
-            // this should not run because previous dates are disabled
-            eventDate.setError(getString(R.string.error_invalid_date));
+            cost = Double.parseDouble(eventCost.getText().toString());
+        } catch (java.lang.NumberFormatException e) {
+            cost = 0;
         }
-
-        try {
-            event.setTime(time);
-        } catch (ParseException e) {
-            eventTime.setError(getString(R.string.error_empty_time));
-        } catch (RuntimeException e) {
-            eventTime.setError(getString(R.string.error_invalid_time));
-        }
-
         event.setCost(cost);
 
-        //access and update the database.
+        //EVENT THRESHOLD (MIN INTEREST)
+        try {
+            threshold = (int) Math.floor(Double.parseDouble(eventThreshold.getText().toString()));
+            event.setMinThreshold(threshold);
+        } catch (java.lang.NumberFormatException e) {
+            eventThreshold.setError(getString(R.string.error_invalid_number));
+            errorFound=true;
+        } catch (RuntimeException e) {
+            eventThreshold.setError(getString(R.string.error_invalid_MinNumber));
+            errorFound=true;
+        }
 
-        MockDatabase database = MockDatabase.getInstance();
-        database.addEvent(event);
-        finish();
+        //EVENT CAPACITY (MAX INTEREST)
+        try {
+            String capacityText = eventCapacity.getText().toString();
+            // if the capacity is not an empty string, turn it into a number
+            if (!capacityText.equals("")) {
+                capacity = (int) Math.floor(Double.parseDouble(capacityText));
+            }
+            // other wise set to -1 which mean there is no max capacity
+            else {
+                capacity = -1;
+            }
+            event.setMaxCapacity(capacity);
+        } catch (java.lang.NumberFormatException e) {
+            eventCapacity.setError(getString(R.string.error_invalid_number));
+            errorFound=true;
+        } catch (RuntimeException e) {
+            eventCapacity.setError(getString(R.string.error_invalid_MaxNumber));
+            errorFound=true;
+        }
+
+        //EVENT DESCRIPTION
+        event.setDescription(desc);
+
+        if (!errorFound) { //if all required event information is entered and information is validated:
+            //access and update the database.
+            MockDatabase database = MockDatabase.getInstance();
+            database.addEvent(event);
+            finish();
+        }
     }
 
     /**
@@ -240,7 +268,7 @@ public class AddEvent extends AppCompatActivity {
     }
 
     public void updateTime() {
-        String TimeFormat = "hh:mm";
+        String TimeFormat = "HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(TimeFormat, Locale.US);
         eventTime.setText(sdf.format(calendar.getTime()));
 
