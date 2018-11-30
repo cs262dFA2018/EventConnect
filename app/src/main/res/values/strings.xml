@@ -35,7 +35,7 @@
     <string name="time_label"><b>Time Of Event</b></string>
     <string name="time_hint">Time of Event</string>
 
-    <!-- String related to delet event -->
+    <!-- String related to delete event -->
     <string name="delete_event">Delete Event</string>
     <string name="delete_confirm">Are you sure you want to delete this event?</string>
 
