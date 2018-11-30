@@ -18,11 +18,19 @@ import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
 
+/**
+ * AddEvent is the activity for adding a new event
+ */
 public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity;
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener date;
 
+    /**
+     * onCreate initializes the AddEvent activity
+     *
+     * @param savedInstanceState bundle passed in when the activity is created
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +41,7 @@ public class AddEvent extends AppCompatActivity {
         calendar = Calendar.getInstance();
         date = new DatePickerDialog.OnDateSetListener() {
             /**
+             * onDateSet stores the date information from the Date Picker
              *
              * @param view
              * @param year
@@ -59,7 +68,8 @@ public class AddEvent extends AppCompatActivity {
             /**
              * onClick for activating the calendar widget
              * once the date EditText is clicked
-             * @param view
+             *
+             * @param view the view the onClick coordinates with
              */
             @Override
             public void onClick(View view) {
@@ -90,9 +100,9 @@ public class AddEvent extends AppCompatActivity {
      */
 
     /**
-     *
-     * @param item
-     * @return
+     * Calls the correct routine for the selected item or finishes the activity
+     * @param item selected item from the menu
+     * @return result of the super call for the selected item
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,8 +114,9 @@ public class AddEvent extends AppCompatActivity {
     }
 
     /**
+     * turns entered data into an Event in the database
      *
-     * @param view
+     * @param view the viewholder for the event cards
      */
     public void onCreateEventClicked(View view) {
         //access the data from the UI elements

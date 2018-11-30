@@ -44,6 +44,8 @@ public class Event {
     /** for methods that change current_interest, min_threshold, and max_capacity,
      * I have placed logic blocks that force the program to crash if values go invalid.
      * This is intended to make the program Fail Fast when bugs creep in during the development process.
+     *
+     * @param new_interest new value for current interest
      */
     public void setCurrentInterest(int new_interest) {
         if (new_interest > -1 || (max_capacity > 0 && new_interest <= max_capacity)) {
@@ -53,6 +55,11 @@ public class Event {
             throw new RuntimeException("ERROR: attempt to set current interest out of its bounds.");
         }
     }
+
+    /**
+     * Called when a user hits the intersted button to mark their interest
+     * Increments the current interest, then moves the event to the confirmed tab if necessary
+     */
     public void incrementCurrentInterest() {
         if (max_capacity < 0 || current_interest + 1 <= max_capacity) {
             current_interest += 1;
@@ -66,6 +73,11 @@ public class Event {
             throw new RuntimeException("ERROR: current_interest exceeded max_capacity.");
         }
     }
+
+    /**
+     * Called when a user hits the interested button to un-mark their interest
+     * Decrements the current interest, then moves the event to the potential tab if necessary
+     */
     public void decrementCurrentInterest() {
         if (current_interest - 1 > -1 ) {
             current_interest -= 1;
@@ -80,6 +92,12 @@ public class Event {
 
     public int getMaxCapacity() {return max_capacity;}
 
+    /**
+     * Sets new capacity to the value passed in
+     *
+     * @param new_capacity new max capacity to change in the system
+     * @throws RuntimeException throws an error if attempted to set to an illegal state
+     */
     public void setMaxCapacity(int new_capacity) throws RuntimeException{
         if (new_capacity == -1 || (new_capacity > 0 && new_capacity > current_interest
                 && new_capacity >= min_threshold)) {
@@ -91,8 +109,12 @@ public class Event {
 
     public int getMinThreshold() {return min_threshold;}
 
+    /**
+     * Sets minimum threshold, should it need to change
+     * @param new_threshold new value for threshold
+     * @throws RuntimeException throws an error if attempted to set to an illegal state
+     */
     public void setMinThreshold(int new_threshold) throws RuntimeException {
-
         //new threshold must be positive and within the max capacity (unless max capacity is -1, in which case it can be anything positive.
         if (new_threshold > 0 && (new_threshold <= max_capacity || max_capacity == -1)) {
             min_threshold = new_threshold;

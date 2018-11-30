@@ -8,14 +8,16 @@ public class MockDatabase {
     private static final String Birthday = "We welcome everyone to Joe's birthday party. " +
             "Please join us as Joe turns 7 today. There will be cake, pinata, and a bounce house. " +
             "Presents are welcomed, but not required.";
-
     private static final String funeral = "Please join us in the celebration of Joe's life. Joseph David " +
             "Anderson lost his life last week, oct 24th 2018 after loosing a short battle with a bouncy castle at his party. " +
             "He was loved by his " + "friends, family, and pets. He will be missed, but let's not focus " +
             "on the negatives but on the positives of his life";
-
     private static final String GroceryOuting = "Does anyone want to get some groceries at Aldi's? I'm lonely and I need some new friends, " +
             "and my therapist suggested I make some new friends. I'll pay for gas, and it doesn't even have to be long... Please?";
+
+    /**
+     * Constructs our mock database with a few default events. In use until the webservice is connected
+     */
     private MockDatabase(){
         potentialEventData = new ArrayList<Event>();
         confirmedEventData = new ArrayList<Event>();
@@ -48,12 +50,19 @@ public class MockDatabase {
         event2.setDescription(GroceryOuting);
         potentialEventData.add(event2);
     }
+
     public synchronized static MockDatabase getInstance() {
         if (uniqueInstance == null) {
             uniqueInstance = new MockDatabase();
         }
         return uniqueInstance;
     }
+
+    /**
+     * Called when an unconfirmed event's attendance passes above its threshold for the first time
+     *
+     * @param eventToMove newly confirmed event to move from the potential events list to the confirmed events list
+     */
     public void movePotentialEvent(Event eventToMove){
         int num_events = potentialEventData.size();
         for (int i=0; i < num_events; i++){
@@ -65,6 +74,12 @@ public class MockDatabase {
             }
         }
     }
+
+    /**
+     * Called if a confirmed event's attendance passes below its threshold for the first time
+     *
+     * @param eventToMove newly unconfirmed event to move from the confirmed events list to the potential events list
+     */
     public void moveCompletedEvent(Event eventToMove){
         int num_events = confirmedEventData.size();
         for (int i=0; i < num_events; i++){
