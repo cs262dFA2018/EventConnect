@@ -22,7 +22,7 @@ import edu.calvin.cs262.cs262d.eventconnect.tools.TempDataTask;
  */
 public class MockDatabase {
     private String jsonData;
-    private ArrayList<Event> potentialEventData, confirmedEventData;
+    private ArrayList<Event> potentialEventData, confirmedEventData, hostedEventData;
     private static MockDatabase uniqueInstance = null;
 
     /**
@@ -48,6 +48,7 @@ public class MockDatabase {
     private MockDatabase() {
         potentialEventData = new ArrayList<Event>();
         confirmedEventData = new ArrayList<Event>();
+        hostedEventData = new ArrayList<Event>();
         fetchData();
     }
 
@@ -248,6 +249,8 @@ public class MockDatabase {
      * @author Littlesnomwan88
      */
     private void placeEvent(Event event) {
+        //TODO: Check if the event is hosted by the device owner. If so, add to hostedEventData
+
         if (!event.checkConfirmed()) {
             potentialEventData.add(event);
         } else {
@@ -260,9 +263,11 @@ public class MockDatabase {
      * called by the AddEvent activity.
      *
      * @author Littlesnowman88
+     * @author ksn7
      */
     public void addNewEvent(Event event) {
         potentialEventData.add(event);
+        hostedEventData.add(event);
     }
 
     /**
@@ -272,8 +277,9 @@ public class MockDatabase {
      * @author ksn7
      */
     public void deleteEvent(Event eventToDelete) {
+        //TODO: check if event host is device owner before allowing to delete
 
-        // Iterate through the potential events, and delete the event if its found
+        // Iterate through the potential events, and delete the event if it's found
         int num_events = potentialEventData.size();
         boolean eventFound = false;
         Event event;
@@ -299,6 +305,17 @@ public class MockDatabase {
             }
         }
 
+        // Iterate through the hosted events, and delete the event if it's found
+        num_events = hostedEventData.size();
+        for (int i = 0; i < num_events; i++) {
+            event = hostedEventData.get(i);
+            if (event == eventToDelete) {
+                hostedEventData.remove(event);
+                num_events--;
+                eventFound = true;
+            }
+        }
+
         // If the event was not found anywhere, throw an error
         if (!eventFound) {
             throw new RuntimeException("ERROR: tried to delete an event not in the database");
@@ -309,7 +326,9 @@ public class MockDatabase {
      * moves an event from the potential tab to the confirmed tab.
      *
      * @param eventToMove the event moving from potentialEvents to confirmedEvents
-     * @author ???
+     * @author Littlesnowman88
+     * @author OneTrueAsian
+     * @author ksn7
      */
     public void movePotentialEvent(Event eventToMove) {
         int num_events = potentialEventData.size();
@@ -327,7 +346,7 @@ public class MockDatabase {
      * moves an event from the confirmed tab to the potential tab.
      *
      * @param eventToMove the event moving from confirmedEvents to potentialEvents
-     * @author ???
+     * @author ksn7
      */
     public void moveCompletedEvent(Event eventToMove) {
         int num_events = confirmedEventData.size();
@@ -360,4 +379,12 @@ public class MockDatabase {
     public ArrayList<Event> getConfirmedEventData() {
         return this.confirmedEventData;
     }
+
+    /**
+     * accessor for list of HostedEvents
+     *
+     * @return a reference to MockDatabases' hosted events.
+     * @author ksn7
+     */
+    public ArrayList<Event> getHostedEventData() { return this.hostedEventData; }
 }

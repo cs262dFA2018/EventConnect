@@ -57,6 +57,8 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
             event_data = database.getPotentialEventData();
         } else if (context.getString(R.string.tab_label_confirmed).equals(getArguments().getString("Fragment_id"))) {
             event_data = database.getConfirmedEventData();
+        } else if (context.getString(R.string.tab_label_hosted).equals(getArguments().getString("Fragment_id"))) {
+            event_data = database.getHostedEventData();
         } else {
             //If I am being used for something else and haven't been informed of that, then I shouldn't be created at all!
             throw new RuntimeException("ERROR: tab fragment created for undetermined purpose.");
