@@ -54,6 +54,8 @@ public class AddEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        context = getBaseContext();
+
         //access the UI Edit Texts
         eventTitle = (EditText) findViewById(R.id.title);
         eventDescription = (EditText) findViewById(R.id.description);
@@ -186,13 +188,26 @@ public class AddEvent extends AppCompatActivity {
                 event.setHost(host);
             } else {
                 eventHost.setError(getString(R.string.error_empty_host));
+                Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_host),
+                        Toast.LENGTH_SHORT).show();
                 errorFound=true;
             }
         } catch (RuntimeException e) {
         } // remember this catch block if we ever throw a runtimeException in the Event class for event.setHost(host)
 
         //EVENT TITLE
-        event.setTitle(title);
+        try{
+            if(!title.equals("")){
+                event.setTitle(title);
+            } else {
+                eventTitle.setError(getString(R.string.error_empty_title));
+                Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_title),
+                        Toast.LENGTH_SHORT).show();
+                errorFound=true;
+            }
+        } catch ( RuntimeException e){
+        }// remember this catch block if we ever throw a runtimeException in the Event class for event.setTitle(title)
+
 
         //EVENT DATE
         try {
@@ -200,10 +215,14 @@ public class AddEvent extends AppCompatActivity {
             eventDate.setError(null); //clear any possible error messages since EditText is hidden behind a dialog.
         } catch (ParseException e) {
             eventDate.setError(getString(R.string.error_empty_date));
+            Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_date),
+                    Toast.LENGTH_SHORT).show();
             errorFound=true;
         } catch (RuntimeException e) {
             // this should not run because previous dates are disabled
             eventDate.setError(getString(R.string.error_invalid_date));
+            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_date),
+                    Toast.LENGTH_SHORT).show();
             errorFound=true;
         }
 
@@ -213,10 +232,12 @@ public class AddEvent extends AppCompatActivity {
             eventTime.setError(null); //clear any possible error messages since EditText is hidden behind a dialog.
         } catch (ParseException e) {
             eventTime.setError(getString(R.string.error_empty_time));
+            Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_time),
+                    Toast.LENGTH_SHORT).show();
             errorFound=true;
         } catch (RuntimeException e) {
             eventTime.setError(getString(R.string.error_invalid_time));
-            Toast.makeText(AddEvent.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_time), Toast.LENGTH_SHORT).show();
             errorFound=true;
         }
 
@@ -227,9 +248,12 @@ public class AddEvent extends AppCompatActivity {
                 event.setLocation(loc);
             } else {
                 eventLocation.setError(getString(R.string.error_empty_location));
+                Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_location),
+                        Toast.LENGTH_SHORT).show();
                 errorFound=true;
             }
         } catch (RuntimeException e) {
+            e.printStackTrace();
         }// remember this catch block if we ever throw a runtimeException in the Event class for event.setLocation(loc)
 
         //EVENT COST
@@ -246,9 +270,13 @@ public class AddEvent extends AppCompatActivity {
             event.setMinThreshold(threshold);
         } catch (java.lang.NumberFormatException e) {
             eventThreshold.setError(getString(R.string.error_invalid_number));
+            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_number),
+                    Toast.LENGTH_SHORT).show();
             errorFound=true;
         } catch (RuntimeException e) {
             eventThreshold.setError(getString(R.string.error_invalid_MinNumber));
+            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_MinNumber),
+                    Toast.LENGTH_SHORT).show();
             errorFound=true;
         }
 
@@ -266,9 +294,13 @@ public class AddEvent extends AppCompatActivity {
             event.setMaxCapacity(capacity);
         } catch (java.lang.NumberFormatException e) {
             eventCapacity.setError(getString(R.string.error_invalid_number));
+            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_number),
+                    Toast.LENGTH_SHORT).show();
             errorFound=true;
         } catch (RuntimeException e) {
             eventCapacity.setError(getString(R.string.error_invalid_MaxNumber));
+            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_MaxNumber),
+                    Toast.LENGTH_SHORT).show();
             errorFound=true;
         }
 

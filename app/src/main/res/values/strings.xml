@@ -53,10 +53,10 @@
         completions."</string>
 
     <!-- Invalid Entries messages -->
-    <string name = "error_invalid_MaxNumber"> Invalid Capacity, Capacity cannot be
-    0 or lower than Min Threshold</string>
-    <string name = "error_invalid_MinNumber"> Invalid Threshold, Threshold cannot be
-    0 or bigger than Max Capacity</string>
+    <string name = "error_invalid_MaxNumber"> Capacity cannot be
+        0 or lower than Min Threshold</string>
+    <string name = "error_invalid_MinNumber"> Threshold cannot be
+        0 or bigger than Max Capacity</string>
     <string name = "error_invalid_number">Cannot create event with this number</string>
     <string name= "error_empty_host" >Host cannot be empty</string>
     <string name="error_empty_location">Location is required</string>
@@ -64,6 +64,7 @@
     <string name="error_empty_date">Date was not in MM/dd/yy</string>
     <string name="error_empty_time">Time Cannot be empty</string>
     <string name="error_invalid_time">Invalid Start Time</string>
+    <string name="error_empty_title">Title cannot be empty</string>
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
