@@ -53,9 +53,7 @@ public class Event {
         return title;
     }
 
-    public void setTitle(String new_title) {
-        title = new_title;
-    }
+    public void setTitle(String new_title) { title = new_title; }
 
     //date
     public String getDate() {
