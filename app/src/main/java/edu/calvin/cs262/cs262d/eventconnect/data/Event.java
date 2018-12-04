@@ -7,7 +7,9 @@ import java.util.Locale;
 
 public class Event {
     private int current_interest, min_threshold, max_capacity;
-    private String title, description, host, location;
+
+
+    private String title, description, host, location, category;
     private Calendar date;
     private boolean confirmed, needs_to_move, interest;
     private double cost;
@@ -21,6 +23,11 @@ public class Event {
         min_threshold = 1;
         max_capacity = -1;
         description = "";
+
+        host = "";
+        location = "";
+        category = "";
+        confirmed = false;
         current_interest = 0;
         needs_to_move = false;
         interest = false;
@@ -36,6 +43,11 @@ public class Event {
         host = new_host;
     }
 
+
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String new_category){category = new_category;}
     //title
     public String getTitle() {
         return title;

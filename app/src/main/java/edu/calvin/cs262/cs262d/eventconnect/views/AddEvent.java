@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity, eventTime;
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener date;
+    private Spinner eventCat;
     private Context context;
     private TimePickerDialog.OnTimeSetListener Time;
     private String currentTheme;
@@ -125,6 +128,18 @@ public class AddEvent extends AppCompatActivity {
             }
         };
 
+        eventCat = (Spinner) findViewById(R.id.event_cat);
+
+        //https://developer.android.com/guide/topics/ui/controls/spinner#java
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> cat_adapter = ArrayAdapter.createFromResource(this,
+                R.array.event_cat, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        cat_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        eventCat.setAdapter(cat_adapter);
+
+
         //setup toolbar bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -165,17 +180,23 @@ public class AddEvent extends AppCompatActivity {
      * setting the time, date, title, etc.
      *
      */
-    public void onCreateEventClicked(View view) {
-        boolean errorFound = false;
-        String host;
+    public void onCreateEventClicked(View view) throws ParseException {
+
+        //access the data from the UI elements
         String title = eventTitle.getText().toString();
+        String desc = eventDescription.getText().toString();
+        String loc;
+        String host;
+        String cat;
+
+        boolean errorFound = false;
         String date = eventDate.getText().toString();
         String time = eventTime.getText().toString();
-        String loc;
+
         double cost;
         int threshold;
         final int capacity;
-        String desc = eventDescription.getText().toString();
+
 
         Event event = new Event();
 
@@ -281,6 +302,22 @@ public class AddEvent extends AppCompatActivity {
             database.addNewEvent(event);
             finish();
         }
+
+
+        try{
+            cat = eventCat.getSelectedItem().toString();
+            event.setCategory(cat);
+        }
+        catch (RuntimeException e){}
+
+        event.setDate(date);
+        event.setCost(cost);
+
+        //access and update the database.
+
+        MockDatabase database = MockDatabase.getInstance();
+        finish();
+
     }
 
     /**
