@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
@@ -68,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         buildTabs(tabLayout);
         buildPagerAdapter(tabLayout);
-
     }
 
     /** buildTabs is a helper function refactored from onCreate

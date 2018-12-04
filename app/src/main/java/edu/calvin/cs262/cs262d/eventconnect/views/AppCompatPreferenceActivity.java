@@ -20,6 +20,8 @@ import edu.calvin.cs262.cs262d.eventconnect.R;
 /**
  * A {@link android.preference.PreferenceActivity} which implements and proxies the necessary calls
  * to be used with AppCompat.
+ *
+ * @author AndroidStudio
  */
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 

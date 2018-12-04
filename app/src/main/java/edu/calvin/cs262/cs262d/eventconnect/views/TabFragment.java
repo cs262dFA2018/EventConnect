@@ -41,7 +41,10 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         // Required empty public constructor
     }
 
-
+    /**
+     * creates the tab fragment
+     * @param savedInstanceState bundle of event and card data
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,13 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         card_container_adapter.setCards(event_data);
     }
 
+    /**
+     * When the view is created, inflate the container and do other setup
+     * @param inflater inflates the layout
+     * @param container tells which viewgroup the fragment belongs to
+     * @param savedInstanceState data bundle
+     * @return the established layout
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,6 +94,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /** Overriding click handling for the card_container_adapter
+     *
      * @param clicked_event the Event that a user clicked on. Determined in CardContainerAdapter.ViewHolder
      * @param action, the action passed up by CardContainerAdapter.ViewHolder to be performed.
      * @author Littlesnowman88
@@ -134,6 +145,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
     /**
      * called by onClick's runnable object, deleteEvent deletes an event from the database and the UI.
+     *
      * @param clicked_event the event that a user confirmed to delete
      * @author ksn7
      * @author Littlesnowman88
@@ -147,6 +159,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**implemented for TabFragment, this method summons an expanded card view
+     *
      * @param event, the event clicked on by the user
      * Postcondition: an ExpandedCard is summoned and displayed for the user
      */

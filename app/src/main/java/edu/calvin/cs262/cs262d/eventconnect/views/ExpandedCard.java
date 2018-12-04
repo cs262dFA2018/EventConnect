@@ -19,13 +19,18 @@ import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 public class ExpandedCard extends DialogFragment {
 
     private TextView hostLabel, hostView, titleLabel, titleView, descriptionLabel, descriptionView,
-        dateLabel, dateView, locationLabel, locationView, costLabel, costView, catView, catLabel;
+
+        dateLabel, dateView, locationLabel, locationView, costLabel, costView, catView, catLabel, timeLabel, timeView;
     private boolean interested;
-    private String title, description, host, location, date, cat;
+    private String title, description, host, location, date, cat, time;
+
+
     private double cost;
 
     /**
      * Create a new instance of ExpandedCard, providing arguments from an Event
+     *
+     * @param event event data to put on expanded card
      */
     static ExpandedCard newInstance(Event event) {
         ExpandedCard ec = new ExpandedCard();
@@ -40,6 +45,7 @@ public class ExpandedCard extends DialogFragment {
         args.putString("date", event.getDate());
         args.putString("cat", event.getCategory());
         args.putDouble("cost", event.getCost());
+        args.putString("time", event.getTime());
 
 
         ec.setArguments(args);
@@ -47,36 +53,86 @@ public class ExpandedCard extends DialogFragment {
         return ec;
     }
 
+    /**
+     * onCreate sets up the ExpandedCard view
+     *
+     * @param savedInstanceState bundle of event data
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //access the event Data
         Bundle args = getArguments();
-        try {title = args.getString("title");}
-        catch (java.lang.NullPointerException ne) {title = "";}
-        try {description = args.getString("description");}
-        catch (java.lang.NullPointerException ne) {description = "";}
-        try {host = args.getString("host");}
-        catch (java.lang.NullPointerException ne) {host = "";}
-        try {interested = args.getBoolean("interested");}
-        catch (java.lang.NullPointerException ne) {interested = false;}
-        try {location = args.getString("location");}
-        catch (java.lang.NullPointerException ne) {location = "";}
-        try {date = args.getString("date");}
-        catch (java.lang.NullPointerException ne) {date = "";}
-        try {cat = args.getString("cat");}
-        catch (java.lang.NullPointerException ne) {cat = "";}
-        try {cost = args.getDouble("cost");}
-        catch (java.lang.NullPointerException ne) {cost = 0;}
+        try {
+            title = args.getString("title");
+        } catch (java.lang.NullPointerException ne) {
+            title = "";
+        }
+        try {
+            description = args.getString("description");
+        } catch (java.lang.NullPointerException ne) {
+            description = "";
+        }
+        try {
+            host = args.getString("host");
+        } catch (java.lang.NullPointerException ne) {
+            host = "";
+        }
+        try {
+            interested = args.getBoolean("interested");
+        } catch (java.lang.NullPointerException ne) {
+            interested = false;
+        }
+        try {
+            location = args.getString("location");
+        } catch (java.lang.NullPointerException ne) {
+            location = "";
+        }
+        try {
+            date = args.getString("date");
+        } catch (java.lang.NullPointerException ne) {
+            date = "";
+        }
+        try {
+            cost = args.getDouble("cost");
+        } catch (java.lang.NullPointerException ne) {
+            cost = 0;
+        }
+        try {
+            time = args.getString("time");
+        } catch (java.lang.NullPointerException ne){
+            time ="";
+        }
+        try{
+            cat = args.getString("cat");
+        } catch (java.lang.NullPointerException ne){
+            cat ="";
+        }
+
 
 
     }
+
+    /**
+     * onCreateView uses an inflater to set up the expanded card view
+     *
+     * @param inflater layout inflator to use
+     * @param container view group for the expanded card
+     * @param savedInstanceState expanded card data
+     * @return result of inflater
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.expanded_event_fragment, container, false);
     }
 
+    /**
+     * Applies data to the expanded card
+     *
+     * @param view view the expanded card is in
+     * @param savedInstanceState expanded card data
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -96,6 +152,10 @@ public class ExpandedCard extends DialogFragment {
         costView = (TextView) view.findViewById(R.id.cost_text);
         catLabel = view.findViewById(R.id.cat_label_text);
         catView = view.findViewById(R.id.cat_text);
+        timeLabel = (TextView) view.findViewById(R.id.time_label_text);
+        timeView = (TextView) view.findViewById(R.id.time_text);
+
+
         //TODO: Floating interested button
 
         //set UI text
@@ -107,6 +167,8 @@ public class ExpandedCard extends DialogFragment {
         descriptionView.setText(description);
         dateLabel.setText(getString(R.string.date_label));
         dateView.setText(date);
+        timeLabel.setText(getString(R.string.time_label));
+        timeView.setText(time);
         locationLabel.setText(getString(R.string.location_label));
         locationView.setText(location);
         costLabel.setText(getString(R.string.cost_label));
@@ -134,6 +196,9 @@ public class ExpandedCard extends DialogFragment {
          */
     }
 
+    /**
+     * onResume shows the already created expanded card view
+     */
     @Override
     public void onResume() {
         super.onResume();
