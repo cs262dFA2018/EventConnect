@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
      * EFFECTIVELY, part of onCreate.
      * Preconditions: tab_layout exists in activity_main.xml,
      *               and the strings tab_label_potential, tab_label_confirmed,
-     *               and tab_label_hosted exist in strings.xml
+     *               tab_label_hosted, and tab_label_my exist in strings.xml
      * Postcondition: Tabs are created for the Main Activity
      * @author Littlesnowman88
      * @author ksn7
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the text for each tab.
         tabs.addTab(tabs.newTab().setText(R.string.tab_label_potential));
         tabs.addTab(tabs.newTab().setText(R.string.tab_label_confirmed));
-        tabs.addTab(tabs.newTab().setText(R.string.tab_label_hosted));
+        tabs.addTab(tabs.newTab().setText(R.string.tab_label_my));
         // Set the tabs to fill the entire layout.
         tabs.setTabGravity(tabs.GRAVITY_FILL);
     }

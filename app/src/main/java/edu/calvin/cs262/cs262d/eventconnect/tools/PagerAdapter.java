@@ -21,7 +21,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     }
 
     /**
-     * getItem sets up the potential, confirmed, and hosted events tab
+     * getItem sets up the potential, confirmed, hosted, and "my" events tab
      * @param position tells which tab should be open
      * @return the Fragment that contains the event cards
      * @author ??
@@ -47,11 +47,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 tabConfirmed.setArguments(fragment_data);
                 return tabConfirmed;
             case 2:
-                TabFragment tabHosted = new TabFragment();
+                TabFragment tabMine = new TabFragment();
                 //tell the fragment which tab it is
-                fragment_data.putString("Fragment_id", context.getString(R.string.tab_label_hosted));
-                tabHosted.setArguments(fragment_data);
-                return tabHosted;
+                fragment_data.putString("Fragment_id", context.getString(R.string.tab_label_my));
+                tabMine.setArguments(fragment_data);
+                return tabMine;
             default:
                 throw new RuntimeException("ERROR: unknown tab clicked in main window.");
         }

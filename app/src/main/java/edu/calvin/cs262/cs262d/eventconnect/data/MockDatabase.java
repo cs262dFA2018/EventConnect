@@ -22,7 +22,7 @@ import edu.calvin.cs262.cs262d.eventconnect.tools.TempDataTask;
  */
 public class MockDatabase {
     private String jsonData;
-    private ArrayList<Event> potentialEventData, confirmedEventData, hostedEventData;
+    private ArrayList<Event> potentialEventData, confirmedEventData, myEventData;
     private static MockDatabase uniqueInstance = null;
 
     /**
@@ -48,7 +48,7 @@ public class MockDatabase {
     private MockDatabase() {
         potentialEventData = new ArrayList<Event>();
         confirmedEventData = new ArrayList<Event>();
-        hostedEventData = new ArrayList<Event>();
+        myEventData = new ArrayList<Event>();
         fetchData();
     }
 
@@ -267,7 +267,7 @@ public class MockDatabase {
      */
     public void addNewEvent(Event event) {
         potentialEventData.add(event);
-        hostedEventData.add(event);
+        myEventData.add(event);
     }
 
     /**
@@ -305,12 +305,12 @@ public class MockDatabase {
             }
         }
 
-        // Iterate through the hosted events, and delete the event if it's found
-        num_events = hostedEventData.size();
+        // Iterate through the user's events, and delete the event if it's found
+        num_events = myEventData.size();
         for (int i = 0; i < num_events; i++) {
-            event = hostedEventData.get(i);
+            event = myEventData.get(i);
             if (event == eventToDelete) {
-                hostedEventData.remove(event);
+                myEventData.remove(event);
                 num_events--;
                 eventFound = true;
             }
@@ -361,6 +361,30 @@ public class MockDatabase {
     }
 
     /**
+     * Adds event to myEvents when user indicates interest
+     *
+     * @param eventInterested to add to myEvents
+     * @author ksn7
+     */
+    public void addInterest(Event eventInterested) {
+        myEventData.add(eventInterested);
+    }
+
+    /**
+     * Removes event from myEvents when user un-indicates interest
+     *
+     * @param eventNotInterested to remove from myEvents
+     * @author ksn7
+     */
+    public void removeInterest(Event eventNotInterested) {
+        try {
+            myEventData.remove(eventNotInterested);
+        } catch (Exception e) {
+            throw new RuntimeException("ERROR: tried to remove interest from an event not in My Events");
+        }
+    }
+
+    /**
      * accessor for list of potentialEvents
      *
      * @return a reference to MockDatabases' potential events.
@@ -381,10 +405,10 @@ public class MockDatabase {
     }
 
     /**
-     * accessor for list of HostedEvents
+     * accessor for list of myEvents
      *
-     * @return a reference to MockDatabases' hosted events.
+     * @return a reference to MockDatabases' list of events the device owner has indicated interest in
      * @author ksn7
      */
-    public ArrayList<Event> getHostedEventData() { return this.hostedEventData; }
+    public ArrayList<Event> getMyEventData() {return this.myEventData; }
 }

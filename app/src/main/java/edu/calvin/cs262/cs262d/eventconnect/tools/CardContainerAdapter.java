@@ -31,6 +31,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     private final String MoveCard = "Move Thy Card";
     private final String UnmoveCard = "Un-move Thy Card";
     private final String DeleteCard = "Delete Event";
+    private final String MyCard = "Add to My Events";
+    private final String NotMyCard = "Remove from My Events";
 
     //the class containing this adapter may need to implement an onClick at the higher level
     public interface CardContainerAdapterOnClickHandler {
@@ -96,6 +98,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                 if (!event_clicked.getInterest()) {
                     event_clicked.setInterest();
                     event_clicked.incrementCurrentInterest();
+                    click_handler.onClick(event_clicked, MyCard);
                     if (event_clicked.shouldMove()) {
                         /*when we have enough interest, get data form data base and reset card
                          */
@@ -125,6 +128,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                     } else {
                         interestedButton.setText(context.getString(R.string.not_interested));
                     }
+                    click_handler.onClick(event_clicked, NotMyCard);
                 }
             } else if (view == deleteButton) {
                 click_handler.onClick(event_clicked, DeleteCard);
