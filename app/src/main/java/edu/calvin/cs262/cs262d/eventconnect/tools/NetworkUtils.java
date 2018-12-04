@@ -93,7 +93,7 @@ public class NetworkUtils {
             }
         }
         //Although I normally delete debug statements, I will leave this here because it REALLY helps with debugging. -LS88
-        //Log.d(LOG_TAG, (eventJSONString != null) ? eventJSONString : "JSON STRING IS NULL, BADNESS");
+        Log.d(LOG_TAG, (eventJSONString != null) ? eventJSONString : "JSON STRING IS NULL, BADNESS");
         return eventJSONString;
     }
 }

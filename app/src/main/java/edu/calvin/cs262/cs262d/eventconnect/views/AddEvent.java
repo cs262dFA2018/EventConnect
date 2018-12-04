@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,8 +24,8 @@ import java.util.Locale;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
-import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
+import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 
 /**
  * AddEvent is the activity for adding a new event
@@ -33,7 +34,6 @@ public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity, eventTime;
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener date;
-    private Context context;
     private TimePickerDialog.OnTimeSetListener Time;
     private String currentTheme;
 
@@ -277,8 +277,8 @@ public class AddEvent extends AppCompatActivity {
 
         if (!errorFound) { //if all required event information is entered and information is validated:
             //access and update the database.
-            MockDatabase database = MockDatabase.getInstance();
-            database.addNewEvent(event);
+            DataManager dm = DataManager.getInstance(new WeakReference<Context>(this));
+            dm.addNewEvent(event);
             finish();
         }
     }

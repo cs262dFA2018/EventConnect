@@ -1,80 +1,88 @@
-package edu.calvin.cs262.cs262d.eventconnect.data;
+package edu.calvin.cs262.cs262d.eventconnect.tools;
 
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import edu.calvin.cs262.cs262d.eventconnect.tools.TempDataTask;
+import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+
 
 /**
- * MockDatabase singleton class provides the app with default event objects to use.
- * Originally, this database contained 3 hard-coded, hand-built events.
- * Now, the MockDatabase makes 1 "GET events" call to the Google Cloud database.
- * After the GET events command, the MockDatabase currently handles all data changes locally.
- * -Littlesnowman88
+ * DataConnection is the AsyncTask responsible for fetching data from NetworkUtils
+ *
+ * @author Littlesnowman88
  */
-public class MockDatabase {
-    private String jsonData;
-    private ArrayList<Event> potentialEventData, confirmedEventData;
-    private static MockDatabase uniqueInstance = null;
+public class DataConnection extends AsyncTask<String, Integer, String> {
+
+    private String dbEndpoint, httpRequest;
+    private JSONObject jsonData;
+    private WeakReference<DataManager> dataHolder;
 
     /**
-     * getInstance, following the singleton pattern, enforces that 1 and only 1 instance of
-     * MockDatabase can exist.
+     * Constructor: creates the AsyncTask and sets important class variables.
      *
-     * @return uniqueInstance, the 1 and only 1 instance of MockDatabase.
+     * @param endpoint    the database API endpoint attached at the end of the base url
+     * @param httpRequest GET, POST, PUT, or DELETE
      * @author Littlesnowman88
      */
-    public synchronized static MockDatabase getInstance() {
-        if (uniqueInstance == null) {
-            uniqueInstance = new MockDatabase();
-        }
-        return uniqueInstance;
+    public DataConnection(@NonNull String endpoint, @NonNull String httpRequest, @NonNull WeakReference<DataManager> rootManager, @Nullable JSONObject data) {
+        super();
+        this.dbEndpoint = endpoint;
+        this.httpRequest = httpRequest;
+        this.dataHolder = rootManager;
+        this.jsonData = data;
     }
 
     /**
-     * MockDatabase private constructor makes 2 empty lists for events and then fetches data.
-     * Private constructor upholds the singleton pattern. App should have 1 and only 1 instance of MockDatabase.
-     *
+     * accesses the request type (GET, POST, PUT, or DELETE) of this connection.
+     * @return httpRequest (GET, POST< PUT, or DELETE)
      * @author Littlesnowman88
      */
-    private MockDatabase() {
-        potentialEventData = new ArrayList<Event>();
-        confirmedEventData = new ArrayList<Event>();
-        fetchData();
+    public String getRequestType() {
+        return httpRequest;
     }
 
+
     /**
-     * fetchData creates a TempDataTask AsyncTask to get all events from the server
-     * if success, calls parseJSON to build and sort events
-     * if fails, aborts the event-building process.
+     * Fetches data from NetworkUtils in the background so the UI thread isn't held up by data fetching
      *
+     * @return information corresponding to the app's http request (GET, POST, PUT, DELETE);
      * @author Littlesnowman88
      */
-    private void fetchData() {
-        //create and execute the async data fetcher
-        TempDataTask fetcher = new TempDataTask("events");
-        fetcher.execute();
-        try {
-            //wait for the async task to complete, and once it has finished, save the json
-            jsonData = fetcher.get();
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    protected String doInBackground(String... strings) {
+        if(android.os.Debug.isDebuggerConnected())
+            android.os.Debug.waitForDebugger();
+        switch (httpRequest) {
+            case "GET":
+                if (dbEndpoint.equals("events")) {
+                    String result = NetworkUtils.getEventInfo(dbEndpoint);
+                    parseJSON(result);
+                }
+                break;
+            case "POST":
+                throw new RuntimeException("ERROR: POST NOT YET IMPLEMENTED");
+                //break;
+            case "PUT":
+                throw new RuntimeException("ERROR: PUT NOT YET IMPLEMENTED");
+                //break;
+            case "DELETE":
+                throw new RuntimeException("ERROR: DELETE NOT YET IMPLEMENTED.");
+                //break;
+            default:
+                return null;
         }
-
-        //if the returned json is a developer-produced error, or if the returned json is blank, abort.
-        if (jsonData.startsWith("ERROR") || jsonData.length() == 0) {
-            return;
-        }
-        //else, build and sort events!
-        parseJSON();
+        return null;
     }
 
     /**
@@ -83,19 +91,22 @@ public class MockDatabase {
      *
      * @author Littlesnowman88
      */
-    private void parseJSON() {
+    private void parseJSON(String data) {
+        if (data == null || data.startsWith("ERROR") || data.length() == 0) return;
         try {
             //declare scope-necessary variables
-            JSONObject jsonObject = new JSONObject(jsonData);
+            JSONObject jsonObject = new JSONObject(data);
             Event builtEvent;
+            DataManager rootManager = dataHolder.get();
             try { //if get request was for events, parse from a list of items.
+                dataHolder.get().clearEvents();
                 JSONArray itemsArray = jsonObject.getJSONArray("items");
                 int num_events = itemsArray.length();
                 for (int i = 0; i < num_events; i++) {
                     JSONObject event = itemsArray.getJSONObject(i); //get the current event
                     try {
                         builtEvent = parseJSONEvent(event); //parse the data
-                        placeEvent(builtEvent); //categorize the event
+                        rootManager.placeEvent(builtEvent); //categorize the event
                     } catch (RuntimeException e) {
                         e.printStackTrace();
                         Log.d("PARSE EVENT: ", "OFFENDING JSON:\n" + event.toString());
@@ -105,7 +116,7 @@ public class MockDatabase {
                 //here, the get request was sent to event/:id
                 try {
                     builtEvent = parseJSONEvent(jsonObject); //parse the data
-                    placeEvent(builtEvent); //categorize the event
+                    rootManager.placeEvent(builtEvent); //categorize the event
                 } catch (RuntimeException re) {
                     re.printStackTrace();
                     Log.d("PARSE EVENT: ", "OFFENDING JSON:\n" + jsonObject.toString());
@@ -114,6 +125,7 @@ public class MockDatabase {
         } catch (Exception e) {
             Log.d("MockDB Parse: ", "ERROR: some connection failed.");
         }
+
     }
 
     /**
@@ -124,7 +136,7 @@ public class MockDatabase {
      * else null if the event could not be built.
      * @author Littlesnomwan88
      */
-    private Event parseJSONEvent(JSONObject eventObj) throws RuntimeException {
+    private static Event parseJSONEvent(JSONObject eventObj) throws RuntimeException {
         String host, title, loc, desc;
         double cost;
         int threshold, capacity;
@@ -240,124 +252,5 @@ public class MockDatabase {
 
 
         return event;
-    }
-
-    /**
-     * placeEvent is a helper function that puts an event into its appropriate tab.
-     *
-     * @author Littlesnomwan88
-     */
-    private void placeEvent(Event event) {
-        if (!event.checkConfirmed()) {
-            potentialEventData.add(event);
-        } else {
-            confirmedEventData.add(event);
-        }
-    }
-
-    /**
-     * adds a brand new event to the potential events list.
-     * called by the AddEvent activity.
-     *
-     * @author Littlesnowman88
-     */
-    public void addNewEvent(Event event) {
-        potentialEventData.add(event);
-    }
-
-    /**
-     * deleteEvent removes an event from the database
-     *
-     * @param eventToDelete passed in event that needs to be deleted
-     * @author ksn7
-     */
-    public void deleteEvent(Event eventToDelete) {
-
-        // Iterate through the potential events, and delete the event if its found
-        int num_events = potentialEventData.size();
-        boolean eventFound = false;
-        Event event;
-        for (int i = 0; i < num_events; i++) {
-            event = potentialEventData.get(i);
-            if (event == eventToDelete) {
-                potentialEventData.remove(event);
-                num_events--;
-                eventFound = true;
-            }
-        }
-
-        // If the event was not found in the potential events, check the confirmed events
-        num_events = confirmedEventData.size();
-        if (!eventFound) {
-            for (int i = 0; i < num_events; i++) {
-                event = confirmedEventData.get(i);
-                if (event == eventToDelete) {
-                    confirmedEventData.remove(event);
-                    num_events--;
-                    eventFound = true;
-                }
-            }
-        }
-
-        // If the event was not found anywhere, throw an error
-        if (!eventFound) {
-            throw new RuntimeException("ERROR: tried to delete an event not in the database");
-        }
-    }
-
-    /**
-     * moves an event from the potential tab to the confirmed tab.
-     *
-     * @param eventToMove the event moving from potentialEvents to confirmedEvents
-     * @author ???
-     */
-    public void movePotentialEvent(Event eventToMove) {
-        int num_events = potentialEventData.size();
-        for (int i = 0; i < num_events; i++) {
-            Event event = potentialEventData.get(i);
-            if (event == eventToMove) {
-                confirmedEventData.add(eventToMove);
-                potentialEventData.remove(event);
-                num_events--;
-            }
-        }
-    }
-
-    /**
-     * moves an event from the confirmed tab to the potential tab.
-     *
-     * @param eventToMove the event moving from confirmedEvents to potentialEvents
-     * @author ???
-     */
-    public void moveCompletedEvent(Event eventToMove) {
-        int num_events = confirmedEventData.size();
-        for (int i = 0; i < num_events; i++) {
-            Event event = confirmedEventData.get(i);
-            if (event == eventToMove) {
-                potentialEventData.add(eventToMove);
-                confirmedEventData.remove(event);
-                num_events--;
-            }
-        }
-    }
-
-    /**
-     * accessor for list of potentialEvents
-     *
-     * @return a reference to MockDatabases' potential events.
-     * @author Littlesnowman88
-     */
-    public ArrayList<Event> getPotentialEventData() {
-        return this.potentialEventData;
-    }
-
-    /**
-     * accessor for list of confirmedEvents
-     *
-     * @return a reference to MockDatabases' confirmed events.
-     * @author Littlesnowman88
-     */
-    public ArrayList<Event> getConfirmedEventData() {
-        return this.confirmedEventData;
     }
 }
