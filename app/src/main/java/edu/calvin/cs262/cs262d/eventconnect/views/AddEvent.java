@@ -200,7 +200,6 @@ public class AddEvent extends AppCompatActivity {
         int threshold;
         final int capacity;
 
-
         Event event = new Event();
 
         //EVENT HOST

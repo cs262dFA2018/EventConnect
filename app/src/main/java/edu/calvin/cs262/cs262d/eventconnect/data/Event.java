@@ -41,11 +41,13 @@ public class Event {
     public void setHost(String new_host) {
         host = new_host;
     }
+  
     //Category
     public String getCategory() {
         return category;
     }
     public void setCategory(String new_category) throws  RuntimeException {category = new_category;}
+
     //title
     public String getTitle() {
         return title;

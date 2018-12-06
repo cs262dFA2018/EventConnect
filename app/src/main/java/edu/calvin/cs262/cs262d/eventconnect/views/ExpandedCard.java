@@ -19,9 +19,12 @@ import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 public class ExpandedCard extends DialogFragment {
 
     private TextView hostLabel, hostView, titleLabel, titleView, descriptionLabel, descriptionView,
-            dateLabel, dateView, locationLabel, locationView, costLabel, costView, timeLabel, timeView;
+
+        dateLabel, dateView, locationLabel, locationView, costLabel, costView, catView, catLabel, timeLabel, timeView;
     private boolean interested;
-    private String title, description, host, location, date, time;
+    private String title, description, host, location, date, cat, time;
+
+
     private double cost;
 
     /**
@@ -40,8 +43,10 @@ public class ExpandedCard extends DialogFragment {
         args.putString("host", event.getHost());
         args.putString("location", event.getLocation());
         args.putString("date", event.getDate());
+        args.putString("cat", event.getCategory());
         args.putDouble("cost", event.getCost());
         args.putString("time", event.getTime());
+
 
         ec.setArguments(args);
 
@@ -98,6 +103,12 @@ public class ExpandedCard extends DialogFragment {
         } catch (java.lang.NullPointerException ne){
             time ="";
         }
+        try{
+            cat = args.getString("cat");
+        } catch (java.lang.NullPointerException ne){
+            cat ="";
+        }
+
 
 
     }
@@ -139,8 +150,11 @@ public class ExpandedCard extends DialogFragment {
         locationView = (TextView) view.findViewById(R.id.location_text);
         costLabel = (TextView) view.findViewById(R.id.cost_label_text);
         costView = (TextView) view.findViewById(R.id.cost_text);
+        catLabel = view.findViewById(R.id.cat_label_text);
+        catView = view.findViewById(R.id.cat_text);
         timeLabel = (TextView) view.findViewById(R.id.time_label_text);
         timeView = (TextView) view.findViewById(R.id.time_text);
+
 
         //TODO: Floating interested button
 
@@ -159,6 +173,7 @@ public class ExpandedCard extends DialogFragment {
         locationView.setText(location);
         costLabel.setText(getString(R.string.cost_label));
         costView.setText(String.format(Locale.getDefault(), Double.toString(cost), Double.toString(cost)));
+        catView.setText(cat);
         //TODO: Floating interested button
 
 

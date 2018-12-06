@@ -25,6 +25,7 @@ public class MockDatabase {
     private ArrayList<Event> potentialEventData, confirmedEventData;
     private static MockDatabase uniqueInstance = null;
 
+
     /**
      * getInstance, following the singleton pattern, enforces that 1 and only 1 instance of
      * MockDatabase can exist.
@@ -32,6 +33,7 @@ public class MockDatabase {
      * @return uniqueInstance, the 1 and only 1 instance of MockDatabase.
      * @author Littlesnowman88
      */
+
     public synchronized static MockDatabase getInstance() {
         if (uniqueInstance == null) {
             uniqueInstance = new MockDatabase();
