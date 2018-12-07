@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 
 
 /**
@@ -26,7 +27,7 @@ public class DataConnection extends AsyncTask<String, Integer, String> {
 
     private String dbEndpoint, httpRequest;
     private JSONObject jsonData;
-    private WeakReference<DataManager> dataHolder;
+    private EventsData dataHolder = EventsData.getInstance();
 
     /**
      * Constructor: creates the AsyncTask and sets important class variables.
@@ -35,11 +36,10 @@ public class DataConnection extends AsyncTask<String, Integer, String> {
      * @param httpRequest GET, POST, PUT, or DELETE
      * @author Littlesnowman88
      */
-    public DataConnection(@NonNull String endpoint, @NonNull String httpRequest, @NonNull WeakReference<DataManager> rootManager, @Nullable JSONObject data) {
+    public DataConnection(@NonNull String endpoint, @NonNull String httpRequest, @Nullable JSONObject data) {
         super();
         this.dbEndpoint = endpoint;
         this.httpRequest = httpRequest;
-        this.dataHolder = rootManager;
         this.jsonData = data;
     }
 
@@ -97,16 +97,15 @@ public class DataConnection extends AsyncTask<String, Integer, String> {
             //declare scope-necessary variables
             JSONObject jsonObject = new JSONObject(data);
             Event builtEvent;
-            DataManager rootManager = dataHolder.get();
             try { //if get request was for events, parse from a list of items.
-                dataHolder.get().clearEvents();
+                dataHolder.clearEvents();
                 JSONArray itemsArray = jsonObject.getJSONArray("items");
                 int num_events = itemsArray.length();
                 for (int i = 0; i < num_events; i++) {
                     JSONObject event = itemsArray.getJSONObject(i); //get the current event
                     try {
                         builtEvent = parseJSONEvent(event); //parse the data
-                        rootManager.placeEvent(builtEvent); //categorize the event
+                        dataHolder.placeEvent(builtEvent); //categorize the event
                     } catch (RuntimeException e) {
                         e.printStackTrace();
                         Log.d("PARSE EVENT: ", "OFFENDING JSON:\n" + event.toString());
@@ -116,7 +115,7 @@ public class DataConnection extends AsyncTask<String, Integer, String> {
                 //here, the get request was sent to event/:id
                 try {
                     builtEvent = parseJSONEvent(jsonObject); //parse the data
-                    rootManager.placeEvent(builtEvent); //categorize the event
+                    dataHolder.placeEvent(builtEvent); //categorize the event
                 } catch (RuntimeException re) {
                     re.printStackTrace();
                     Log.d("PARSE EVENT: ", "OFFENDING JSON:\n" + jsonObject.toString());

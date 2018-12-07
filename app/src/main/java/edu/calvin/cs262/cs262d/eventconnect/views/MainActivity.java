@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
         //initialize DataManager with MainActivity's context
-        DataManager dm = DataManager.getInstance(new WeakReference<>(context));
+        DataManager dm = new DataManager();
 
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
