@@ -3,8 +3,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:paddingLeft="@dimen/activity_wide_horizontal_margin"
     android:paddingStart="@dimen/activity_wide_horizontal_margin"
     android:paddingRight="@dimen/activity_wide_horizontal_margin"
@@ -12,6 +12,14 @@
     android:paddingTop="@dimen/activity_tall_vertical_margin"
     android:paddingBottom="@dimen/activity_tall_vertical_margin"
     >
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="32dp"
+        android:src="?attr/homeAsUpIndicator"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        />
 
     <!--a parent view so that contents are scrollable-->
     <ScrollView
@@ -156,3 +164,5 @@
 
     </ScrollView>
 </LinearLayout>
+
+
