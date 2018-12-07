@@ -14,8 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.lang.ref.WeakReference;
+
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
+import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private Intent mainToLogin, mainToSettings;
     private String currentUser;
     private String currentTheme;
+
+
 
     /**
      * creates the Main Activity:
@@ -46,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
+        //initialize DataManager with MainActivity's context
+        DataManager dm = DataManager.getInstance(new WeakReference<>(context));
 
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
@@ -68,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         buildTabs(tabLayout);
         buildPagerAdapter(tabLayout);
-
     }
 
     /** buildTabs is a helper function refactored from onCreate

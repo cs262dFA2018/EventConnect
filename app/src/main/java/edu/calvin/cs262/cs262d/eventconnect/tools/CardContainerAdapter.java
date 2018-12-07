@@ -51,13 +51,13 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      * receives the card's "interested" button click
      * handles clicks by expanding a card or marking interest
      */
-
     public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView eventTitle, eventDescription;
         private Button interestedButton;
         private CardView eventCard;
         private Button deleteButton;
         private final int animationTime = 500;
+
         /**
          * constructor
          * gives this viewholder access to a card's internal xml elements
@@ -134,9 +134,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                  */
                 click_handler.onClick(event_clicked, ExpandCard);
             }
-
-
-
         }
 
         /**
@@ -154,7 +151,11 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
             new Handler().postDelayed(eventRemover, animationTime);
         }
 
-        // Had to use runnable b/c removeCard reset the UI before the Animation finished
+        /**
+         * Runnable to remove a card
+         * @param e Event whose card to remove
+         * @return result of removeCard to affirm the card was removed
+         */
         private Runnable createRunnable(final Event e){
             //this runnable simply calls removeCard.
             return new Runnable(){
@@ -222,6 +223,11 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         notifyDataSetChanged();
     }
 
+    /**
+     * Placeholder function for removing card that will work with animation in the future
+     * Currently not in use, only calls removeCard
+     * @param event Event to delete
+     */
     public void deleteEvent(Event event) {
         /*
         TODO: find some way of telling this event's corresponding view holder to run deleteCard;
