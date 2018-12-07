@@ -13,14 +13,19 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.view.View;
 import android.view.ViewGroup;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
@@ -249,12 +254,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             target.get(0).iconRes = R.drawable.ic_info_black_24dp;
             target.get(1).iconRes = R.drawable.ic_notifications_black_24dp;
             target.get(2).iconRes = R.drawable.ic_sync_black_24dp;
+            target.get(3).iconRes = R.drawable.ic_question_answer_black_24dp;
         }
         //else if white is needed, set icons to white
         else if (night_mode.equals("Dark")) {
             target.get(0).iconRes = R.drawable.ic_info_white_24dp;
             target.get(1).iconRes = R.drawable.ic_notifications_white_24dp;
             target.get(2).iconRes = R.drawable.ic_sync_white_24dp;
+            target.get(3).iconRes = R.drawable.ic_question_answer_light_24dp;
+
         }
     }
 
@@ -268,7 +276,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
-                || NotificationPreferenceFragment.class.getName().equals(fragmentName);
+                || NotificationPreferenceFragment.class.getName().equals(fragmentName)
+                || FAQFragment.class.getName().equals(fragmentName);
     }
 
 
@@ -420,6 +429,45 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+        }
+
+        /**
+         * onOptionsItemSelected handles the up arrow that a user can click on
+         * @param item the back arrow at the action bar
+         * @return true if up arrow pressed, otherwise PreferenceFragment handles things.
+         * @author Littlesnowman88
+         */
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                NavUtils.navigateUpTo(getActivity(), new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static class FAQFragment extends Fragment {
+        /**
+        TODO doc
+         */
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_notification);
+            setHasOptionsMenu(true);
+
+
+
+            //TODO set text
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View frag_layout = inflater.inflate(R.layout.faq, container, false);
+            return frag_layout;
         }
 
         /**
