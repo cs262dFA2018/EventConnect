@@ -66,6 +66,8 @@ public class ExpandedCard extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO: add doc for back arrow
         context = getContext().getApplicationContext();
 
         expandToMain = new Intent(context, MainActivity.class);
@@ -133,6 +135,8 @@ public class ExpandedCard extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //TODO: add doc for imageButton and operations.
         View v = inflater.inflate(R.layout.expanded_event_fragment, container, false);
 
         ImageButton backButton = (ImageButton) v.findViewById(R.id.back_button);
@@ -175,9 +179,6 @@ public class ExpandedCard extends DialogFragment {
         timeLabel = (TextView) view.findViewById(R.id.time_label_text);
         timeView = (TextView) view.findViewById(R.id.time_text);
 
-
-        //TODO: Floating interested button
-
         //set UI text
         hostLabel.setText(getString(R.string.host_label));
         hostView.setText(host);
@@ -194,8 +195,6 @@ public class ExpandedCard extends DialogFragment {
         costLabel.setText(getString(R.string.cost_label));
         costView.setText(String.format(Locale.getDefault(), Double.toString(cost), Double.toString(cost)));
         catView.setText(cat);
-        //TODO: Floating interested button
-
 
         //TODO: click listener for a native copy of the "interested" button
         //TODO: when TabFragment is refreshed, maybe the buttons will have to be updated?
@@ -216,15 +215,6 @@ public class ExpandedCard extends DialogFragment {
         */
     }
 
-    /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        startActivity(expandToMain);
-        onStop();
-        return super.onOptionsItemSelected(item);
-
-    }
-    */
 
     /**
      * onResume shows the already created expanded card view
