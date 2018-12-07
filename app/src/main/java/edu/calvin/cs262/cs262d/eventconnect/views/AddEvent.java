@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -91,7 +92,7 @@ public class AddEvent extends AppCompatActivity {
         // initialize a DatePickerDialog and set name to date for the onClickListener
         calendar = Calendar.getInstance();
         date = new DatePickerDialog.OnDateSetListener() {
-          /**
+            /**
              * onDateSet stores the date information from the Date Picker
              *
              * @param view
@@ -189,8 +190,8 @@ public class AddEvent extends AppCompatActivity {
         String desc = eventDescription.getText().toString();
         String loc;
         String host;
-        String cat;
-
+        String cat = eventCat.getSelectedItem().toString();
+        TextView CatError = (TextView)eventCat.getSelectedView();
         boolean errorFound = false;
         String date = eventDate.getText().toString();
         String time = eventTime.getText().toString();
@@ -198,7 +199,6 @@ public class AddEvent extends AppCompatActivity {
         double cost;
         int threshold;
         final int capacity;
-
 
         Event event = new Event();
 
@@ -328,27 +328,22 @@ public class AddEvent extends AppCompatActivity {
         //EVENT DESCRIPTION
         event.setDescription(desc);
 
+        //set Category
+        try{
+            if(cat.equals("Select")){
+                event.setCategory("");
+            } else {
+                event.setCategory(cat);
+            }
+        }
+        catch (RuntimeException e){}
+
         if (!errorFound) { //if all required event information is entered and information is validated:
             //access and update the database.
             MockDatabase database = MockDatabase.getInstance();
             database.addNewEvent(event);
             finish();
         }
-
-
-        try{
-            cat = eventCat.getSelectedItem().toString();
-            event.setCategory(cat);
-        }
-        catch (RuntimeException e){}
-
-        event.setDate(date);
-        event.setCost(cost);
-
-        //access and update the database.
-
-        MockDatabase database = MockDatabase.getInstance();
-        finish();
 
     }
 
@@ -374,3 +369,4 @@ public class AddEvent extends AppCompatActivity {
     }
 
 }
+

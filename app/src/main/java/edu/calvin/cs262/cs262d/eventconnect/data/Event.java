@@ -38,23 +38,21 @@ public class Event {
     public String getHost() {
         return host;
     }
-
     public void setHost(String new_host) {
         host = new_host;
     }
-
-
+  
+    //Category
     public String getCategory() {
         return category;
     }
-    public void setCategory(String new_category){category = new_category;}
+    public void setCategory(String new_category) throws  RuntimeException {category = new_category;}
+
     //title
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String new_title) { title = new_title; }
-
     //date
     public String getDate() {
         String DateFormat = "MM/dd/yy";
@@ -95,13 +93,13 @@ public class Event {
         if (newY > currentY) {
             date = calendar;
         } else if (newY < currentY) {
-            throw dateTooEarly;
+            //throw dateTooEarly;
         } else {
             //if years are the same, check months
             if (newM > currentM) {
                 date = calendar;
             } else if (newM < currentM) {
-                throw dateTooEarly;
+                //throw dateTooEarly;
             } else {
                 //if months are also the same, check days
                 if (newD >= currentD) { //NOTE: events are allowed to be created for today
@@ -329,4 +327,5 @@ public class Event {
         return confirmed;
     }
 }
+
 

@@ -50,13 +50,13 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."</string>
+       completions."</string>
 
     <!-- Invalid Entries messages -->
     <string name = "error_invalid_MaxNumber"> Capacity cannot be
-        0 or lower than Min Threshold</string>
+       0 or lower than Min Threshold</string>
     <string name = "error_invalid_MinNumber"> Threshold cannot be
-        0 or bigger than Max Capacity</string>
+       0 or bigger than Max Capacity</string>
     <string name = "error_invalid_number">Cannot create event with this number</string>
     <string name= "error_empty_host" >Host cannot be empty</string>
     <string name="error_empty_location">Location is required</string>
@@ -65,6 +65,7 @@
     <string name="error_empty_time">Time Cannot be empty</string>
     <string name="error_invalid_time">Invalid Start Time</string>
     <string name="error_empty_title">Title cannot be empty</string>
+    <string name="error_empty_category">Category not set</string>
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
@@ -141,7 +142,7 @@
     <!-- Spinner dta for catagory -->
 
     <string-array name="event_cat">
-        <item></item>
+        <item>Select</item>
         <item>Party</item>
         <item>Study</item>
         <item>Trip</item>
@@ -153,3 +154,4 @@
     </string-array>
 
 </resources>
+
