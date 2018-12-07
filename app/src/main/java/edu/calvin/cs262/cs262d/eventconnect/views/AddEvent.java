@@ -330,13 +330,10 @@ public class AddEvent extends AppCompatActivity {
 
         //set Category
         try{
-            if(!cat.equals("Select")) {
-                event.setCategory(cat);
+            if(cat.equals("Select")){
+                event.setCategory("");
             } else {
-                CatError.setError(getString(R.string.error_empty_category));
-                Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_category),
-                        Toast.LENGTH_SHORT).show();
-                errorFound = true;
+                event.setCategory(cat);
             }
         }
         catch (RuntimeException e){}
