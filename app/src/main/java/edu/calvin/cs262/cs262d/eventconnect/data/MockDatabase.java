@@ -367,7 +367,7 @@ public class MockDatabase {
      * @author ksn7
      */
     public void addInterest(Event eventInterested) {
-        myEventData.add(eventInterested);
+        if (!myEventData.contains(eventInterested)) {myEventData.add(eventInterested);}
     }
 
     /**
