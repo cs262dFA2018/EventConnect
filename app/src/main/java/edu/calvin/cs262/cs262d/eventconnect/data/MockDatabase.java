@@ -22,7 +22,7 @@ import edu.calvin.cs262.cs262d.eventconnect.tools.TempDataTask;
  */
 public class MockDatabase {
     private String jsonData;
-    private ArrayList<Event> potentialEventData, confirmedEventData;
+    private ArrayList<Event> potentialEventData, confirmedEventData, myEventData;
     private static MockDatabase uniqueInstance = null;
 
 
@@ -50,6 +50,7 @@ public class MockDatabase {
     private MockDatabase() {
         potentialEventData = new ArrayList<Event>();
         confirmedEventData = new ArrayList<Event>();
+        myEventData = new ArrayList<Event>();
         fetchData();
     }
 
@@ -250,6 +251,8 @@ public class MockDatabase {
      * @author Littlesnomwan88
      */
     private void placeEvent(Event event) {
+        //TODO: Check if the event is hosted by the device owner. If so, add to hostedEventData
+
         if (!event.checkConfirmed()) {
             potentialEventData.add(event);
         } else {
@@ -262,9 +265,11 @@ public class MockDatabase {
      * called by the AddEvent activity.
      *
      * @author Littlesnowman88
+     * @author ksn7
      */
     public void addNewEvent(Event event) {
         potentialEventData.add(event);
+        myEventData.add(event);
     }
 
     /**
@@ -274,8 +279,9 @@ public class MockDatabase {
      * @author ksn7
      */
     public void deleteEvent(Event eventToDelete) {
+        //TODO: check if event host is device owner before allowing to delete
 
-        // Iterate through the potential events, and delete the event if its found
+        // Iterate through the potential events, and delete the event if it's found
         int num_events = potentialEventData.size();
         boolean eventFound = false;
         Event event;
@@ -301,6 +307,17 @@ public class MockDatabase {
             }
         }
 
+        // Iterate through the user's events, and delete the event if it's found
+        num_events = myEventData.size();
+        for (int i = 0; i < num_events; i++) {
+            event = myEventData.get(i);
+            if (event == eventToDelete) {
+                myEventData.remove(event);
+                num_events--;
+                eventFound = true;
+            }
+        }
+
         // If the event was not found anywhere, throw an error
         if (!eventFound) {
             throw new RuntimeException("ERROR: tried to delete an event not in the database");
@@ -311,7 +328,9 @@ public class MockDatabase {
      * moves an event from the potential tab to the confirmed tab.
      *
      * @param eventToMove the event moving from potentialEvents to confirmedEvents
-     * @author ???
+     * @author Littlesnowman88
+     * @author OneTrueAsian
+     * @author ksn7
      */
     public void movePotentialEvent(Event eventToMove) {
         int num_events = potentialEventData.size();
@@ -329,7 +348,7 @@ public class MockDatabase {
      * moves an event from the confirmed tab to the potential tab.
      *
      * @param eventToMove the event moving from confirmedEvents to potentialEvents
-     * @author ???
+     * @author ksn7
      */
     public void moveCompletedEvent(Event eventToMove) {
         int num_events = confirmedEventData.size();
@@ -340,6 +359,30 @@ public class MockDatabase {
                 confirmedEventData.remove(event);
                 num_events--;
             }
+        }
+    }
+
+    /**
+     * Adds event to myEvents when user indicates interest
+     *
+     * @param eventInterested to add to myEvents
+     * @author ksn7
+     */
+    public void addInterest(Event eventInterested) {
+        if (!myEventData.contains(eventInterested)) {myEventData.add(eventInterested);}
+    }
+
+    /**
+     * Removes event from myEvents when user un-indicates interest
+     *
+     * @param eventNotInterested to remove from myEvents
+     * @author ksn7
+     */
+    public void removeInterest(Event eventNotInterested) {
+        try {
+            myEventData.remove(eventNotInterested);
+        } catch (Exception e) {
+            throw new RuntimeException("ERROR: tried to remove interest from an event not in My Events");
         }
     }
 
@@ -362,4 +405,12 @@ public class MockDatabase {
     public ArrayList<Event> getConfirmedEventData() {
         return this.confirmedEventData;
     }
+
+    /**
+     * accessor for list of myEvents
+     *
+     * @return a reference to MockDatabases' list of events the device owner has indicated interest in
+     * @author ksn7
+     */
+    public ArrayList<Event> getMyEventData() {return this.myEventData; }
 }
