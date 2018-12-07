@@ -99,6 +99,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                     event_clicked.setInterest();
                     event_clicked.incrementCurrentInterest();
                     click_handler.onClick(event_clicked, MyCard);
+                    interestedButton.setText(context.getString(R.string.interested));
                     if (event_clicked.shouldMove()) {
                         /*when we have enough interest, get data form data base and reset card
                          */
@@ -108,8 +109,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
 
                         //remove the event card from this UI
                         deleteCard(event_clicked);
-                    } else {
-                        interestedButton.setText(context.getString(R.string.interested));
                     }
                 }
                 /* If current interest is true, mark they're not interested anymore
@@ -117,6 +116,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                 else if (event_clicked.getInterest()) {
                     event_clicked.clearInterest();
                     event_clicked.decrementCurrentInterest();
+                    interestedButton.setText(context.getString(R.string.not_interested));
                     if (event_clicked.shouldMove()) {
                         /* If too little interest, move card back to potential event
                          */
@@ -125,8 +125,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                         event_clicked.clearMoved();
                         //remove the event card from this UI
                         deleteCard(event_clicked);
-                    } else {
-                        interestedButton.setText(context.getString(R.string.not_interested));
                     }
                     click_handler.onClick(event_clicked, NotMyCard);
                 }
@@ -201,6 +199,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         card_holder.interestedButton.setEnabled(true);
         if(current_card.getInterest()){
             card_holder.interestedButton.setText(context.getString(R.string.interested));
+        } else {
+            card_holder.interestedButton.setText(context.getString(R.string.not_interested));
         }
     }
 

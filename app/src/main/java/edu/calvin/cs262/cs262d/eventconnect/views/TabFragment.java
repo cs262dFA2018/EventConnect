@@ -141,9 +141,11 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 break;
             case "Add to My Events":
                 database.addInterest(clicked_event);
+                card_container_adapter.notifyDataSetChanged();
                 break;
             case "Remove from My Events":
                 database.removeInterest(clicked_event);
+                card_container_adapter.notifyDataSetChanged();
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
