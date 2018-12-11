@@ -5,6 +5,7 @@
     <string name="fragment_2_text">Hello Tab 2 User!</string>
     <string name="tab_label_potential">Potential Events</string>
     <string name="tab_label_confirmed">Confirmed Events</string>
+    <string name="tab_label_my">My Events</string>
     <string name="interested">Uninterested?</string>
     <string name="not_interested">Interested?</string>
     <string name="Event_Confirmed"> Event is now confirmed</string>
