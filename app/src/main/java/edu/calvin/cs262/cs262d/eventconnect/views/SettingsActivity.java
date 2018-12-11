@@ -15,6 +15,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
@@ -448,7 +449,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
-    public static class FAQFragment extends Fragment {
+    public static class FAQFragment extends DialogFragment {
         /**
         TODO doc
          */
