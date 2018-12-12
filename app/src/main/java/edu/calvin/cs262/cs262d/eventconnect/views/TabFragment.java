@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,7 +34,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
     private RecyclerView card_container;
     private CardContainerAdapter card_container_adapter;
-    private EventsData dataSource = EventsData.getInstance();
+    private EventsData dataSource = EventsData.getInstance(null);
     private List<Event> event_data;
     private Context context;
 
@@ -57,7 +59,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         //build the adapter for this fragment's recycler view
         card_container_adapter = new CardContainerAdapter(this, context);
 
-        //get access to the DataManager
+        // get Events from the server
         getData();
     }
 
@@ -102,7 +104,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**
-     * Register the BroadcastManager here to receive messages from DataManager.
+     * Register the BroadcastManager here to receive messages from EventsPoller.
      *
      * @author Littlesnowman88
      */
@@ -114,7 +116,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**
-     * Unregister the BroadcastManager here to stop receiving messages from DataManager.
+     * Unregister the BroadcastManager here to stop receiving messages from EventsPoller.
      *
      * @author Littlesnowman88
      */
@@ -208,6 +210,8 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
      *
      * @param event, the event clicked on by the user
      * Postcondition: an ExpandedCard is summoned and displayed for the user
+     *
+     * @author Littlesnowman88
      */
     public void showExpandedCard(Event event) {
         //the following code is based on https://developer.android.com/reference/android/app/DialogFragment
@@ -235,8 +239,8 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**
-     * handles Broadcasted Intents from DataManager.
-     * If the intent really is from DataManager, this broadcast receiver updates TabFragments' data.
+     * handles Broadcasted Intents from EventsPoller.
+     * If the intent really is from EventsPoller, this broadcast receiver updates TabFragments' data.
      * appMessageReceiver is initialized outside of onCreate because only one ever needs to be made.
      *
      * @author Littlesnowman88
@@ -246,13 +250,13 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
          * onReceive updates MainActivity's TabFragments' data to reflect server database state.
          *
          * @param context the context that this receiver listens to.
-         * @param intent the message sent out by DataManager or other places MainActivity has registered this receiver to.
+         * @param intent the message sent out by EventsPoller or other places MainActivity has registered this receiver to.
          *
          * @author Littlesnowman88
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            /* before updating UI, the intent should be from DataManager.
+            /* before updating UI, the intent should be from EventsPoller.
              * IF UI NEEDS TO BE UPDATED FROM ANOTHER PLACE, FIX THIS COMMENT.
              * -LS88
              */

@@ -6,13 +6,9 @@ import android.util.Log;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
-import com.androidnetworking.interfaces.StringRequestListener;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jacksonandroidnetworking.JacksonParserFactory;
-
-import org.json.JSONArray;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -28,7 +24,8 @@ public class EventConnector {
     private static final String TAG = "EventConnector";
     private static final String BASE_URL = "https://calvincs262-fall2018-cs262d.appspot.com/eventconnect/v1/";
 
-    public void initialize(Context context) {
+
+    public EventConnector(Context context) {
         AndroidNetworking.initialize(context);
         AndroidNetworking.setParserFactory(new JacksonParserFactory());
     }
@@ -43,14 +40,17 @@ public class EventConnector {
                     @Override
                     public void onResponse(EventJsonDataHolder events) {
                         Log.d(TAG, "eventList: " + events);
+                        EventsData dataSource = EventsData.getInstance(null);
                         for (EventDAO event : events.EventsDAOList) {
                             Log.d(TAG, "eventTitle: " + event.getTitle());
                             try {
-                                EventsData.getInstance().placeEvent(EventDAOtoEvent(event));
+                                dataSource.placeEvent(EventDAOtoEvent(event));
                             } catch (ParseException e) {
                                 Log.d(TAG, "onResponse: " + e);
                             }
                         }
+
+                        //TODO: send broadcast to main activity.
                     }
 
                     @Override

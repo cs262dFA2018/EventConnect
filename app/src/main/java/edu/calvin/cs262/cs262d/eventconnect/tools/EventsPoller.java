@@ -10,15 +10,11 @@ import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 
 
 /**
- * DataManager manages DataConnection requests..
- * This class prevents Read/Write conflicts with the cloud database.
- * <p>
- * LOGIN ACTIVITY SHOULD NOT ACCESS THIS CLASS. MainActivity needs to be the first object to call this class,
- * because this class broadcasts updates to MainActivity.
+ * //TODO: comment this class.
  *
  * @author Littlesnowman88
  */
-public class DataManager extends Service {
+public class EventsPoller extends Service {
 
     /* TODO:
      * in UI, if something is edited, buttons may need to be disabled so multiple, identical requests cannot be made.
@@ -37,15 +33,15 @@ public class DataManager extends Service {
     //self-repeating Runnables that timer and connectionProcessor run.
     private Runnable timerRunner;
 
-    private EventsData dataSource = EventsData.getInstance();
+    private EventsData dataSource;
 
     /**
      * Constructor:
-     * Creates the GET request looper and the Connections Processing looper.
+     * Creates the GET request looper.
      *
      * @author Littlesnowman88
      */
-    public DataManager() {
+    public EventsPoller() {
         //Create the GET request looper
         timerRunner = new Runnable() {
             @Override
@@ -64,7 +60,7 @@ public class DataManager extends Service {
      * @param intent  the Intent responsible for starting this Service. (Activity Source: MainActivity).
      * @param flags
      * @param startId
-     * @return Service.START_NOT_STICKY, meaning that DataManager will stop running when MainActivity stops running.
+     * @return Service.START_NOT_STICKY, meaning that EventsPoller will stop running when MainActivity stops running.
      * @author Littlesnowman88
      */
     @Override
@@ -81,14 +77,14 @@ public class DataManager extends Service {
         String action = intent.getAction();
 
         if (action != null && action.equals("processConnections")) {
+            //create an EventConnector for getting data from server.
+            EventConnector ec = new EventConnector(getBaseContext());
+            //set the database's eventConnector so the database can tell the server to update data.
+            dataSource = EventsData.getInstance(ec);
+
             //start GET request timer immediately
             timer.post(timerRunner);
-            EventConnector ec = new EventConnector(getBaseContext());
-            ec.getEvents();
-        }
-        else if (action != null && action.equals("loginToServer")) {
-            EventConnector ec = new EventConnector(getBaseContext());
-            //ec get user, check password, and authenticate??
+
         }
         return START_NOT_STICKY;
     }
@@ -97,7 +93,7 @@ public class DataManager extends Service {
     /**
      * required by the Service class, but the app doesn't do anything with it.
      *
-     * @param arg0
+     * @param arg0 not used because the app doesn't need to do anything with binding.
      * @return null because the app doesn't need to do anything with binding.
      * @author Littlesnowman88
      */

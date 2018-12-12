@@ -1,6 +1,7 @@
 package edu.calvin.cs262.cs262d.eventconnect.data;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -11,25 +12,38 @@ public final class EventsData {
     private static EventsData uniqueInstance;
 
     private static final String TAG = "EventsData";
-    private EventConnector ec;
+    private static EventConnector ec;
     private List<Event> potentialEvents, confirmedEvents, myEvents;
 
-    public static synchronized EventsData getInstance() {
+    /**
+     * Singleton constructor, effectively.
+     * NOTE: getInstance must be called once with a NonNull eventConnector for many of the EventsData functions to work!!!
+     * @param eventConnector The class responsible for getting/sending data with the server.
+     *                       Nullable so Fragments can access the database and make changes.
+     *                       MUST BE CALLED AT LEAST ONCE WITH A NONNULL EVENTCONNECTOR for this class to work!
+     *                       (ideally, MainActivity)
+     * @return uniqueInstance, the one and only ever one instance of EventsData. Yay Singleton pattern!
+     *
+     * @author Littlesnowman88
+     */
+    public static synchronized EventsData getInstance(@Nullable EventConnector eventConnector) {
         if (uniqueInstance == null) {
             uniqueInstance = new EventsData();
         }
+        if (eventConnector != null) ec = eventConnector;
         return uniqueInstance;
     }
 
+    /**
+     * Constructor.
+     * Creates blank lists for the TabFragments
+     *
+     * @author Littlesnowman88
+     */
     private EventsData() {
         potentialEvents = new ArrayList<>();
         confirmedEvents = new ArrayList<>();
         myEvents = new ArrayList<>();
-    }
-
-    public void initializeEventConnector(Context context){
-        ec = new EventConnector();
-        ec.initialize(context);
     }
 
     public void updateEvents(){

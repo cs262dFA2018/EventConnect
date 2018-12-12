@@ -15,9 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
-import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
-import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
+import edu.calvin.cs262.cs262d.eventconnect.tools.EventsPoller;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,20 +51,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
 
-
-        //FIXME: fix the design conflict between thesse.
-
-        //start DataManager, the service responsible for server httpRequests.
-        Intent mainToDataManager = new Intent(context, DataManager.class);
+        /*start EventsPoller, the service responsible for polling the server with get requests.
+         * EventsPoller also creates an EventConnector for MainActivity, here.
+         */
+        Intent mainToDataManager = new Intent(context, EventsPoller.class);
         mainToDataManager.setAction(DATA_UPDATE);
-        //startService(mainToDataManager);
-
-
-        //initialize DataManager with MainActivity's context
-        EventsData ed = EventsData.getInstance();
-        ed.initializeEventConnector(context);
-        ed.updateEvents();
-
+        startService(mainToDataManager);
 
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);

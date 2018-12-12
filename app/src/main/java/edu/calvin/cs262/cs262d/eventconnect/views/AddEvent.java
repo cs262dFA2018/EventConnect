@@ -341,7 +341,7 @@ public class AddEvent extends AppCompatActivity {
 
         if (!errorFound) { //if all required event information is entered and information is validated:
             //access and update the database.
-            EventsData.getInstance().addNewEvent(event);
+            EventsData.getInstance(null).addNewEvent(event);
             finish();
         }
 
