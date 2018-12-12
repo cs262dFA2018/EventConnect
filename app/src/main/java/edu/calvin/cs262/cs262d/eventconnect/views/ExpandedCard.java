@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -67,9 +65,11 @@ public class ExpandedCard extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO: add doc for back arrow
+        /**
+         *Create an application context to connect Expanded card to main
+         *Assign to the intent that connects expanded card view to main
+         */
         context = getContext().getApplicationContext();
-
         expandToMain = new Intent(context, MainActivity.class);
 
         //access the event Data
@@ -125,8 +125,8 @@ public class ExpandedCard extends DialogFragment {
     }
 
     /**
-     * onCreateView uses an inflater to set up the expanded card view
-     *
+     * onCreateView uses an inflater to set up the expanded card view.
+     * Back arrow uses an ImageButton that the user taps on instead of the traditional button.
      * @param inflater layout inflator to use
      * @param container view group for the expanded card
      * @param savedInstanceState expanded card data
@@ -136,11 +136,12 @@ public class ExpandedCard extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //TODO: add doc for imageButton and operations.
         View v = inflater.inflate(R.layout.expanded_event_fragment, container, false);
-
         ImageButton backButton = (ImageButton) v.findViewById(R.id.back_button);
 
+        /**
+         * onClick listener for backButton to move to main when clicked.
+         */
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,7 +218,8 @@ public class ExpandedCard extends DialogFragment {
 
 
     /**
-     * onResume shows the already created expanded card view
+     * onStart shows the already created expanded card view
+     * Expands previous card from 325 to Fill_Parent
      */
     @Override
     public void onStart()
