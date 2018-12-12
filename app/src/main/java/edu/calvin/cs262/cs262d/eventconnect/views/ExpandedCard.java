@@ -150,8 +150,8 @@ public class ExpandedCard extends DialogFragment {
         locationView = (TextView) view.findViewById(R.id.location_text);
         costLabel = (TextView) view.findViewById(R.id.cost_label_text);
         costView = (TextView) view.findViewById(R.id.cost_text);
-        //catLabel = view.findViewById(R.id.cat_label_text);
-        //catView = view.findViewById(R.id.cat_text);
+        catLabel = view.findViewById(R.id.cat_label_text);
+        catView = view.findViewById(R.id.cat_text);
         timeLabel = (TextView) view.findViewById(R.id.time_label_text);
         timeView = (TextView) view.findViewById(R.id.time_text);
 

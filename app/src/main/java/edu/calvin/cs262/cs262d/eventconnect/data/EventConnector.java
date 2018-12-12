@@ -67,7 +67,7 @@ public class EventConnector {
     public Event EventDAOtoEvent(EventDAO eventDAO) throws ParseException {
         Event event = new Event();
         event.setHost(Integer.toString(eventDAO.getUserId()));
-        event.setTitle(event.getTitle());
+        event.setTitle(eventDAO.getTitle());
         event.setDate(eventDAO.getTimeCalendar().get(Calendar.MONTH) + "/"
                 + eventDAO.getTimeCalendar().get(Calendar.DAY_OF_MONTH) + "/"
                 + eventDAO.getTimeCalendar().get(Calendar.YEAR));
