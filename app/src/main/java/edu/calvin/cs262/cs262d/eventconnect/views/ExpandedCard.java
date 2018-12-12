@@ -1,13 +1,16 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -20,17 +23,18 @@ public class ExpandedCard extends DialogFragment {
 
     private TextView hostLabel, hostView, titleLabel, titleView, descriptionLabel, descriptionView,
 
-        dateLabel, dateView, locationLabel, locationView, costLabel, costView, catView, catLabel, timeLabel, timeView;
+    dateLabel, dateView, locationLabel, locationView, costLabel, costView, catView, catLabel, timeLabel, timeView;
     private boolean interested;
     private String title, description, host, location, date, cat, time;
-
-
+    private Intent expandToMain;
+    private Context context;
     private double cost;
 
     /**
      * Create a new instance of ExpandedCard, providing arguments from an Event
-     *
      * @param event event data to put on expanded card
+     * @author Littlesnowman88
+     * @author OneTrueAsian (back arrow)
      */
     static ExpandedCard newInstance(Event event) {
         ExpandedCard ec = new ExpandedCard();
@@ -55,12 +59,19 @@ public class ExpandedCard extends DialogFragment {
 
     /**
      * onCreate sets up the ExpandedCard view
-     *
      * @param savedInstanceState bundle of event data
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /**
+         *Create an application context to connect Expanded card to main
+         *Assign to the intent that connects expanded card view to main
+         */
+        context = getContext().getApplicationContext();
+        expandToMain = new Intent(context, MainActivity.class);
+
         //access the event Data
         Bundle args = getArguments();
         try {
@@ -114,8 +125,8 @@ public class ExpandedCard extends DialogFragment {
     }
 
     /**
-     * onCreateView uses an inflater to set up the expanded card view
-     *
+     * onCreateView uses an inflater to set up the expanded card view.
+     * Back arrow uses an ImageButton that the user taps on instead of the traditional button.
      * @param inflater layout inflator to use
      * @param container view group for the expanded card
      * @param savedInstanceState expanded card data
@@ -124,12 +135,25 @@ public class ExpandedCard extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.expanded_event_fragment, container, false);
+
+        View v = inflater.inflate(R.layout.expanded_event_fragment, container, false);
+        ImageButton backButton = (ImageButton) v.findViewById(R.id.back_button);
+
+        /**
+         * onClick listener for backButton to move to main when clicked.
+         */
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(expandToMain);
+                dismiss();
+            }
+        });
+        return v;
     }
 
     /**
      * Applies data to the expanded card
-     *
      * @param view view the expanded card is in
      * @param savedInstanceState expanded card data
      */
@@ -155,9 +179,6 @@ public class ExpandedCard extends DialogFragment {
         timeLabel = (TextView) view.findViewById(R.id.time_label_text);
         timeView = (TextView) view.findViewById(R.id.time_text);
 
-
-        //TODO: Floating interested button
-
         //set UI text
         hostLabel.setText(getString(R.string.host_label));
         hostView.setText(host);
@@ -174,40 +195,46 @@ public class ExpandedCard extends DialogFragment {
         costLabel.setText(getString(R.string.cost_label));
         costView.setText(String.format(Locale.getDefault(), Double.toString(cost), Double.toString(cost)));
         catView.setText(cat);
-        //TODO: Floating interested button
-
 
         //TODO: click listener for a native copy of the "interested" button
         //TODO: when TabFragment is refreshed, maybe the buttons will have to be updated?
         //first access UI above
-        /*
-        button.setOnClickListener(new onClickListener() {
-            public void onClick(View v) {
-                if button is confirmed text:
-                    set denied text
-                    update calling activity with the change in data? or manipulate the db directly?
-                else:
-                    make button text positive
-                    update calling activity with the change in data? or manipulate the db directly?
-         */
-        /*
-        how to call up to the owning activity:
-        ((FragmentDialog)getActivity()).showDialog();
-         */
+       /*
+       button.setOnClickListener(new onClickListener() {
+           public void onClick(View v) {
+               if button is confirmed text:
+                   set denied text
+                   update calling activity with the change in data? or manipulate the db directly?
+               else:
+                   make button text positive
+                   update calling activity with the change in data? or manipulate the db directly?
+        */
+       /*
+       how to call up to the owning activity:
+       ((FragmentDialog)getActivity()).showDialog();
+        */
     }
 
+
     /**
-     * onResume shows the already created expanded card view
+     * onStart shows the already created expanded card view
+     * Expands previous card from 325 to Fill_Parent
+     * @author OneTrueAsian
+     * @author Littlesnowman88
      */
     @Override
-    public void onResume() {
-        super.onResume();
-        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getDialog().getWindow().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        params.width = displayMetrics.widthPixels - 283;
-        params.height = displayMetrics.heightPixels - 283;
-        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+    public void onStart()
+    {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null)
+        {
+            int width = ViewGroup.LayoutParams.FILL_PARENT;
+            int height = ViewGroup.LayoutParams.FILL_PARENT;
+            dialog.getWindow().setLayout(width, height);
+        }
     }
 
 }
+
+
