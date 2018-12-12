@@ -27,8 +27,6 @@ public class EventConnector {
     private static final String TAG = "EventConnector";
     private static final String BASE_URL = "https://calvincs262-fall2018-cs262d.appspot.com/eventconnect/v1/";
 
-    private List<Event> eventList;
-
     /**
      * This class holds the list of events
      * need because GET to /events returns an array
@@ -72,7 +70,7 @@ public class EventConnector {
                         for (EventDAO event : events.EventsDAOList) {
                             EventsData.getInstance().placeEvent(EventDAOtoEvent(event));
                         }
-                        postEvent(EventsData.getInstance().getPotentialEventData().get(0), "TestUser", "TestPass");
+//                        postEvent(EventsData.getInstance().getPotentialEventData().get(0), "TestUser", "TestPass");
                     }
 
                     @Override
@@ -140,6 +138,7 @@ public class EventConnector {
                     @Override
                     public void onResponse(EventDAO event) {
                         // do something with created event
+//                        joinEvent(EventDAOtoEvent(event), "TestUser", "TestPass");
                     }
 
                     @Override
@@ -176,6 +175,8 @@ public class EventConnector {
                     @Override
                     public void onResponse(EventDAO event) {
                         // do something with joined event
+//                        event.setTitle("End of World...? (World Leaders ONLY)");
+//                        putEvent(EventDAOtoEvent(event), "TestUser", "TestPass");
                     }
 
                     @Override
@@ -213,7 +214,7 @@ public class EventConnector {
                 .getAsObject(EventDAO.class, new ParsedRequestListener<EventDAO>() {
                     @Override
                     public void onResponse(EventDAO event) {
-                        // do something with unjoined event
+                        // do something with updated event
                     }
 
                     @Override
@@ -228,6 +229,63 @@ public class EventConnector {
                 });
     }
 
+    /**
+     * Does a PUT request update an already existing event
+     * Corresponds to /event/{id}/{token} described here:
+     * https://github.com/cs262dFA2018/EventConnectServer/wiki/Event-endpoints
+     *
+     * @param event    the event to join MUST HAVE ID SET(which is done by getEvents())
+     * @param username Username the user joining
+     * @param password Password of the user joining
+     * @author Theron Tjapkes (tpt3)
+     */
+    public void putEvent(Event event, String username, String password) {
+        EventDAO eventDAO = EventToEventDAO(event);
+        String base64UsernamePassword = encodeBase64(username + ":" + password);
+        AndroidNetworking.put(BASE_URL + "event/" + eventDAO.getId() + "/"
+                + base64UsernamePassword)
+                .addBodyParameter(eventDAO)
+                .setTag(this)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsObject(EventDAO.class, new ParsedRequestListener<EventDAO>() {
+                    @Override
+                    public void onResponse(EventDAO event) {
+                        // do something with updated event
+//                        deleteEvent(EventDAOtoEvent(event), "TestUser", "TestPass");
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                        Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                        Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        throw new RuntimeException("ERROR: errorCode " + error.getErrorCode()
+                                + " errorBody " + error.getErrorBody()
+                                + " errorDetail " + error.getErrorDetail());
+                    }
+                });
+    }
+
+    /**
+     * Does a DELETE request delete an event
+     * Corresponds to /event/{id}/{token} described here:
+     * https://github.com/cs262dFA2018/EventConnectServer/wiki/Event-endpoints
+     *
+     * @param event    the event to join MUST HAVE ID SET(which is done by getEvents())
+     * @param username Username the user joining
+     * @param password Password of the user joining
+     * @author Theron Tjapkes (tpt3)
+     */
+    public void deleteEvent(Event event, String username, String password) {
+        EventDAO eventDAO = EventToEventDAO(event);
+        String base64UsernamePassword = encodeBase64(username + ":" + password);
+        AndroidNetworking.delete(BASE_URL + "event/" + eventDAO.getId() + "/"
+                + base64UsernamePassword)
+                .setTag(this)
+                .setPriority(Priority.MEDIUM)
+                .build();
+    }
 
     // Utility
 
