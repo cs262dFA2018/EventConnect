@@ -3,24 +3,18 @@ package edu.calvin.cs262.cs262d.eventconnect.data;
 import android.content.Context;
 import android.util.Log;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.ParsedRequestListener;
-import com.jacksonandroidnetworking.JacksonParserFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public final class EventsData {
-    private static final String TAG = "EventsData";
-    private EventConnector ec;
-    private List<Event> potentialEvents;
-    private List<Event> confirmedEvents;
 
     private static EventsData uniqueInstance;
 
-    public static  EventsData getInstance() {
+    private static final String TAG = "EventsData";
+    private EventConnector ec;
+    private List<Event> potentialEvents, confirmedEvents, myEvents;
+
+    public static synchronized EventsData getInstance() {
         if (uniqueInstance == null) {
             uniqueInstance = new EventsData();
         }
@@ -30,6 +24,7 @@ public final class EventsData {
     private EventsData() {
         potentialEvents = new ArrayList<>();
         confirmedEvents = new ArrayList<>();
+        myEvents = new ArrayList<>();
     }
 
     public void initializeEventConnector(Context context){
@@ -154,6 +149,32 @@ public final class EventsData {
     }
 
     /**
+     * Adds event to myEvents when user indicates interest
+     *
+     * @param eventInterested to add to myEvents
+     * @author ksn7
+     */
+    public void addInterest(Event eventInterested) {
+        if (!myEvents.contains(eventInterested)) {
+            myEvents.add(eventInterested);
+        }
+    }
+
+    /**
+     * Removes event from myEvents when user un-indicates interest
+     *
+     * @param eventNotInterested to remove from myEvents
+     * @author ksn7
+     */
+    public void removeInterest(Event eventNotInterested) {
+        try {
+            myEvents.remove(eventNotInterested);
+        } catch (Exception e) {
+            throw new RuntimeException("ERROR: tried to remove interest from an event not in My Events");
+        }
+    }
+
+    /**
      * accessor for list of potentialEvents
      *
      * @return a reference to MockDatabases' potential events.
@@ -172,5 +193,15 @@ public final class EventsData {
      */
     public List<Event> getConfirmedEventData() {
         return this.confirmedEvents;
+    }
+
+    /**
+     * accessor for list of myEvents
+     *
+     * @return a reference to MockDatabases' list of events the device owner has indicated interest in
+     * @author ksn7
+     */
+    public List<Event> getMyEventData() {
+        return this.myEvents;
     }
 }

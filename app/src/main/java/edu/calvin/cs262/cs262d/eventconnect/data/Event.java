@@ -93,12 +93,16 @@ public class Event {
         if (newY > currentY) {
             date = calendar;
         } else if (newY < currentY) {
+            //TODO: CLEAN THIS UP.
+            date = calendar;
             //throw dateTooEarly;
         } else {
             //if years are the same, check months
             if (newM > currentM) {
                 date = calendar;
             } else if (newM < currentM) {
+                //TODO: CLEAN THIS UP.
+                date = calendar;
                 //throw dateTooEarly;
             } else {
                 //if months are also the same, check days
