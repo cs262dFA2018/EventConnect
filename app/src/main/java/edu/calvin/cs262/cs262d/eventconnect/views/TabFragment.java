@@ -20,13 +20,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.CardContainerAdapter;
-import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 
 
 /**
@@ -37,7 +36,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     private RecyclerView card_container;
     private CardContainerAdapter card_container_adapter;
     private EventsData dataSource = EventsData.getInstance();
-    private ArrayList<Event> event_data;
+    private List<Event> event_data;
     private Context context;
 
     public TabFragment() {

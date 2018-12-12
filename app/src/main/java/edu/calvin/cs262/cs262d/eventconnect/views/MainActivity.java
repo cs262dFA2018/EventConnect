@@ -17,8 +17,8 @@ import android.view.View;
 import java.lang.ref.WeakReference;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
-import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
         //initialize DataManager with MainActivity's context
-        DataManager dm = new DataManager();
-        dm.makeHTTPRequest("events", "GET", null);
-
+        EventsData ed = EventsData.getInstance();
+        ed.initializeEventConnector(context);
+        ed.updateEvents();
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
         mainToSettings = new Intent(context, SettingsActivity.class);

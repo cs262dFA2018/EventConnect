@@ -26,7 +26,6 @@ import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
-import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 
 /**
  * AddEvent is the activity for adding a new event

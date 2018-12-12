@@ -12,7 +12,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
-import java.util.ArrayList;
+
+import java.util.List;
+
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 
@@ -23,7 +25,7 @@ import edu.calvin.cs262.cs262d.eventconnect.data.Event;
  */
 public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdapter.CardContainerAdapterViewHolder> {
 
-    private ArrayList<Event> cards;
+    private List<Event> cards;
 
     private final CardContainerAdapterOnClickHandler click_handler;
     private Context context;
@@ -208,7 +210,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     }
 
     /** set the cards in the adapter's data structure **/
-    public void setCards(ArrayList<Event> new_cards) {
+    public void setCards(List<Event> new_cards) {
         cards = new_cards;
         notifyDataSetChanged(); //a method inside of Recycler View.
     }
