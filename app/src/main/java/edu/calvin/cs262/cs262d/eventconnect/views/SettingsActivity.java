@@ -449,19 +449,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
+
+    /**This class create the FAQ fragment,
+     *containing in-app documentation.
+     */
     public static class FAQFragment extends DialogFragment {
         /**
-        TODO doc
+         * Creates the FAWDialogFragment
+         * @param savedInstanceState the last known state of this PreferenceFragment
+         * @author Android Studio (code)
+         * @author RickRilled (documentation)
          */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
-
-
-
-            //TODO set text
         }
 
         @Nullable
