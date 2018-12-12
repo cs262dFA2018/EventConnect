@@ -3,8 +3,8 @@ package edu.calvin.cs262.cs262d.eventconnect.tools;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -14,10 +14,7 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 
-import edu.calvin.cs262.cs262d.eventconnect.data.Event;
-import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 
 /**
  * DataManager manages DataConnection requests..
@@ -28,7 +25,7 @@ import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
  *
  * @author Littlesnowman88
  */
-public class DataManager extends Service implements TasksCompleted {
+public class DataManager extends Service {
 
     /* TODO:
      * in UI, if something is edited, buttons may need to be disabled so multiple, identical requests cannot be made.
@@ -46,7 +43,6 @@ public class DataManager extends Service implements TasksCompleted {
 
     private WeakReference<Context> contextRef; //the context to send Broadcasts to (when data has been updated and UI needs to change)
 
-    private EventsData dataHolder = EventsData.getInstance();
     private ArrayDeque<DataConnection> connections;
     private DataConnection currentConnection;
 
@@ -83,7 +79,7 @@ public class DataManager extends Service implements TasksCompleted {
      * @throws RuntimeException if the httpRequest is invalid.
      * @author Littlesnowman88
      */
-    private void makeHTTPRequest(@NonNull String endpoint, @NonNull String httpRequest, @Nullable JSONObject data) throws RuntimeException {
+    public void makeHTTPRequest(@NonNull String endpoint, @NonNull String httpRequest, @Nullable JSONObject data) throws RuntimeException {
         //if an invalid httpRequest is given, abort the constructor process.
         if (!httpRequest.equals("GET") && !httpRequest.equals("POST")
                 && !httpRequest.equals("PUT") && !httpRequest.equals("DELETE")) {
@@ -93,10 +89,15 @@ public class DataManager extends Service implements TasksCompleted {
             return;
         }
         connections.addLast(new DataConnection(endpoint, httpRequest, data));
+        if (currentConnection==null) {
+            //process connections in the background. If connection is not null, then connections are already being processed.
+            startService(new Intent("processConnections"));
+        }
     }
 
     /**
      * processes all tasks in the connections queue
+     * after, tell Main Activity to update its UI
      *
      * @param intent
      * @param flags
@@ -107,27 +108,18 @@ public class DataManager extends Service implements TasksCompleted {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //process the tasks?
+        if(android.os.Debug.isDebuggerConnected())
+            android.os.Debug.waitForDebugger();
+        if (intent.getAction() != null && intent.getAction().equals("processConnections")) {
+            processConnections();
+            //FIXME: pass more substantive data.
+            intent.putExtra("message", "THIS MESSAGE is from DataManager. You should see it in TabFragment.");
+            LocalBroadcastManager.getInstance(contextRef.get()).sendBroadcast(intent);
+            currentConnection = null; //once all connections have been processed, update state.
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
-    /**
-     * processTasks synchronously handles all http requests in connections arraylist.
-     *
-     * @param strings not used.
-     * @return null. No status to report.
-     * @author Littlesnowman88
-     *
-     * FIXME: figure out why doInBackground doesn't seem to end...
-     */
-    @Override
-    protected String doInBackground(String... strings) {
-        if(android.os.Debug.isDebuggerConnected())
-            android.os.Debug.waitForDebugger();
-        processConnections();
-        currentConnection = null; //once all connections have been processed, update state.
-        return "finished";
-    }
 
     /**
      * helper function for doInBackground. Runs events in the connections queue.
@@ -169,7 +161,7 @@ public class DataManager extends Service implements TasksCompleted {
      * makes a getRequest for all events and processes that getRequest.
      */
     private void processFinalGet() {
-        currentConnection = new DataConnection("events", "GET", dataHolder, null);
+        currentConnection = new DataConnection("events", "GET", null);
         processConnection();
     }
 
@@ -194,28 +186,27 @@ public class DataManager extends Service implements TasksCompleted {
     }
 
     /**
-     * Tells DataManager to update MainActivity's data.
-     * @param s the result of doInBackground.
+     * required by the Service class, but the app doesn't do anything with it.
+     * @param arg0
+     * @return null because the app doesn't need to do anything with binding.
      * @author Littlesnowman88
      */
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        if (s != null && s.equals("finished")) {
-            dataHolder.get().onTasksComplete();
-        }
+    public IBinder onBind(Intent arg0) {
+        return null;
     }
 
     /**
-     * called by TaskManager's onPostExecute, onTaskComplete sends a broadcast to MainActivity
-     * that broadcast tells MainActivity's TabFragments to update their EventData.
+     * clear any currently and remaining threads before shutting down the service.
      * @author Littlesnowman88
      */
     @Override
-    public void onTasksComplete() {
-        //FIXME: pass more substantive data.
-        Intent intent = new Intent("dataUpdate");
-        intent.putExtra("message", "THIS MESSAGE is from DataManager. You should see it in TabFragment.");
-        LocalBroadcastManager.getInstance(contextRef.get()).sendBroadcast(intent);
+    public void onDestroy() {
+        stopSelf();
+        super.onDestroy();
+        connections.clear();
+        if (currentConnection != null) {
+            currentConnection.cancel(true);
+        }
     }
 }

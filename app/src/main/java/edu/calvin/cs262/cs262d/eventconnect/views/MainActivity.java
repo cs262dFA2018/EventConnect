@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
         //initialize DataManager with MainActivity's context
         DataManager dm = new DataManager();
+        dm.makeHTTPRequest("events", "GET", null);
 
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);

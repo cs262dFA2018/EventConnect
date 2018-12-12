@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 
@@ -277,8 +278,7 @@ public class AddEvent extends AppCompatActivity {
 
         if (!errorFound) { //if all required event information is entered and information is validated:
             //access and update the database.
-            DataManager dm = DataManager.getInstance(new WeakReference<Context>(this));
-            dm.addNewEvent(event);
+            EventsData.getInstance().addNewEvent(event);
             finish();
         }
     }

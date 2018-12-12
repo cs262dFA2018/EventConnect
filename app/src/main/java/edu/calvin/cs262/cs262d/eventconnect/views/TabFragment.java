@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.CardContainerAdapter;
 import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 
@@ -35,8 +36,8 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
     private RecyclerView card_container;
     private CardContainerAdapter card_container_adapter;
+    private EventsData dataSource = EventsData.getInstance();
     private ArrayList<Event> event_data;
-    private DataManager dm;
     private Context context;
 
     public TabFragment() {
@@ -54,12 +55,11 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         //get the necessary resources to check which tab I am.
         context = new WeakReference<Context>(getActivity().getApplicationContext()).get();
         //get access to the DataManager
-         dm = DataManager.getInstance(new WeakReference<Context>(getActivity().getApplicationContext()));
         //check which tab I am based on the tab name and what PagerAdapter.java told me I am
         if (context.getString(R.string.tab_label_potential).equals(getArguments().getString("Fragment_id"))) {
-            event_data = dm.getPotentialEventData();
+            event_data = dataSource.getPotentialEventData();
         } else if (context.getString(R.string.tab_label_confirmed).equals(getArguments().getString("Fragment_id"))) {
-            event_data = dm.getConfirmedEventData();
+            event_data = dataSource.getConfirmedEventData();
         } else {
             //If I am being used for something else and haven't been informed of that, then I shouldn't be created at all!
             throw new RuntimeException("ERROR: tab fragment created for undetermined purpose.");
@@ -119,12 +119,12 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 showExpandedCard(clicked_event);
                 break;
             case "Move Thy Card":
-                dm.movePotentialEvent(clicked_event);
+                dataSource.movePotentialEvent(clicked_event);
                 Toast.makeText(getActivity(),context.getString(R.string.Event_Confirmed),
                         Toast.LENGTH_LONG).show();
                 break;
             case "Un-move Thy Card":
-                dm.moveCompletedEvent(clicked_event);
+                dataSource.moveCompletedEvent(clicked_event);
                 Toast.makeText(getActivity(), context.getString(R.string.Event_Unconfirmed),
                         Toast.LENGTH_LONG).show();
                 break;
@@ -163,7 +163,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
      */
     public void deleteEvent(Event clicked_event) {
         try {
-            dm.deleteEvent(clicked_event);
+            dataSource.deleteEvent(clicked_event);
         }
         catch (RuntimeException e) {
             //event wasn't found in the database
@@ -205,7 +205,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                     Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
         @Override
