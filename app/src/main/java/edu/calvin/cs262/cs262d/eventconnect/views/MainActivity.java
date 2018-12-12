@@ -17,7 +17,6 @@ import android.view.View;
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
-import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         //FIXME: fix the design conflict between thesse.
 
         //start DataManager, the service responsible for server httpRequests.
-        Intent mainToDataManager = new Intent(context, DataManager.class);
-        mainToDataManager.setAction(DATA_UPDATE);
+        //Intent mainToDataManager = new Intent(context, DataManager.class);
+        //mainToDataManager.setAction(DATA_UPDATE);
         //startService(mainToDataManager);
 
 

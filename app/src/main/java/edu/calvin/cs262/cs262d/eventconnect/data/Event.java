@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class Event {
-    private int current_interest, min_threshold, max_capacity;
+    private int current_interest, min_threshold, max_capacity, id;
 
 
     private String title, description, host, location, category;
@@ -33,6 +33,27 @@ public class Event {
         interest = false;
         confirmed = false;
     }
+
+    //id
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    //calendar (date) needed for EventDAO to Event conversion in EventConnector
+    public Calendar getCalendar(){
+        return date;
+    }
+
+    public void setCalendar(Calendar calendar){
+        this.date = calendar;
+    }
+
 
     //host
     public String getHost() {

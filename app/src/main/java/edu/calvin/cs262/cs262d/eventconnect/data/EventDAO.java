@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**
+ * Copied directory from server side
+ *
  * This class implements an Event Data-Access Object (DAO) class for the Event relation.
  * This provides an object-oriented way to represent and manipulate Event "objects" from
  * the traditional (non-object-oriented) EventConnect database.
