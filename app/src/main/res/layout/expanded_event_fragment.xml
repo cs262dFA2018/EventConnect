@@ -15,6 +15,16 @@
     android:background="@drawable/expanded_card_background_light"
     >
 
+    <!-- back arrow -->
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="32dp"
+        android:src="?attr/homeAsUpIndicator"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        />
+
     <!-- a container for the textviews in the expanded event view -->
     <LinearLayout
         android:layout_width="match_parent"

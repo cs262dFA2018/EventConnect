@@ -21,6 +21,7 @@ public class ConfirmDialog {
      * @param base_context context to run in, here the current UI activity
      * @param confirm Runnable that deletes the event
      * @param cancel Runnable with no content (does nothing)
+     * @edited: ksn7
      */
     public ConfirmDialog(String message, String confirmationWord, Context base_context, final Runnable confirm, final Runnable cancel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new WeakReference<Context>(base_context).get());

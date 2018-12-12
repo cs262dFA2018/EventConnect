@@ -32,6 +32,7 @@ import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 
 /**
  * AddEvent is the activity for adding a new event
+ * @author therOn
  */
 public class AddEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity, eventTime;
@@ -44,8 +45,9 @@ public class AddEvent extends AppCompatActivity {
 
     /**
      * onCreate initializes the AddEvent activity
-     *
      * @param savedInstanceState bundle passed in when the activity is created
+     * @author OneTrueAsian (Time & Date Dialog fragments)
+     * @author RickRilled (category spinner)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +185,7 @@ public class AddEvent extends AppCompatActivity {
      * Onclick for creating a database event object when the "create event" button is clicked,
      * setting the time, date, title, etc.
      *
+     * @author OneTrueAsian (SetError)
      */
     public void onCreateEventClicked(View view) throws ParseException {
 
@@ -350,6 +353,7 @@ public class AddEvent extends AppCompatActivity {
     /**
      * This method updates the onClick listener for the calendar
      * widget, updating it to the MM/dd/yy format and Local US date
+     * @author OneTrueAsian
      **/
     private void updateLabel() {
         String DateFormat = "MM/dd/yy";
@@ -360,6 +364,7 @@ public class AddEvent extends AppCompatActivity {
     /**
      * This method updates the onClick listener for the time
      * widget, updating it to the HH:mm format and Local US date
+     * @author OneTrueAsian
      **/
     public void updateTime() {
         String TimeFormat = "HH:mm";

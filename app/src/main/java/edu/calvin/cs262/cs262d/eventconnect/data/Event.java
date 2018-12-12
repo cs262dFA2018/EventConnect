@@ -202,6 +202,8 @@ public class Event {
      *
      * @param new_threshold new value for threshold
      * @throws RuntimeException throws an error if attempted to set to an illegal state
+     * @author OneTrueAsian
+     * @author Littlesnowman88
      */
     public void setMinThreshold(int new_threshold) throws RuntimeException {
 
@@ -223,6 +225,8 @@ public class Event {
      *
      * @param new_capacity new max capacity to change in the system
      * @throws RuntimeException throws an error if attempted to set to an illegal state
+     * @author OneTrueAsian
+     * @author Littlesnowman88
      */
     public void setMaxCapacity(int new_capacity) throws RuntimeException {
         if (new_capacity == -1 || (new_capacity > 0 && new_capacity > current_interest
@@ -247,6 +251,12 @@ public class Event {
         return current_interest;
     }
 
+    /**
+     * @param new_interest
+     * @throws RuntimeException
+     * @author OneTrueAsian
+     * @author Littlesnowman88
+     */
     public void setCurrentInterest(int new_interest) throws RuntimeException {
         if (new_interest > -1 && max_capacity > 0 && new_interest <= max_capacity) {
             current_interest = new_interest;
@@ -258,6 +268,7 @@ public class Event {
     /**
      * Called when a user hits the intersted button to mark their interest
      * Increments the current interest, then moves the event to the confirmed tab if necessary
+     * @author Littlesnowman88
      */
     public void incrementCurrentInterest() {
         if (max_capacity < 0 || current_interest + 1 <= max_capacity) {
@@ -277,6 +288,7 @@ public class Event {
     /**
      * Called when a user hits the interested button to un-mark their interest
      * Decrements the current interest, then moves the event to the potential tab if necessary
+     * @author Littlesnowman88
      */
     public void decrementCurrentInterest() {
         if (current_interest - 1 > -1) {

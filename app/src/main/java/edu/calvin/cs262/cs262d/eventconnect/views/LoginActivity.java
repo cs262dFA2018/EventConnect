@@ -182,6 +182,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
+     * @author Android Studio
      */
     private void attemptLogin() {
         if (mAuthTask != null) {
@@ -231,11 +232,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    /**
+     * Checks to  make sure email is valid
+     * Requirements: must contain @ and ends with .com or .edu
+     * @param email
+     * @return
+     * @author Android Studio
+     */
     private boolean isEmailValid(String email) {
         //makes sure email ends with .com or .edu
         return email.contains("@") && (email.endsWith(".com") || email.endsWith(".edu"));
     }
 
+    /**
+     * Valid Password length must be > 4 char
+     * @param password
+     * @return
+     * @author Android Studio
+     * @author OneTrueAsian
+     */
     private boolean isPasswordValid(String password) {
         //is a valid password before sending to server
         if (password.length() > 4) return true;
@@ -244,6 +259,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * Shows the progress UI and hides the login form.
+     * @author Android Studio
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -278,6 +294,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    /**
+     * @param i
+     * @param bundle
+     * @return
+     * @author Android Studio
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -295,6 +317,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+    /**
+     * @param cursorLoader
+     * @param cursor
+     * @author: Android Studio
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -307,11 +334,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         addEmailsToAutoComplete(emails);
     }
 
+    /**
+     * @param cursorLoader
+     * @author Android Studio
+     */
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
 
+    /**
+     * @param emailAddressCollection
+     * @author Android Studio
+     */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -322,6 +357,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
+    /**
+     * @author Android Studio
+     */
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -335,6 +373,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
+     * @author Android Studio
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -391,7 +430,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /** starts main Activity when the AsyncTask Login completes
-     * @author: Littlesnowman88
+     * @author Littlesnowman88
      * @param result, whether the asynctask succeeded or failed
      */
     @Override
