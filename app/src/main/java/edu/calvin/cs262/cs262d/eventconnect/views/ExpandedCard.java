@@ -1,8 +1,6 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,8 +24,6 @@ public class ExpandedCard extends DialogFragment {
     dateLabel, dateView, locationLabel, locationView, costLabel, costView, catView, catLabel, timeLabel, timeView;
     private boolean interested;
     private String title, description, host, location, date, cat, time;
-    private Intent expandToMain;
-    private Context context;
     private double cost;
 
     /**
@@ -69,8 +65,6 @@ public class ExpandedCard extends DialogFragment {
          *Create an application context to connect Expanded card to main
          *Assign to the intent that connects expanded card view to main
          */
-        context = getContext().getApplicationContext();
-        expandToMain = new Intent(context, MainActivity.class);
 
         //access the event Data
         Bundle args = getArguments();
@@ -145,7 +139,6 @@ public class ExpandedCard extends DialogFragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(expandToMain);
                 dismiss();
             }
         });
