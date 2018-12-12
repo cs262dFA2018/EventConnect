@@ -17,6 +17,7 @@ import android.view.View;
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
+import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,19 +51,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-<<<<<<< HEAD
+
+
+        //FIXME: fix the design conflict between thesse.
 
         //start DataManager, the service responsible for server httpRequests.
         Intent mainToDataManager = new Intent(context, DataManager.class);
         mainToDataManager.setAction(DATA_UPDATE);
-        startService(mainToDataManager);
+        //startService(mainToDataManager);
 
-=======
+
         //initialize DataManager with MainActivity's context
         EventsData ed = EventsData.getInstance();
         ed.initializeEventConnector(context);
         ed.updateEvents();
->>>>>>> TheronServerConnection
+
+
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
         mainToSettings = new Intent(context, SettingsActivity.class);

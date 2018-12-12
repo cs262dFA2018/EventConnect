@@ -17,12 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-=======
-import java.lang.ref.WeakReference;
 import java.util.List;
->>>>>>> TheronServerConnection
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
@@ -78,11 +73,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         } else if (context.getString(R.string.tab_label_confirmed).equals(getArguments().getString("Fragment_id"))) {
             event_data = dataSource.getConfirmedEventData();
         } else if (getString(R.string.tab_label_my).equals(getArguments().getString("Fragment_id"))) {
-<<<<<<< HEAD
             event_data = dataSource.getMyEventData();
-=======
-            //event_data = dataSource.getMyEventData();
->>>>>>> TheronServerConnection
         } else {
             //If I am being used for something else and haven't been informed of that, then I shouldn't be created at all!
             throw new RuntimeException("ERROR: tab fragment created for undetermined purpose.");
@@ -178,19 +169,11 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 //wait to actually delete the event until the deleteRunnable calls deleteEvent
                 break;
             case "Add to My Events":
-<<<<<<< HEAD
                 dataSource.addInterest(clicked_event);
                 card_container_adapter.notifyDataSetChanged();
                 break;
             case "Remove from My Events":
                 dataSource.removeInterest(clicked_event);
-=======
-                //data.addInterest(clicked_event);
-                card_container_adapter.notifyDataSetChanged();
-                break;
-            case "Remove from My Events":
-                //database.removeInterest(clicked_event);
->>>>>>> TheronServerConnection
                 card_container_adapter.notifyDataSetChanged();
                 break;
             default:
