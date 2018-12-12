@@ -7,7 +7,9 @@ import java.util.Locale;
 
 public class Event {
     private int current_interest, min_threshold, max_capacity;
-    private String title, description, host, location;
+
+
+    private String title, description, host, location, category;
     private Calendar date;
     private boolean confirmed, needs_to_move, interest;
     private double cost;
@@ -21,6 +23,11 @@ public class Event {
         min_threshold = 1;
         max_capacity = -1;
         description = "";
+
+        host = "";
+        location = "";
+        category = "";
+        confirmed = false;
         current_interest = 0;
         needs_to_move = false;
         interest = false;
@@ -31,20 +38,21 @@ public class Event {
     public String getHost() {
         return host;
     }
-
     public void setHost(String new_host) {
         host = new_host;
     }
+  
+    //Category
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String new_category) throws  RuntimeException {category = new_category;}
 
     //title
     public String getTitle() {
         return title;
     }
-
-    public void setTitle(String new_title) {
-        title = new_title;
-    }
-
+    public void setTitle(String new_title) { title = new_title; }
     //date
     public String getDate() {
         String DateFormat = "MM/dd/yy";
@@ -85,16 +93,12 @@ public class Event {
         if (newY > currentY) {
             date = calendar;
         } else if (newY < currentY) {
-            //TODO: CLEAN THIS UP.
-            date = calendar;
             //throw dateTooEarly;
         } else {
             //if years are the same, check months
             if (newM > currentM) {
                 date = calendar;
             } else if (newM < currentM) {
-                //TODO: CLEAN THIS UP.
-                date = calendar;
                 //throw dateTooEarly;
             } else {
                 //if months are also the same, check days
@@ -327,4 +331,5 @@ public class Event {
         return confirmed;
     }
 }
+
 

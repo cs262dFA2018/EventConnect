@@ -1,10 +1,6 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
-
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -58,7 +54,9 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         if (context.getString(R.string.tab_label_potential).equals(getArguments().getString("Fragment_id"))) {
             event_data = dataSource.getPotentialEventData();
         } else if (context.getString(R.string.tab_label_confirmed).equals(getArguments().getString("Fragment_id"))) {
-            event_data = dataSource.getConfirmedEventData();
+            event_data = database.getConfirmedEventData();
+        } else if (getString(R.string.tab_label_my).equals(getArguments().getString("Fragment_id"))) {
+            event_data = database.getMyEventData();
         } else {
             //If I am being used for something else and haven't been informed of that, then I shouldn't be created at all!
             throw new RuntimeException("ERROR: tab fragment created for undetermined purpose.");
@@ -146,6 +144,14 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 new ConfirmDialog("Are you sure you want to delete this event?", "delete",
                         getActivity(), deleteRunnable, cancelRunnable);
                 //wait to actually delete the event until the deleteRunnable calls deleteEvent
+                break;
+            case "Add to My Events":
+                database.addInterest(clicked_event);
+                card_container_adapter.notifyDataSetChanged();
+                break;
+            case "Remove from My Events":
+                database.removeInterest(clicked_event);
+                card_container_adapter.notifyDataSetChanged();
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
