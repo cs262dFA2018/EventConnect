@@ -1,13 +1,18 @@
 package edu.calvin.cs262.cs262d.eventconnect.data;
 
+import android.content.Context;
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public final class EventsData {
 
-    private ArrayList<Event> potentialEvents, confirmedEvents, myEvents;
-
     private static EventsData uniqueInstance;
 
+    private static final String TAG = "EventsData";
+    private EventConnector ec;
+    private List<Event> potentialEvents, confirmedEvents, myEvents;
 
     public static synchronized EventsData getInstance() {
         if (uniqueInstance == null) {
@@ -20,6 +25,16 @@ public final class EventsData {
         potentialEvents = new ArrayList<>();
         confirmedEvents = new ArrayList<>();
         myEvents = new ArrayList<>();
+    }
+
+    public void initializeEventConnector(Context context){
+        ec = new EventConnector();
+        ec.initialize(context);
+    }
+
+    public void updateEvents(){
+        clearEvents();
+        ec.getEvents();
     }
 
     /**
@@ -165,9 +180,10 @@ public final class EventsData {
      * @return a reference to MockDatabases' potential events.
      * @author Littlesnowman88
      */
-    public ArrayList<Event> getPotentialEventData() {
-        return this.potentialEvents;
-    }
+    public List<Event> getPotentialEventData() {
+        Log.d(TAG, potentialEvents.toString());
+        return this.potentialEvents; }
+
 
     /**
      * accessor for list of confirmedEvents
@@ -175,7 +191,7 @@ public final class EventsData {
      * @return a reference to MockDatabases' confirmed events.
      * @author Littlesnowman88
      */
-    public ArrayList<Event> getConfirmedEventData() {
+    public List<Event> getConfirmedEventData() {
         return this.confirmedEvents;
     }
 
@@ -185,7 +201,7 @@ public final class EventsData {
      * @return a reference to MockDatabases' list of events the device owner has indicated interest in
      * @author ksn7
      */
-    public ArrayList<Event> getMyEventData() {
+    public List<Event> getMyEventData() {
         return this.myEvents;
     }
 }
