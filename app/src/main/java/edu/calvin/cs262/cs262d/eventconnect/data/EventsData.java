@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 public final class EventsData {
 
-    private ArrayList<Event> potentialEvents;
-    private ArrayList<Event> confirmedEvents;
+    private ArrayList<Event> potentialEvents, confirmedEvents, myEvents;
 
     private static EventsData uniqueInstance;
 
 
-    public static  EventsData getInstance() {
+    public static synchronized EventsData getInstance() {
         if (uniqueInstance == null) {
             uniqueInstance = new EventsData();
         }
@@ -20,6 +19,7 @@ public final class EventsData {
     private EventsData() {
         potentialEvents = new ArrayList<>();
         confirmedEvents = new ArrayList<>();
+        myEvents = new ArrayList<>();
     }
 
     /**
@@ -134,6 +134,32 @@ public final class EventsData {
     }
 
     /**
+     * Adds event to myEvents when user indicates interest
+     *
+     * @param eventInterested to add to myEvents
+     * @author ksn7
+     */
+    public void addInterest(Event eventInterested) {
+        if (!myEvents.contains(eventInterested)) {
+            myEvents.add(eventInterested);
+        }
+    }
+
+    /**
+     * Removes event from myEvents when user un-indicates interest
+     *
+     * @param eventNotInterested to remove from myEvents
+     * @author ksn7
+     */
+    public void removeInterest(Event eventNotInterested) {
+        try {
+            myEvents.remove(eventNotInterested);
+        } catch (Exception e) {
+            throw new RuntimeException("ERROR: tried to remove interest from an event not in My Events");
+        }
+    }
+
+    /**
      * accessor for list of potentialEvents
      *
      * @return a reference to MockDatabases' potential events.
@@ -151,5 +177,15 @@ public final class EventsData {
      */
     public ArrayList<Event> getConfirmedEventData() {
         return this.confirmedEvents;
+    }
+
+    /**
+     * accessor for list of myEvents
+     *
+     * @return a reference to MockDatabases' list of events the device owner has indicated interest in
+     * @author ksn7
+     */
+    public ArrayList<Event> getMyEventData() {
+        return this.myEvents;
     }
 }
