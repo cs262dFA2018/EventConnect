@@ -20,6 +20,7 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <!--Login Scroll view-->
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!--Email entry-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -46,6 +48,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <!--Password entry-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -64,6 +67,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <!--Login Button-->
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
@@ -76,6 +80,7 @@
         </LinearLayout>
     </ScrollView>
 
+    <!--Image view for App Icon-->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"

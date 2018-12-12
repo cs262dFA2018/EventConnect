@@ -32,8 +32,9 @@ public class ExpandedCard extends DialogFragment {
 
     /**
      * Create a new instance of ExpandedCard, providing arguments from an Event
-     *
      * @param event event data to put on expanded card
+     * @author Littlesnowman88
+     * @author OneTrueAsian (back arrow)
      */
     static ExpandedCard newInstance(Event event) {
         ExpandedCard ec = new ExpandedCard();
@@ -58,7 +59,6 @@ public class ExpandedCard extends DialogFragment {
 
     /**
      * onCreate sets up the ExpandedCard view
-     *
      * @param savedInstanceState bundle of event data
      */
     @Override
@@ -154,7 +154,6 @@ public class ExpandedCard extends DialogFragment {
 
     /**
      * Applies data to the expanded card
-     *
      * @param view view the expanded card is in
      * @param savedInstanceState expanded card data
      */
@@ -220,6 +219,8 @@ public class ExpandedCard extends DialogFragment {
     /**
      * onStart shows the already created expanded card view
      * Expands previous card from 325 to Fill_Parent
+     * @author OneTrueAsian
+     * @author Littlesnowman88
      */
     @Override
     public void onStart()
