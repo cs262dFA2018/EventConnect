@@ -5,7 +5,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingLeft="17dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -13,22 +14,23 @@
             android:orientation="vertical"
             >
             
-            <!--Login Prodecure-->
+            <!--Login Procedure FAQ-->
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/login_faq_procedure" />
+                android:text="@string/login_faq_procedure"
+                android:textStyle="bold|normal"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/login_header"/>
+                android:text="@string/login_header" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/Login_st_1"/>
+                android:text="@string/Login_st_1" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -65,16 +67,17 @@
                 android:layout_height="wrap_content"
                 android:text=""/>
             
-            <!--Indicate interest procedure-->
+            <!--Indicate interest procedure FAQ-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/indicate_interest"/>
+                android:text="@string/indicate_interest"
+                android:textStyle="bold|normal"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/Interest_title"/>
+                android:text="@string/Interest_title" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -100,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/interested_stp_3_a"/>
 
+            <!--App tabs navigation FAQ-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,7 +112,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/app_tabs_potential_and_confirmed_events"/>
+                android:text="@string/app_tabs_potential_and_confirmed_events"
+                android:textStyle="bold|normal"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -135,6 +140,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_tabs_2"/>
 
+            <!--New Event FAQ-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +149,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/new_event"/>
+                android:text="@string/new_event"
+                android:textStyle="bold|normal"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -205,6 +212,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/new_10"/>
 
+            <!--Rescinding Interest FAQ-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,7 +221,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/rescinding_interest"/>
+                android:text="@string/rescinding_interest"
+                android:textStyle="bold|normal"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -244,8 +253,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/rescind_3_a"/>
-
-
         </LinearLayout>
     </ScrollView>
 
