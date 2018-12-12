@@ -68,10 +68,9 @@ public class EventConnector {
         Event event = new Event();
         event.setHost(Integer.toString(eventDAO.getUserId()));
         event.setTitle(event.getTitle());
-//        event.setDate(eventDAO.getTimeCalendar().get(Calendar.MONTH) + "/"
-//                + eventDAO.getTimeCalendar().get(Calendar.DAY_OF_MONTH) + "/"
-//                + eventDAO.getTimeCalendar().get(Calendar.YEAR));
-        event.setDate("12/25/18");
+        event.setDate(eventDAO.getTimeCalendar().get(Calendar.MONTH) + "/"
+                + eventDAO.getTimeCalendar().get(Calendar.DAY_OF_MONTH) + "/"
+                + eventDAO.getTimeCalendar().get(Calendar.YEAR));
         event.setLocation(eventDAO.getLocation());
         event.setCost(eventDAO.getCost());
         event.setMinThreshold(eventDAO.getThreshold());
