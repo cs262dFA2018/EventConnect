@@ -231,6 +231,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      * Placeholder function for removing card that will work with animation in the future
      * Currently not in use, only calls removeCard
      * @param event Event to delete
+     * @author ksn7
      */
     public void deleteEvent(Event event) {
         /*
