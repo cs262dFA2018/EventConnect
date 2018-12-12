@@ -19,14 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
 import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.CardContainerAdapter;
-import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
 
 
 /**
@@ -39,6 +37,9 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     private EventsData dataSource = EventsData.getInstance();
     private ArrayList<Event> event_data;
     private Context context;
+
+    //Received from dataManager, this is the intent filter used in appBroadcastReceiver.
+    private static final String DATA_UPDATE = "processConnections";
 
     public TabFragment() {
         // Required empty public constructor
@@ -53,8 +54,21 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         super.onCreate(savedInstanceState);
         Bundle my_args = getArguments();
         //get the necessary resources to check which tab I am.
-        context = new WeakReference<Context>(getActivity().getApplicationContext()).get();
+        context = getContext();
+
+        //build the adapter for this fragment's recycler view
+        card_container_adapter = new CardContainerAdapter(this, context);
+
         //get access to the DataManager
+        getData();
+    }
+
+    /**
+     * getData examines which instance of TabFragment this is, and selects only the appropriate ArrayList of data to use.
+     *
+     * @author Littlesnowman88
+     */
+    private void getData() {
         //check which tab I am based on the tab name and what PagerAdapter.java told me I am
         if (context.getString(R.string.tab_label_potential).equals(getArguments().getString("Fragment_id"))) {
             event_data = dataSource.getPotentialEventData();
@@ -64,14 +78,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
             //If I am being used for something else and haven't been informed of that, then I shouldn't be created at all!
             throw new RuntimeException("ERROR: tab fragment created for undetermined purpose.");
         }
-
-        //build the adapter for this fragment's recycler view
-        card_container_adapter = new CardContainerAdapter(this, context);
         card_container_adapter.setCards(event_data);
-
-        //register with local broadcast receiver to get updates from DataManager
-        LocalBroadcastManager.getInstance(context).registerReceiver(updateReceiver,
-                new IntentFilter("dataUpdate"));
     }
 
     /**
@@ -95,13 +102,26 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**
-     * overridden to also unregister this tabFragment from the updateReceiver
+     * Register the BroadcastManager here to receive messages from DataManager.
+     *
      * @author Littlesnowman88
      */
     @Override
-    public void onDestroy() {
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(updateReceiver);
-        super.onDestroy();
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(context).registerReceiver(appMessageReceiver,
+                new IntentFilter(DATA_UPDATE));
+    }
+
+    /**
+     * Unregister the BroadcastManager here to stop receiving messages from DataManager.
+     *
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(appMessageReceiver);
     }
 
     /** Overriding click handling for the card_container_adapter
@@ -206,11 +226,32 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         }
     }
 
-    private BroadcastReceiver updateReceiver = new BroadcastReceiver() {
+    /**
+     * handles Broadcasted Intents from DataManager.
+     * If the intent really is from DataManager, this broadcast receiver updates TabFragments' data.
+     * appMessageReceiver is initialized outside of onCreate because only one ever needs to be made.
+     *
+     * @author Littlesnowman88
+     */
+    private final BroadcastReceiver appMessageReceiver = new BroadcastReceiver() {
+        /**
+         * onReceive updates MainActivity's TabFragments' data to reflect server database state.
+         *
+         * @param context the context that this receiver listens to.
+         * @param intent the message sent out by DataManager or other places MainActivity has registered this receiver to.
+         *
+         * @author Littlesnowman88
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra("message");
-            Log.d("RECEIVER", "Got message: " + message);
+            /* before updating UI, the intent should be from DataManager.
+             * IF UI NEEDS TO BE UPDATED FROM ANOTHER PLACE, FIX THIS COMMENT.
+             * -LS88
+             */
+
+            if (intent.getAction() != null && intent.getAction().equals(DATA_UPDATE)) {
+                getData(); //see up near onCreate
+            }
         }
     };
 }

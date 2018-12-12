@@ -8,7 +8,6 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -248,7 +247,6 @@ public class DataConnection extends AsyncTask<String, Integer, String> {
         } catch (org.json.JSONException jse) {
             throw new RuntimeException("ERROR: Current Interest not detected.");
         }
-
 
         return event;
     }

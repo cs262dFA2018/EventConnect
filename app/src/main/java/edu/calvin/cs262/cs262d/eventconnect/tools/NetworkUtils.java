@@ -26,9 +26,8 @@ public class NetworkUtils {
      * getPlayerInfo builds a complete URL, connects to that URL, and fetches player data based on player filter
      *
      * @param endpoint the database api endpoint, appended to the base URL
-     * @return //TODO: figure this out...
-     * a JSON String to be parsed by MainActivity; the JSONString, if successful connection, contains player data
-     * OR, a localized error message if connection failed.
+     * @return the fetched json (as a string) from the server, or else null if the fetching failed.
+     *
      * @author Littlesnowman88
      */
     public static String getEventInfo(String endpoint) throws RuntimeException {
@@ -93,7 +92,7 @@ public class NetworkUtils {
             }
         }
         //Although I normally delete debug statements, I will leave this here because it REALLY helps with debugging. -LS88
-        Log.d(LOG_TAG, (eventJSONString != null) ? eventJSONString : "JSON STRING IS NULL, BADNESS");
+        //Log.d(LOG_TAG, (eventJSONString != null) ? eventJSONString : "JSON STRING IS NULL, BADNESS");
         return eventJSONString;
     }
 }

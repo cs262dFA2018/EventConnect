@@ -1,7 +1,6 @@
 package edu.calvin.cs262.cs262d.eventconnect.tools;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -12,14 +11,13 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayDeque;
 
 
 /**
  * DataManager manages DataConnection requests..
  * This class prevents Read/Write conflicts with the cloud database.
- *
+ * <p>
  * LOGIN ACTIVITY SHOULD NOT ACCESS THIS CLASS. MainActivity needs to be the first object to call this class,
  * because this class broadcasts updates to MainActivity.
  *
@@ -36,24 +34,34 @@ public class DataManager extends Service {
     private static final int ONE_HOUR = ONE_MINUTE * 60;
     private static final int NEVER = -1;
 
-    //timer that ticks every 30 seconds to see if the app should GET updates. //TODO: Change to shared preference values later.
-    //assign it here because only one ever needs to exist.
+    private static final int TIMER_DELAY = ONE_SECOND * 5;
+
+    //assign timer and queue here because only one of each ever needs to exist.
+    //timer that triggers event GET requests every TIMER_DELAY seconds.//TODO: Change to shared preference values later.
     private final Handler timer = new Handler();
+    //background queue for processing all httpRequests made by the application.
+    private final Handler queue = new Handler();
 
+    //self-repeating Runnables that timer and connectionProcessor run.
+    private Runnable timerRunner, connectionProcessor;
 
-    private WeakReference<Context> contextRef; //the context to send Broadcasts to (when data has been updated and UI needs to change)
-
+    //data used by connectionProcessor to keep track of httpRequests.
     private ArrayDeque<DataConnection> connections;
     private DataConnection currentConnection;
 
+    //saved by onStartCommand, this intent allows DataManager to signal MainActivity when UI updates need to be made (after GET requests).
+    private Intent startingIntent;
+
     /**
      * Constructor:
+     * Creates the GET request looper and the Connections Processing looper.
      *
      * @author Littlesnowman88
      */
     public DataManager() {
         connections = new ArrayDeque<>();
-        Runnable timerRunning = new Runnable() {
+        //Create the GET request looper
+        timerRunner = new Runnable() {
             @Override
             public void run() {
                 //after the reset time, check for updates.
@@ -62,12 +70,25 @@ public class DataManager extends Service {
                 } catch (Exception e) {
                     Log.w("DataManager", "failed to get data; " + e.getLocalizedMessage());
                 }
-                //after delayMillis milliseconds, run this runnable again.
-                timer.postDelayed(this, ONE_SECOND * 5);
+                //after timer delay, run this runnable again.
+                timer.postDelayed(this, TIMER_DELAY);
             }
         };
-        //start timer
-        timer.postDelayed(timerRunning, ONE_SECOND);
+        //Create the queue processing looper.
+        connectionProcessor = new Runnable() {
+            @Override
+            public void run() {
+                //process the connections queue.
+                processConnections();
+
+                //once finished processing all requested connections, tell MainActivity to update its UI
+                LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(startingIntent);
+                currentConnection = null; //once all connections have been processed, update state.
+
+                //After 2 Timer Delays (optimization based on Pigeonhole Principle), process auto-generated GET requests.
+                queue.postDelayed(this, TIMER_DELAY * 2);
+            }
+        };
     }
 
     /**
@@ -85,41 +106,47 @@ public class DataManager extends Service {
                 && !httpRequest.equals("PUT") && !httpRequest.equals("DELETE")) {
             throw new RuntimeException("ERROR: could not handle DataConnection with httpRequest " + httpRequest + ". Must be GET, POST, PUT, or DELETE.");
         }
+
+        //if a GET request is already being handled, don't ask to make a second one immediately after. Let the GET request timer take care of that.
         if (currentConnection != null && endpoint.equals("GET")) {
             return;
         }
+        //add the legal httpRequest to the queue of httpRequests.
         connections.addLast(new DataConnection(endpoint, httpRequest, data));
-        if (currentConnection==null) {
-            //process connections in the background. If connection is not null, then connections are already being processed.
-            startService(new Intent("processConnections"));
-        }
     }
 
     /**
-     * processes all tasks in the connections queue
-     * after, tell Main Activity to update its UI
+     * Triggers the GET request loop and the connectionProcessor loop.
+     * Because processConnection() waits for its connection to finish, the queue Handler
+     * must be started from onStartCommand for connection processing to happen in background.
      *
-     * @param intent
+     * @param intent  the Intent responsible for starting this Service. (Activity Source: MainActivity).
      * @param flags
      * @param startId
-     * @return
-     *
+     * @return Service.START_NOT_STICKY, meaning that DataManager will stop running when MainActivity stops running.
      * @author Littlesnowman88
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(android.os.Debug.isDebuggerConnected())
+        if (android.os.Debug.isDebuggerConnected())
             android.os.Debug.waitForDebugger();
-        if (intent.getAction() != null && intent.getAction().equals("processConnections")) {
-            processConnections();
-            //FIXME: pass more substantive data.
-            intent.putExtra("message", "THIS MESSAGE is from DataManager. You should see it in TabFragment.");
-            LocalBroadcastManager.getInstance(contextRef.get()).sendBroadcast(intent);
-            currentConnection = null; //once all connections have been processed, update state.
-        }
-        return super.onStartCommand(intent, flags, startId);
-    }
 
+        /*an extra layer of difficulty, I admit, but I am trying to force future developers
+         * to be VERY careful about changing this service's design assumption.
+         * This service is intended to be run from MainActivity.
+         * If a future dev wants to change this assumption, that dev must come to here and
+         * (ideally) read this comment at least once. - LS88
+         */
+        if (intent.getAction() != null && intent.getAction().equals("processConnections")) {
+            startingIntent = intent;
+
+            //start GET request timer immediately
+            timer.post(timerRunner);
+            //after that, start begin the background processing of httpRequests.
+            queue.postDelayed(connectionProcessor, 200);
+        }
+        return START_NOT_STICKY;
+    }
 
     /**
      * helper function for doInBackground. Runs events in the connections queue.
@@ -142,6 +169,7 @@ public class DataManager extends Service {
 
     /**
      * processWriteConnections iterates through the connections queue, running only PUT, POST, and DELETE requests.
+     *
      * @author Littlesnowman88
      */
     private void processWriteConnections() {
@@ -153,7 +181,7 @@ public class DataManager extends Service {
                 continue;
             }
             //run the connection and wait for it to finish. This waiting has to happen inside of asynchronous doInBackground.
-            processConnection();
+            processConnection(currentConnection);
         }
     }
 
@@ -162,7 +190,7 @@ public class DataManager extends Service {
      */
     private void processFinalGet() {
         currentConnection = new DataConnection("events", "GET", null);
-        processConnection();
+        processConnection(currentConnection);
     }
 
     /**
@@ -170,11 +198,11 @@ public class DataManager extends Service {
      *
      * @author Littlesnowman88
      */
-    private void processConnection() {
-        currentConnection.execute();
+    private static void processConnection(DataConnection connection) {
+        connection.execute();
         try {
-            currentConnection.get();
-            Log.d("Request Complete: ", "HTTP request of type " + currentConnection.getRequestType() + " completed.");
+            connection.get();
+            Log.d("Request Complete: ", "HTTP request of type " + connection.getRequestType() + " completed.");
         } catch (java.util.concurrent.ExecutionException ee) {
             //caught if currentConnection throws an exception.
             //TODO: Be more gracious with this statement later, once you have completed more testing.
@@ -185,8 +213,10 @@ public class DataManager extends Service {
         }
     }
 
+
     /**
      * required by the Service class, but the app doesn't do anything with it.
+     *
      * @param arg0
      * @return null because the app doesn't need to do anything with binding.
      * @author Littlesnowman88
@@ -198,6 +228,7 @@ public class DataManager extends Service {
 
     /**
      * clear any currently and remaining threads before shutting down the service.
+     *
      * @author Littlesnowman88
      */
     @Override

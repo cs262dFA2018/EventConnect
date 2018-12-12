@@ -14,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.lang.ref.WeakReference;
-
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 import edu.calvin.cs262.cs262d.eventconnect.tools.DataManager;
@@ -28,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private String currentUser;
     private String currentTheme;
 
-
+    //Received from dataManager, this is the intent filter used in appBroadcastReceiver. (see TabFragment)
+    private static final String DATA_UPDATE = "processConnections";
 
     /**
      * creates the Main Activity:
@@ -51,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-        //initialize DataManager with MainActivity's context
-        DataManager dm = new DataManager();
-        dm.makeHTTPRequest("events", "GET", null);
+
+        //start DataManager, the service responsible for server httpRequests.
+        Intent mainToDataManager = new Intent(context, DataManager.class);
+        mainToDataManager.setAction(DATA_UPDATE);
+        startService(mainToDataManager);
 
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
