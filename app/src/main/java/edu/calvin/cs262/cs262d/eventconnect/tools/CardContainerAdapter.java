@@ -95,6 +95,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
             Event event_clicked = cards.get(getAdapterPosition());
             if (view == interestedButton){
 
+                //TODO: refactor so TabFragment handles interest?
+                //TODO: DO NOT DELETE CARD.
                 /* If current interest is false, mark they're interested now
                  */
                 if (!event_clicked.getInterest()) {
@@ -133,9 +135,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
             } else if (view == deleteButton) {
                 click_handler.onClick(event_clicked, DeleteCard);
             } else if (view == eventTitle || view == eventDescription || view == eventCard) {
-                /* show toast
-                 * also display the expanded event view
-                 */
                 click_handler.onClick(event_clicked, ExpandCard);
             }
         }
@@ -195,6 +194,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      */
     @Override
     public void onBindViewHolder(@NonNull CardContainerAdapterViewHolder card_holder, int position) {
+        //TODO: if event is in myEvents, set interested button to Uninterested. Else, set button text to interested.
         Event current_card = cards.get(position);
         card_holder.eventTitle.setText(current_card.getTitle());
         card_holder.eventDescription.setText(current_card.getDescription());
@@ -219,11 +219,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         notifyDataSetChanged(); //a method inside of Recycler View.
     }
 
-    private void addCard(Event event){
-        cards.add(event);
-        notifyDataSetChanged();
-    }
-
+    //TODO: Fix removal of card.
     private void removeCard(Event event){
         cards.remove(event);
         notifyDataSetChanged();

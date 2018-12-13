@@ -63,6 +63,7 @@ public final class EventsData {
         } else {
             confirmedEvents.add(event);
         }
+        //TODO: if the event has interested button clicked, place the event in "my events"
     }
 
     /**
@@ -74,6 +75,7 @@ public final class EventsData {
     public void clearEvents() {
         potentialEvents.clear();
         confirmedEvents.clear();
+        myEvents.clear();
     }
 
     /**
@@ -82,50 +84,24 @@ public final class EventsData {
      *
      * @author Littlesnowman88
      */
-    public void addNewEvent(Event event) {
-        potentialEvents.add(event);
+    public void addNewEvent(@NonNull Event event) {
+        ec.postEvent(event, "TestUser", "TestPass");
+        ec.getEvents();
     }
 
     /**
      * deleteEvent removes an event from the database
      *
      * @param eventToDelete passed in event that needs to be deleted
-     * @author ksn7
+     * @author Littlesnowman88
      */
-    public void deleteEvent(Event eventToDelete) throws RuntimeException {
-
-        // Iterate through the potential events, and delete the event if its found
-        int num_events = potentialEvents.size();
-        boolean eventFound = false;
-        Event event;
-        for (int i = 0; i < num_events; i++) {
-            event = potentialEvents.get(i);
-            if (event == eventToDelete) {
-                potentialEvents.remove(event);
-                num_events--;
-                eventFound = true;
-            }
-        }
-
-        // If the event was not found in the potential events, check the confirmed events
-        num_events = confirmedEvents.size();
-        if (!eventFound) {
-            for (int i = 0; i < num_events; i++) {
-                event = confirmedEvents.get(i);
-                if (event == eventToDelete) {
-                    confirmedEvents.remove(event);
-                    num_events--;
-                    eventFound = true;
-                }
-            }
-        }
-
-        // If the event was not found anywhere, throw an error
-        if (!eventFound) {
-            throw new RuntimeException("ERROR: tried to delete an event not in the database");
-        }
+    public void deleteEvent(@NonNull Event eventToDelete) throws RuntimeException {
+        ec.deleteEvent(eventToDelete, "TestUser", "TestPass");
+        ec.getEvents();
     }
 
+
+    //TODO: move events will be erased and replaced Interest button press.
     /**
      * moves an event from the potential tab to the confirmed tab.
      *
@@ -162,6 +138,7 @@ public final class EventsData {
         }
     }
 
+    //TODO: join event.
     /**
      * Adds event to myEvents when user indicates interest
      *
@@ -174,6 +151,7 @@ public final class EventsData {
         }
     }
 
+    //TODO; unjoin event.
     /**
      * Removes event from myEvents when user un-indicates interest
      *
@@ -188,6 +166,7 @@ public final class EventsData {
         }
     }
 
+    /* =========================== */
     /**
      * accessor for list of potentialEvents
      *

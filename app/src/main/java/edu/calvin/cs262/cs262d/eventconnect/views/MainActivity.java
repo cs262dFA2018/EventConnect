@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
@@ -27,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentUser;
     private String currentTheme;
 
-    //Received from dataManager, this is the intent filter used in appBroadcastReceiver. (see TabFragment)
+    //Received from EventConnector, this is the intent filter used in appBroadcastReceiver. (see TabFragment)
     private static final String DATA_UPDATE = "processConnections";
 
     /**
@@ -58,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         Intent mainToDataManager = new Intent(context, EventsPoller.class);
         mainToDataManager.setAction(DATA_UPDATE);
         startService(mainToDataManager);
+
+        mainToLogin = new Intent(MainActivity.this, LoginActivity.class);
 
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);

@@ -52,15 +52,14 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle my_args = getArguments();
         //get the necessary resources to check which tab I am.
         context = getContext();
 
         //build the adapter for this fragment's recycler view
         card_container_adapter = new CardContainerAdapter(this, context);
 
-        // get Events from the server
-        getData();
+//        // get Events from the server
+//        getData();
     }
 
     /**
@@ -68,7 +67,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
      *
      * @author Littlesnowman88
      */
-    private void getData() {
+    private synchronized void getData() {
         //check which tab I am based on the tab name and what PagerAdapter.java told me I am
         if (context.getString(R.string.tab_label_potential).equals(getArguments().getString("Fragment_id"))) {
             event_data = dataSource.getPotentialEventData();
@@ -170,6 +169,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                         getActivity(), deleteRunnable, cancelRunnable);
                 //wait to actually delete the event until the deleteRunnable calls deleteEvent
                 break;
+            //TODO: refactor these case statements?
             case "Add to My Events":
                 dataSource.addInterest(clicked_event);
                 card_container_adapter.notifyDataSetChanged();
@@ -181,7 +181,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
         }
-
     }
 
     /**
@@ -192,13 +191,8 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
      * @author Littlesnowman88
      */
     public void deleteEvent(Event clicked_event) {
-        try {
-            dataSource.deleteEvent(clicked_event);
-        }
-        catch (RuntimeException e) {
-            //event wasn't found in the database
-            e.printStackTrace();
-        }
+        dataSource.deleteEvent(clicked_event);
+
         //still delete the event from the adapter, since a user clicked on an event's DELETE button.
         card_container_adapter.deleteEvent(clicked_event);
         //display a message to the user, confirming the deletion of an event
@@ -256,7 +250,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            /* before updating UI, the intent should be from EventsPoller.
+            /* before updating UI, the intent should be from EventConnector.
              * IF UI NEEDS TO BE UPDATED FROM ANOTHER PLACE, FIX THIS COMMENT.
              * -LS88
              */
