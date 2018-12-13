@@ -142,6 +142,90 @@
     <string name="save_event">Save Event</string>
     <string name="edit_event">Edit Event</string>
 
+  <!--FAQ string instructions for users-->
+    <string name="faq">FAQ</string>
+    <string name="hello_faq">Hello FAQ!</string>
+
+    <!--Logging in-->
+    <string name="FAQ_string">Login FAQ Procedure To use the Event Connect App, you must first Log in. This Will help you do that. Step 1. Tap on the Event Connect Icon on your phone, it should be a red circle with the outline of a calendar in it. Step 2. Once in the App you should see two entry boxes that says Email and Password and a button that says “Event Connect”. Step 3. Tap on the email entry box and enter your email. Make sure your email has a “@ “and ends with a “.com” or “.edu”. For example, me@.edu. After entering a working email, tap on the password entry box and enter a password that is greater than 4 letters or numbers. Step 4. After you’re done entering your password and email, hit the “Event Connect” button labeled as “Event Connect”. Good job! You are now in the Event Connect app. To indicate your interest in an event, follow these steps: Find an event that interests you in the “Potential” tab or “Confirmed” tab. If you wish to see detailed information about an event, tap the event title or description Tap the interested button You will see a checkmark next to the text “Interested” If the interest threshold is reached for an event in the “Potential” tab, it will be moved to the Confirmed” tab to indicate the event is confirmed. If this happens you will see a message to let you know. App Tabs: Potential and Confirmed Events The Potential and Confirmed Events tabs sort events as either potential or confirmed. All EventConnect events start out as potential events, which become confirmed if enough people decide to attend. Only the event host knows how many people need to come to confirm an event. A guest can tell whether an event is confirmed by finding out which tab the event is in. To find out if an event is confirmed, look for it in the confirmed events tab. If the event is there, it has been confirmed! If not, the event is either still considered potential or the event has been deleted. Creating A New Event One key feature of the application is the ability to create new events. To create a new event, 1. Press the floating Plus button at the bottom right of the app. 2. Add your name as the host of the event. 3. Create a title for your event and add it to the title line. We will call it BirthdayParty. 4. Enter the date by pressing the date line by pressing April 7th in the calendar widget. 5. Enter 9 pm in the timeline. 6. Put 0 for the cost line, since we are assuming nobody has to pay to join. 7. Add the minimum number of people you need to attend in the threshold, and the maximum number of people you can host in the capacity. We will assume we need at least 5 people to come and can host up to 15. 8. Choose a category for the event from the category spinner. 9. Add a short description of the event in the description line. 10. Press Create EventTo rescind interest in an event you previously indicated interest for, follow these steps: 1. Find the event you previously indicated interest in a. If the event was in the “Potential” tab when you indicated your interest, it may have become confirmed since that time in which case it will be found in the “Confirmed” tab instead. 2. You should see a button with the text “Interested” with a checkmark next to it, tap this button 3. You will see the check mark disappear, and the text on the button will read “Interested?” a. If the interest threshold is no longer met for an event in the “Confirmed” tab, it will be moved to the “Potential” tab to indicate the event is no longer confirmed. If this happens you will see a message to let you know.</string>
+    <string name="login_faq_procedure">Logging In</string>
+    <string name="login_header">To use the EventConnect App, you must first log in using the following steps:</string>
+    <string name="Login_st_1">1. Tap on the EventConnect icon to launch the app.</string>
+    <string name="FAQ_stp_2">2. Tap on the email entry box and enter your email, which must contain the @ symbol and end with “.com” or “.edu”.</string>
+    <string name="FAQ_stp_3">3. Tap on the password entry box and enter a password that is at least 5 characters long.</string>
+    <string name="FAQ_stp_4">4. Click on the “Event Connect” button to log in. Good job! You are now in the EventConnect app.</string>
+    <string name="space">/n /n</string>
+
+    <!--Logging out-->
+    <string name="Logout_header">Logging Out</string>
+    <string name="logout_info">To log out of the app, follow these events:</string>
+    <string name="logout_1">1. Click the back arrow in the top left corner of the main app screen. This will return you to the login screen. You are now logged out.</string>
+
+    <!--Indicating Interest-->
+    <string name="Interest_title">To indicate your interest in an event, follow these steps:</string>
+    <string name="indicate_interest">Indicating Interest</string>
+    <string name="interest_stp_1">1. Find the event that interests you in the “Potential Events” tab or “Confirmed Events” tab.</string>
+    <string name="interest_stp_1_a">a. If you wish to see detailed information about an event, tap the event title or description.</string>
+    <string name="interested_stp_2">2. Tap the interested button.</string>
+    <string name="interested_stp_3">3. The text on the button will change to "Uninterested?" to show your choice has been saved.</string>
+    <string name="interested_stp_3_a">a. If the interest threshold is reached for an event in the “Potential” tab, it will be moved to the Confirmed” tab to indicate the event is confirmed. If this happens you will see a message to let you know.</string>
+
+    <!--Navigating app tabs-->
+    <string name="app_tabs_potential_and_confirmed_events">Navigating The Tabs</string>
+    <string name="potential_intro">EventConnect has three main tabs: Potential Events, Confirmed Events, and My Events. My Events contains the events that the current user is hosting or has indicated interest in. The Potential Events and Confirmed Events tabs sort events as either potential or confirmed.</string>
+    <string name="app_tabs_1">All EventConnect events start out as potential events, which become confirmed if enough people decide to attend. Only the event host knows how many people need to come to confirm an event. A guest can tell whether an event is confirmed by finding out which tab the event is in.</string>
+    <string name="app_tabs_2">To find out if an event is confirmed, follow these steps:</string>
+    <string name="app_tabs_3">1. Look for the event in the Confirmed Events tab. If the event is there, it has been confirmed!</string>
+    <string name="app_tabs_4">2. Look for the event in the Potential Events tab if you did not find it in the Confirmed Events tab. If there, the event is still considered potential. If the event is not in the Potential Events tab, the event has been deleted.</string>
+
+    <!--Accessing event info-->
+    <string name="expanded_header">Accessing Event Information</string>
+    <string name="expanded_intro">To see information about an event that is not visible from the card view, follow these steps:</string>
+    <string name="expanded_1">1. Tap on the card title or description. This will bring up the expanded card view.</string>
+    <string name="expanded_2">2. If necessary, scroll up and down in the expanded card view to see all of the event information.</string>
+    <string name="expanded_3">3. To exit the expanded card view, tap the back arrow in the top left corner.</string>
+
+    <!--Creating a new event-->
+    <string name="new_event">Creating A New Event</string>
+    <string name="new_intro">One key feature of the application is the ability to create new events.</string>
+    <string name="to_create_a_new_event">To create a new event, follow these steps:</string>
+    <string name="new_1">1. Press the floating plus button at the bottom right of the app.</string>
+    <string name="new_2">2. Add your name as the host of the event.</string>
+    <string name="new_3">3. Write a title for your event in the title line.</string>
+    <string name="new_4">4. Enter the event date by pressing the date line, selecting a date from the calendar widget.</string>
+    <string name="new_5">5. Enter the event time by pressing the time line, selecting a time from the clock widget.</string>
+    <string name="new_6">6. Enter the event cost in the cost line. You can leave this field blank if there is no cost, or you can put a 0 in the blank.</string>
+    <string name="new_7">7. Enter the minimum number of people you need to attend in the threshold line.</string>
+    <string name="new_8">8. Enter the maximum number of people you can host in the capacity line.</string>
+    <string name="new_9">9. Choose a category for the event from the category spinner.</string>
+    <string name="new_10">10. Add a short description of the event in the description line.</string>
+    <string name="new_11">11. Press the Create Event button to add your event.</string>
+
+    <!--Removing Interest-->
+    <string name="resending_interest">Removing Interest</string>
+    <string name="rescind_intro">To remove interest in an event you previously indicated interest for, follow these steps:</string>
+    <string name="rescinding_interest">Removing Interest</string>
+    <string name="rescind_1">1. Find the event you previously indicated interest in in one of the tabs.</string>
+    <string name="rescind_1_a">Note: If the event was in the “Potential Events” tab when you indicated your interest, it may have become confirmed since that time, in which case it will be found in the “Confirmed Events” tab instead.</string>
+    <string name="rescind_2">2. Tap the button with the text “Uninterested?” to mark you are no longer interested in the event.</string>
+    <string name="rescind_3">3. The text on the button will read “Interested?” to show that your choice has been saved.</string>
+    <string name="rescind_3_a">Note: If the interest threshold is no longer met for an event in the “Confirmed Events” tab, it will be moved to the “Potential Events” tab to indicate the event is no longer confirmed. If this happens you will see a message to let you know.</string>
+
+    <!--Deleting an event-->
+    <string name="delete_intro">Deleting An Event</string>
+    <string name="deleting_event">To delete an event you are created but no longer wish to host, follow these steps:</string>
+    <string name="delete_1">1. Find the event in one of the tabs. The event might be easiest to find in the My Events tab.</string>
+    <string name="delete_2">2. Tap the three dot menu in the corner of the event card. Select "Delete" from the menu that pops up.</string>
+    <string name="delete_3">3. On the pop-up that appears, tap "Delete" to confirm deletion. You can also cancel deletion at this point if you change your mind by tapping "Cancel".</string>
+
+    <!--Using dark mode-->
+    <string name="dark_header">Using Dark Mode</string>
+    <string name="dark_intro">Some users might prefer darker or lighter background colors while using the app. To enable or disable dark mode, follow these steps:</string>
+    <string name="dark_1">1. Click the gear symbol in the top right corner of the screen to access the Settings menu.</string>
+    <string name="dark_2">2. Click "General".</string>
+    <string name="dark_3">3. Click "Dark Mode Settings".</string>
+    <string name="dark_4">4. On the pop-up that appears, select either "Light Theme" or "Dark Theme".</string>
+
     <!-- Spinner dta for catagory -->
     <string-array name="event_cat">
         <item>Select</item>

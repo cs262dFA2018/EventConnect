@@ -18,6 +18,12 @@
         android:title="@string/pref_header_data_sync" />
 
     <header
+        android:fragment="edu.calvin.cs262.cs262d.eventconnect.views.SettingsActivity$FAQFragment"
+        android:icon="@drawable/ic_question_answer_black_24dp"
+        android:title="@string/faq" />
+        />
+
+    <header
         android:id="@+id/action_logout"
         android:icon="@drawable/ic_logout_black_24dp"
         android:title="@string/log_out"
