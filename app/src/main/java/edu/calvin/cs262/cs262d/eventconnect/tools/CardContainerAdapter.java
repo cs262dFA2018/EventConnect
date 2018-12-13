@@ -63,7 +63,6 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         private TextView eventTitle, eventDescription, eventMenu;
         private Button interestedButton;
         private CardView eventCard;
-//        private Button deleteButton;
         private final int animationTime = 500;
 
         /**
@@ -78,19 +77,15 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
             eventDescription = (TextView) view.findViewById(R.id.event_desc);
             interestedButton = (Button) view.findViewById(R.id.interested_button);
             eventMenu = (TextView) view.findViewById(R.id.event_options);
-//            deleteButton = (Button) view.findViewById(R.id.delete_button);
             eventCard.setOnClickListener(this);
             eventTitle.setOnClickListener(this);
             eventDescription.setOnClickListener(this);
             interestedButton.setOnClickListener(this);
             interestedButton.setEnabled(true);
             eventMenu.setOnClickListener(this);
-//            deleteButton.setOnClickListener(this);
-//            deleteButton.setEnabled(true);
         }
 
         /**
-         * //TODO: fix this documentation.
          * this onClick(View v) is called by the recycler view's child views at click
          *
          * @param view v, a View that was clicked on a card (ex: text views, the "interested" button)

@@ -109,25 +109,19 @@ public class Event {
         if (newY > currentY) {
             date = calendar;
         } else if (newY < currentY) {
-            //TODO: CLEAN THIS UP.
-            date = calendar;
-            //throw dateTooEarly;
+            throw dateTooEarly;
         } else {
             //if years are the same, check months
             if (newM > currentM) {
                 date = calendar;
             } else if (newM < currentM) {
-                //TODO: CLEAN THIS UP.
-                date = calendar;
-                //throw dateTooEarly;
+                throw dateTooEarly;
             } else {
                 //if months are also the same, check days
                 if (newD >= currentD) { //NOTE: events are allowed to be created for today
                     date = calendar;
                 } else {
-                    //TODO: CLEAN THIS UP.
-                    date = calendar;
-                    //throw dateTooEarly;
+                    throw dateTooEarly;
                 }
             }
         }
@@ -174,9 +168,7 @@ public class Event {
         calendar.setTime(sdf.parse(dateAndTime));
 
         if (calendar.before(calendarNow)) {
-            //TODO: CLEAN THIS UP.
-            date = calendar;
-            //throw new RuntimeException("ERROR: attempt to set Time to before current time");
+            throw new RuntimeException("ERROR: attempt to set Time to before current time");
         } else {
             date = calendar;
         }

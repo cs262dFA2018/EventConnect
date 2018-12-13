@@ -10,15 +10,13 @@ import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 
 
 /**
- * //TODO: comment this class.
+ * EventsPoller is a service responsible for repeatedly updating MainActivity with Events.
+ * EventsPoller gives EventsData its EventConnector. IMPORTANT.
+ * EventsPoller starts non-sticky, which means it will destroy when MainActivity destroys.
  *
  * @author Littlesnowman88
  */
 public class EventsPoller extends Service {
-
-    /* TODO:
-     * in UI, if something is edited, buttons may need to be disabled so multiple, identical requests cannot be made.
-     */
 
     private static final int ONE_SECOND = 1000;
     private static final int ONE_MINUTE = ONE_SECOND * 60;
@@ -28,7 +26,7 @@ public class EventsPoller extends Service {
     private static final int TIMER_DELAY = ONE_SECOND * 5;
 
     //assign queue here because only one ever needs to exist.
-    //timer that triggers event GET requests every TIMER_DELAY seconds.//TODO: Change to shared preference values later.
+    //timer that triggers event GET requests every TIMER_DELAY seconds.
     private final Handler timer = new Handler();
     //self-repeating Runnables that timer and connectionProcessor run.
     private Runnable timerRunner;
@@ -55,7 +53,7 @@ public class EventsPoller extends Service {
     }
 
     /**
-     * //TODO: COMMENT THIS
+     * gives EventsData its EventConnector and begins the timer for automatic getRequests.
      *
      * @param intent  the Intent responsible for starting this Service. (Activity Source: MainActivity).
      * @param flags
