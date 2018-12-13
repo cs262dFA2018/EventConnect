@@ -3,7 +3,6 @@ package edu.calvin.cs262.cs262d.eventconnect.views;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -41,12 +39,11 @@ import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.EventConnector;
 import edu.calvin.cs262.cs262d.eventconnect.data.UserDAO;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
-import edu.calvin.cs262.cs262d.eventconnect.tools.LoginHandler;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, LoginHandler {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -252,7 +249,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         //if the current login email already exists, start MainActivity.
                         if (user.getUsername().equals(email)) {
                             showProgress(false);
-                            completeLoginTask(Integer.toString(AppCompatActivity.RESULT_OK), email);
+                            completeLoginTask(Integer.toString(AppCompatActivity.RESULT_OK), email, password);
                         }
                     }
                     //if the current login email doesn't already exist, post the current login email to the server.
@@ -262,7 +259,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 else if (intent.getAction().equals(LOGIN_POST)) {
                     //startMainActivity.
                     showProgress(false);
-                    completeLoginTask(Integer.toString(AppCompatActivity.RESULT_OK), email);
+                    completeLoginTask(Integer.toString(AppCompatActivity.RESULT_OK), email, password);
                 }
             }
         }
@@ -272,11 +269,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * @author Littlesnowman88
      * @param result, whether the asynctask succeeded or failed
      */
-    @Override
-    public void completeLoginTask(String result, String LoginID) {
+    public void completeLoginTask(String result, String LoginID, String userPass) {
         if (result.equals(Integer.toString(AppCompatActivity.RESULT_OK))) {
             Intent startMain = new Intent(context, MainActivity.class);
             startMain.putExtra("UserID", LoginID);
+            startMain.putExtra("UserPass", userPass);
             startActivity(startMain);
         }
     }

@@ -55,29 +55,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
         //build the adapter for this fragment's recycler view
         card_container_adapter = new CardContainerAdapter(this, context);
-
-//        // get Events from the server
-//        getData();
-    }
-
-    /**
-     * getData examines which instance of TabFragment this is, and selects only the appropriate ArrayList of data to use.
-     *
-     * @author Littlesnowman88
-     */
-    private synchronized void getData() {
-        //check which tab I am based on the tab name and what PagerAdapter.java told me I am
-        if (context.getString(R.string.tab_label_potential).equals(getArguments().getString("Fragment_id"))) {
-            event_data = dataSource.getPotentialEventData();
-        } else if (context.getString(R.string.tab_label_confirmed).equals(getArguments().getString("Fragment_id"))) {
-            event_data = dataSource.getConfirmedEventData();
-        } else if (getString(R.string.tab_label_my).equals(getArguments().getString("Fragment_id"))) {
-            event_data = dataSource.getMyEventData();
-        } else {
-            //If I am being used for something else and haven't been informed of that, then I shouldn't be created at all!
-            throw new RuntimeException("ERROR: tab fragment created for undetermined purpose.");
-        }
-        card_container_adapter.setCards(event_data);
     }
 
     /**
@@ -257,8 +234,28 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
              */
 
             if (intent.getAction() != null && intent.getAction().equals(DATA_UPDATE)) {
-                getData(); //see up near onCreate
+                getData();
             }
         }
     };
+
+    /**
+     * getData examines which instance of TabFragment this is, and selects only the appropriate ArrayList of data to use.
+     *
+     * @author Littlesnowman88
+     */
+    private synchronized void getData() {
+        //check which tab I am based on the tab name and what PagerAdapter.java told me I am
+        if (context.getString(R.string.tab_label_potential).equals(getArguments().getString("Fragment_id"))) {
+            event_data = dataSource.getPotentialEventData();
+        } else if (context.getString(R.string.tab_label_confirmed).equals(getArguments().getString("Fragment_id"))) {
+            event_data = dataSource.getConfirmedEventData();
+        } else if (getString(R.string.tab_label_my).equals(getArguments().getString("Fragment_id"))) {
+            event_data = dataSource.getMyEventData();
+        } else {
+            //If I am being used for something else and haven't been informed of that, then I shouldn't be created at all!
+            throw new RuntimeException("ERROR: tab fragment created for undetermined purpose.");
+        }
+        card_container_adapter.setCards(event_data);
+    }
 }

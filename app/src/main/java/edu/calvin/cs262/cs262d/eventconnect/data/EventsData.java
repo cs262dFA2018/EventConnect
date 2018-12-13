@@ -15,6 +15,7 @@ public final class EventsData {
     private static EventConnector ec;
     private List<Event> potentialEvents, confirmedEvents, myEvents;
     private List<UserDAO> users;
+    private String userEmail, userPass;
 
     /**
      * Singleton constructor, effectively.
@@ -47,6 +48,11 @@ public final class EventsData {
         myEvents = new ArrayList<>();
         users = new ArrayList<>();
     }
+    
+    public void setCredentials(@NonNull String username, @NonNull String password) {
+        userEmail = username;
+        userPass = password;
+    }
 
     /**
      * updateEvents gets all users, then populates events tabs, then
@@ -58,7 +64,7 @@ public final class EventsData {
         clearEvents();
         ec.getUsers();
         ec.getEvents();
-        ec.getMyEvents("TestUser", "TestPass");
+        ec.getMyEvents(userEmail, userPass);
     }
 
     /**
@@ -117,7 +123,7 @@ public final class EventsData {
      * @author Littlesnowman88
      */
     public void addNewEvent(@NonNull Event event) {
-        ec.postEvent(event, "TestUser", "TestPass");
+        ec.postEvent(event, userEmail, userPass);
         ec.getEvents();
     }
 
@@ -141,7 +147,7 @@ public final class EventsData {
      * @author Littlesnomwan88
      */
     public void editEvent(@NonNull Event event) {
-        ec.putEvent(event, "Testuser", "TestPass");
+        ec.putEvent(event, userEmail, userPass);
         ec.getEvents();
     }
 
@@ -152,7 +158,7 @@ public final class EventsData {
      * @author Littlesnowman88
      */
     public void deleteEvent(@NonNull Event eventToDelete) throws RuntimeException {
-        ec.deleteEvent(eventToDelete, "TestUser", "TestPass");
+        ec.deleteEvent(eventToDelete, userEmail, userPass);
         ec.getEvents();
     }
 
@@ -164,7 +170,7 @@ public final class EventsData {
      * @author ksn7
      */
     public void join(Event eventInterested) {
-        ec.joinEvent(eventInterested, "TestUser", "TestPass");
+        ec.joinEvent(eventInterested, userEmail, userPass);
         ec.getEvents();
     }
 
@@ -177,7 +183,7 @@ public final class EventsData {
      * @author ksn7
      */
     public void leave(Event eventNotInterested) {
-        ec.unjoinEvent(eventNotInterested, "TestUser", "TestPass");
+        ec.unjoinEvent(eventNotInterested, userEmail, userPass);
         ec.getEvents();
     }
 

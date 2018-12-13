@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 import edu.calvin.cs262.cs262d.eventconnect.tools.EventsPoller;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Context context;
     private Intent mainToLogin, mainToSettings;
-    private String currentUser;
+    private String currentUser, currentPass;
     private String currentTheme;
 
     //Received from EventConnector, this is the intent filter used in appBroadcastReceiver. (see TabFragment)
@@ -50,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
 
+        //save the currently logged-in user
+        currentUser = getIntent().getStringExtra("UserID");
+        currentPass = getIntent().getStringExtra("UserPass");
+        //give EventsData the currently logged in Username and Password.
+        EventsData.getInstance(null).setCredentials(currentUser, currentPass);
+
         /*start EventsPoller, the service responsible for polling the server with get requests.
          * EventsPoller also creates an EventConnector for MainActivity, here.
          */
@@ -62,9 +69,6 @@ public class MainActivity extends AppCompatActivity {
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
         mainToSettings = new Intent(context, SettingsActivity.class);
-
-        //save the currently logged-in user
-        currentUser = getIntent().getStringExtra("UserID");
 
         //setup action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
