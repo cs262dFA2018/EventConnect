@@ -141,7 +141,6 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="save_event">Save Event</string>
     <string name="edit_event">Edit Event</string>
-    <string name="delete_event">Delete Event</string>
 
     <!-- Spinner dta for catagory -->
     <string-array name="event_cat">

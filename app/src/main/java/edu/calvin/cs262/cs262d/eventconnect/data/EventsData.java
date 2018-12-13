@@ -48,7 +48,9 @@ public final class EventsData {
 
     public void updateEvents(){
         clearEvents();
+        ec.getUsers();
         ec.getEvents();
+        ec.getMyEvents("TestUser", "TestPass");
     }
 
     /**

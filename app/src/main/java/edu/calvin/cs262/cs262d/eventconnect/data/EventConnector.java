@@ -46,6 +46,17 @@ public class EventConnector {
     }
 
     /**
+     * This class holds the list of events
+     * need because GET to /events returns an array
+     *
+     * @author Theron Tjapkes (tpt3)
+     */
+    private static class UserJsonDataHolder {
+        @JsonProperty("items")
+        public List<UserDAO> UsersDAOList;
+    }
+
+    /**
      * Constructor
      * Requires a context for the Android Networking library to work properly.
      *
@@ -58,8 +69,6 @@ public class EventConnector {
         AndroidNetworking.setParserFactory(new JacksonParserFactory());
     }
 
-
-    // Events
 
     /**
      * Does a GET request and updates EventsData using placeEvent()
@@ -85,7 +94,44 @@ public class EventConnector {
                         Intent uiUpdater = new Intent(context, MainActivity.class);
                         uiUpdater.setAction(DATA_UPDATE);
                         LocalBroadcastManager.getInstance(context).sendBroadcast(uiUpdater);
-//                        postEvent(EventsData.getInstance().getPotentialEventData().get(0), "TestUser", "TestPass");
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                        Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                        Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                        throw new RuntimeException("ERROR: errorCode " + anError.getErrorCode()
+                                + " errorBody " + anError.getErrorBody()
+                                + " errorDetail " + anError.getErrorDetail());
+                    }
+                });
+    }
+
+    /**
+     * Does a GET request and updates EventsData using placeEvent()
+     * Corresponds to /events described here:
+     * https://github.com/cs262dFA2018/EventConnectServer/wiki/Event-endpoints
+     *
+     * @author Theron Tjapkes (tpt3)
+     */
+    public synchronized void getUsers() {
+        AndroidNetworking.get(BASE_URL + "users")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(UserJsonDataHolder.class, new ParsedRequestListener<UserJsonDataHolder>() {
+                    @Override
+                    public void onResponse(UserJsonDataHolder users) {
+                        EventsData dataSource = EventsData.getInstance(null);
+                        for (UserDAO user : users.UsersDAOList) {
+                            dataSource.addUser(user);
+                        }
+
+                        //TODO: send broadcast to main activity.
+                        Intent uiUpdater = new Intent(context, MainActivity.class);
+                        uiUpdater.setAction(DATA_UPDATE);
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(uiUpdater);
                     }
 
                     @Override
@@ -131,6 +177,7 @@ public class EventConnector {
                 });
     }
 
+
     /**
      * Does a GET request to get all events a user has joined and adds them to myEvents
      * in EventsData
@@ -151,7 +198,6 @@ public class EventConnector {
                         for (EventDAO event : events.EventsDAOList) {
                             EventsData.getInstance(null).addToMyEvents(EventDAOtoEvent(event));
                         }
-//                        postEvent(EventsData.getInstance().getPotentialEventData().get(0), "TestUser", "TestPass");
                     }
 
                     @Override
@@ -187,8 +233,42 @@ public class EventConnector {
                 .getAsObject(EventDAO.class, new ParsedRequestListener<EventDAO>() {
                     @Override
                     public void onResponse(EventDAO event) {
-                        // do something with created event
-//                        joinEvent(EventDAOtoEvent(event), "TestUser", "TestPass");
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                        Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                        Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        throw new RuntimeException("ERROR: errorCode " + error.getErrorCode()
+                                + " errorBody " + error.getErrorBody()
+                                + " errorDetail " + error.getErrorDetail());
+                    }
+                });
+    }
+
+    /**
+     * POSTs a user to the API
+     * Corresponds to /user described here:
+     * https://github.com/cs262dFA2018/EventConnectServer/wiki/User-endpoints
+     *
+     * @param username Username the event creator
+     * @param password Password of the event creator
+     * @author Theron Tjapkes (tpt3)
+     */
+    public synchronized void postUser(String username, String password) {
+        UserDAO userDAO = new UserDAO();
+        userDAO.setUsername(username);
+        userDAO.setPassword(password);
+        AndroidNetworking.post(BASE_URL + "user/")
+                .addBodyParameter(userDAO) // posting java object
+                .setTag(this)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsObject(UserDAO.class, new ParsedRequestListener<UserDAO>() {
+                    @Override
+                    public void onResponse(UserDAO user) {
+                        // do something with created user
                     }
 
                     @Override
@@ -224,9 +304,6 @@ public class EventConnector {
                 .getAsObject(EventDAO.class, new ParsedRequestListener<EventDAO>() {
                     @Override
                     public void onResponse(EventDAO event) {
-                        // do something with joined event
-//                        event.setTitle("End of World...? (World Leaders ONLY)");
-//                        putEvent(EventDAOtoEvent(event), "TestUser", "TestPass");
                     }
 
                     @Override
@@ -301,8 +378,6 @@ public class EventConnector {
                 .getAsObject(EventDAO.class, new ParsedRequestListener<EventDAO>() {
                     @Override
                     public void onResponse(EventDAO event) {
-                        // do something with updated event
-//                        deleteEvent(EventDAOtoEvent(event), "TestUser", "TestPass");
                     }
 
                     @Override
@@ -348,7 +423,7 @@ public class EventConnector {
                 + base64UsernamePassword);
     }
 
-    // Utility
+    //Utility
 
     /**
      * Converts the EventsDAO to an Event used by the rest of the app
@@ -363,7 +438,7 @@ public class EventConnector {
         time.setTime(eventDAO.getTime());
         try {
             event.setId(eventDAO.getId());
-            event.setHost("TestUser"); //TODO: Fetch user from API
+            event.setHost(EventsData.getInstance(null).getUsername(eventDAO.getUserId())); //TODO: Fetch user from API
             event.setTitle(eventDAO.getTitle());
             event.setCalendar(time);
             event.setLocation(eventDAO.getLocation());
@@ -390,7 +465,7 @@ public class EventConnector {
     private EventDAO EventToEventDAO(Event event) {
         EventDAO eventDAO = new EventDAO();
         eventDAO.setId(event.getId());
-        eventDAO.setUserId(1); //TODO: Fetch user from API
+        eventDAO.setUserId(EventsData.getInstance(null).getUserId(event.getHost()));
         eventDAO.setTitle(event.getTitle());
         eventDAO.setDescription(event.getDescription());
         eventDAO.setTime(new Timestamp(event.getCalendar().getTimeInMillis()));
