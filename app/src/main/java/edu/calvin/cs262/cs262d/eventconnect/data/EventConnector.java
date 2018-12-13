@@ -231,7 +231,9 @@ public class EventConnector {
                     public void onResponse(EventJsonDataHolder events) {
                         ArrayList<Event> myEvents = new ArrayList<>();
                         for (EventDAO event : events.EventsDAOList) {
-                            myEvents.add(EventDAOtoEvent(event));
+                            Event retrievedEvent = EventDAOtoEvent(event);
+                            retrievedEvent.setInterest();
+                            myEvents.add(retrievedEvent);
                         }
                         localData.setMyEvents(myEvents);
                     }
