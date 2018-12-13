@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--the contents for the DialogFragment expanded card view-->
-<LinearLayout
+<!--a parent view so that contents are scrollable-->
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:id="@+id/expanded_root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_wide_horizontal_margin"
     android:paddingStart="@dimen/activity_wide_horizontal_margin"
     android:paddingRight="@dimen/activity_wide_horizontal_margin"
     android:paddingEnd="@dimen/activity_wide_horizontal_margin"
     android:paddingTop="@dimen/activity_tall_vertical_margin"
     android:paddingBottom="@dimen/activity_tall_vertical_margin"
+    android:background="@drawable/expanded_card_background_light"
     >
+
+    <!-- back arrow -->
     <ImageButton
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
@@ -21,146 +25,177 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         />
 
-    <!--a parent view so that contents are scrollable-->
-    <ScrollView
+    <!-- a container for the textviews in the expanded event view -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
 
-        <!-- a container for the textviews in the expanded event view -->
-        <LinearLayout
+        <!-- host label -->
+        <TextView
+            android:id="@+id/host_label_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:text="@string/host_label"
+            android:textStyle="bold|normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
 
-            <!-- host label -->
-            <TextView
-                android:id="@+id/host_label_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/host_label"
-                android:textStyle="bold|normal"
-                />
+        <!-- host name -->
+        <TextView
+            android:id="@+id/host_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
 
-            <!-- host name -->
-            <TextView
-                android:id="@+id/host_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                />
+        <!-- title label -->
+        <TextView
+            android:id="@+id/title_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_label"
+            android:textStyle="bold|normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
 
-            <!-- title label -->
-            <TextView
-                android:id="@+id/title_label_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/title_label"
-                android:textStyle="bold|normal"/>
+        <!-- title -->
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
 
-            <!-- title -->
-            <TextView
-                android:id="@+id/title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                />
+        <!-- category label -->
+        <TextView
+            android:id="@+id/cat_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/category"
+            android:textStyle="bold|normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
 
-            <!-- category label -->
-            <TextView
-                android:id="@+id/cat_label_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/category"
-                android:textStyle="bold|normal"/>
-
-            <!-- category -->
-            <TextView
-                android:id="@+id/cat_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"/>
-
-
-            <!-- description label -->
-            <TextView
-                android:id="@+id/description_label_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/description_label"
-                android:textStyle="bold|normal"/>
-
-            <!-- description -->
-            <TextView
-                android:id="@+id/description_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                />
-
-            <!-- date label -->
-            <TextView
-                android:id="@+id/date_label_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold|normal"/>
-
-            <!-- date -->
-            <TextView
-                android:id="@+id/date_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                />
-
-            <!-- Time label-->
-            <TextView
-                android:id="@+id/time_label_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold|normal"/>
-
-            <!-- time -->
-            <TextView
-                android:id="@+id/time_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                />
-
-            <!-- location label  -->
-            <TextView
-                android:id="@+id/location_label_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold|normal"/>
-
-            <!-- location -->
-            <TextView
-                android:id="@+id/location_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                />
-
-            <!-- cost label -->
-            <TextView
-                android:id="@+id/cost_label_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold|normal"/>
-
-            <!-- cost -->
-            <TextView
-                android:id="@+id/cost_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                />
-
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        <!-- category -->
+        <TextView
+            android:id="@+id/cat_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
 
 
+        <!-- description label -->
+        <TextView
+            android:id="@+id/description_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/description_label"
+            android:textStyle="bold|normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- description -->
+        <TextView
+            android:id="@+id/description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- date label -->
+        <TextView
+            android:id="@+id/date_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- date -->
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- Time label-->
+        <TextView
+            android:id="@+id/time_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- time -->
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- location label  -->
+        <TextView
+            android:id="@+id/location_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- location -->
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- cost label -->
+        <TextView
+            android:id="@+id/cost_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+        <!-- cost -->
+        <TextView
+            android:id="@+id/cost_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            />
+
+    </LinearLayout>
+</ScrollView>

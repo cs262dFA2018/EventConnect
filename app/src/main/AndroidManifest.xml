@@ -12,6 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".tools.EventsPoller"
+            >
+        </service>
         <activity
             android:name=".views.LoginActivity"
             android:label="@string/title_activity_login"

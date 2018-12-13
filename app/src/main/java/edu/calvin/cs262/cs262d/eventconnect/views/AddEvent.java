@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +27,7 @@ import java.util.Locale;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
-import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 
 /**
@@ -343,8 +344,7 @@ public class AddEvent extends AppCompatActivity {
 
         if (!errorFound) { //if all required event information is entered and information is validated:
             //access and update the database.
-            MockDatabase database = MockDatabase.getInstance();
-            database.addNewEvent(event);
+            EventsData.getInstance(null).addNewEvent(event);
             finish();
         }
 

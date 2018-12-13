@@ -1,11 +1,17 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,12 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
-import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.CardContainerAdapter;
 
 
@@ -29,9 +34,12 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
 
     private RecyclerView card_container;
     private CardContainerAdapter card_container_adapter;
-    private ArrayList<Event> event_data;
-    private MockDatabase database;
+    private EventsData dataSource = EventsData.getInstance(null);
+    private List<Event> event_data;
     private Context context;
+
+    //Received from dataManager, this is the intent filter used in appBroadcastReceiver.
+    private static final String DATA_UPDATE = "processConnections";
 
     public TabFragment() {
         // Required empty public constructor
@@ -46,22 +54,32 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         super.onCreate(savedInstanceState);
         Bundle my_args = getArguments();
         //get the necessary resources to check which tab I am.
-        context = new WeakReference<Context>(getActivity().getApplicationContext()).get();
-        database = MockDatabase.getInstance();
+        context = getContext();
+
+        //build the adapter for this fragment's recycler view
+        card_container_adapter = new CardContainerAdapter(this, context);
+
+        // get Events from the server
+        getData();
+    }
+
+    /**
+     * getData examines which instance of TabFragment this is, and selects only the appropriate ArrayList of data to use.
+     *
+     * @author Littlesnowman88
+     */
+    private void getData() {
         //check which tab I am based on the tab name and what PagerAdapter.java told me I am
         if (context.getString(R.string.tab_label_potential).equals(getArguments().getString("Fragment_id"))) {
-            event_data = database.getPotentialEventData();
+            event_data = dataSource.getPotentialEventData();
         } else if (context.getString(R.string.tab_label_confirmed).equals(getArguments().getString("Fragment_id"))) {
-            event_data = database.getConfirmedEventData();
+            event_data = dataSource.getConfirmedEventData();
         } else if (getString(R.string.tab_label_my).equals(getArguments().getString("Fragment_id"))) {
-            event_data = database.getMyEventData();
+            event_data = dataSource.getMyEventData();
         } else {
             //If I am being used for something else and haven't been informed of that, then I shouldn't be created at all!
             throw new RuntimeException("ERROR: tab fragment created for undetermined purpose.");
         }
-
-        //build the adapter for this fragment's recycler view
-        card_container_adapter = new CardContainerAdapter(this, context);
         card_container_adapter.setCards(event_data);
     }
 
@@ -85,10 +103,27 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         return frag_layout;
     }
 
-    //the class implementing this is responsible for summoning dialogFragments.
-    //IMPORTANT: MAIN ACTIVITY SHOULD BE THE ONLY ACTIVITY TO EVER CALL THIS.
-    public interface CardExpansionHandler {
-        void showExpandedCard(Event event);
+    /**
+     * Register the BroadcastManager here to receive messages from EventsPoller.
+     *
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(context).registerReceiver(appMessageReceiver,
+                new IntentFilter(DATA_UPDATE));
+    }
+
+    /**
+     * Unregister the BroadcastManager here to stop receiving messages from EventsPoller.
+     *
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(appMessageReceiver);
     }
 
     /** Overriding click handling for the card_container_adapter
@@ -106,12 +141,12 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 showExpandedCard(clicked_event);
                 break;
             case "Move Thy Card":
-                database.movePotentialEvent(clicked_event);
+                dataSource.movePotentialEvent(clicked_event);
                 Toast.makeText(getActivity(),context.getString(R.string.Event_Confirmed),
                         Toast.LENGTH_LONG).show();
                 break;
             case "Un-move Thy Card":
-                database.moveCompletedEvent(clicked_event);
+                dataSource.moveCompletedEvent(clicked_event);
                 Toast.makeText(getActivity(), context.getString(R.string.Event_Unconfirmed),
                         Toast.LENGTH_LONG).show();
                 break;
@@ -136,11 +171,11 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 //wait to actually delete the event until the deleteRunnable calls deleteEvent
                 break;
             case "Add to My Events":
-                database.addInterest(clicked_event);
+                dataSource.addInterest(clicked_event);
                 card_container_adapter.notifyDataSetChanged();
                 break;
             case "Remove from My Events":
-                database.removeInterest(clicked_event);
+                dataSource.removeInterest(clicked_event);
                 card_container_adapter.notifyDataSetChanged();
                 break;
             default:
@@ -157,7 +192,14 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
      * @author Littlesnowman88
      */
     public void deleteEvent(Event clicked_event) {
-        database.deleteEvent(clicked_event);
+        try {
+            dataSource.deleteEvent(clicked_event);
+        }
+        catch (RuntimeException e) {
+            //event wasn't found in the database
+            e.printStackTrace();
+        }
+        //still delete the event from the adapter, since a user clicked on an event's DELETE button.
         card_container_adapter.deleteEvent(clicked_event);
         //display a message to the user, confirming the deletion of an event
         Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Worked),
@@ -168,6 +210,8 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
      *
      * @param event, the event clicked on by the user
      * Postcondition: an ExpandedCard is summoned and displayed for the user
+     *
+     * @author Littlesnowman88
      */
     public void showExpandedCard(Event event) {
         //the following code is based on https://developer.android.com/reference/android/app/DialogFragment
@@ -193,4 +237,33 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * handles Broadcasted Intents from EventsPoller.
+     * If the intent really is from EventsPoller, this broadcast receiver updates TabFragments' data.
+     * appMessageReceiver is initialized outside of onCreate because only one ever needs to be made.
+     *
+     * @author Littlesnowman88
+     */
+    private final BroadcastReceiver appMessageReceiver = new BroadcastReceiver() {
+        /**
+         * onReceive updates MainActivity's TabFragments' data to reflect server database state.
+         *
+         * @param context the context that this receiver listens to.
+         * @param intent the message sent out by EventsPoller or other places MainActivity has registered this receiver to.
+         *
+         * @author Littlesnowman88
+         */
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            /* before updating UI, the intent should be from EventsPoller.
+             * IF UI NEEDS TO BE UPDATED FROM ANOTHER PLACE, FIX THIS COMMENT.
+             * -LS88
+             */
+
+            if (intent.getAction() != null && intent.getAction().equals(DATA_UPDATE)) {
+                getData(); //see up near onCreate
+            }
+        }
+    };
 }

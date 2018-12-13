@@ -15,8 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
-import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
+import edu.calvin.cs262.cs262d.eventconnect.tools.EventsPoller;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     private Intent mainToLogin, mainToSettings;
     private String currentUser;
     private String currentTheme;
+
+    //Received from dataManager, this is the intent filter used in appBroadcastReceiver. (see TabFragment)
+    private static final String DATA_UPDATE = "processConnections";
 
     /**
      * creates the Main Activity:
@@ -47,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
+
+        /*start EventsPoller, the service responsible for polling the server with get requests.
+         * EventsPoller also creates an EventConnector for MainActivity, here.
+         */
+        Intent mainToDataManager = new Intent(context, EventsPoller.class);
+        mainToDataManager.setAction(DATA_UPDATE);
+        startService(mainToDataManager);
 
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
