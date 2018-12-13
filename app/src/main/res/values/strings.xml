@@ -152,6 +152,11 @@
     <string name="FAQ_stp_4">4. Click on the “Event Connect” button to log in. Good job! You are now in the EventConnect app.</string>
     <string name="space">/n /n</string>
 
+    <!--Logging out-->
+    <string name="Logout_header">Logging Out</string>
+    <string name="logout_info">To log out of the app, follow these events:</string>
+    <string name="logout_1">1. Click the back arrow in the top left corner of the main app screen. This will return you to the login screen. You are now logged out.</string>
+
     <!--Indicating Interest-->
     <string name="Interest_title">To indicate your interest in an event, follow these steps:</string>
     <string name="indicate_interest">Indicating Interest</string>
@@ -168,6 +173,13 @@
     <string name="app_tabs_2">To find out if an event is confirmed, follow these steps:</string>
     <string name="app_tabs_3">1. Look for the event in the Confirmed Events tab. If the event is there, it has been confirmed!</string>
     <string name="app_tabs_4">2. Look for the event in the Potential Events tab if you did not find it in the Confirmed Events tab. If there, the event is still considered potential. If the event is not in the Potential Events tab, the event has been deleted.</string>
+
+    <!--Accessing event info-->
+    <string name="expanded_header">Accessing Event Information</string>
+    <string name="expanded_intro">To see information about an event that is not visible from the card view, follow these steps:</string>
+    <string name="expanded_1">1. Tap on the card title or description. This will bring up the expanded card view.</string>
+    <string name="expanded_2">2. If necessary, scroll up and down in the expanded card view to see all of the event information.</string>
+    <string name="expanded_3">3. To exit the expanded card view, tap the back arrow in the top left corner.</string>
 
     <!--Creating a new event-->
     <string name="new_event">Creating A New Event</string>
@@ -201,6 +213,14 @@
     <string name="delete_1">1. Find the event in one of the tabs. The event might be easiest to find in the My Events tab.</string>
     <string name="delete_2">2. Tap the three dot menu in the corner of the event card. Select "Delete" from the menu that pops up.</string>
     <string name="delete_3">3. On the pop-up that appears, tap "Delete" to confirm deletion. You can also cancel deletion at this point if you change your mind by tapping "Cancel".</string>
+
+    <!--Using dark mode-->
+    <string name="dark_header">Using Dark Mode</string>
+    <string name="dark_intro">Some users might prefer darker or lighter background colors while using the app. To enable or disable dark mode, follow these steps:</string>
+    <string name="dark_1">1. Click the gear symbol in the top right corner of the screen to access the Settings menu.</string>
+    <string name="dark_2">2. Click "General".</string>
+    <string name="dark_3">3. Click "Dark Mode Settings".</string>
+    <string name="dark_4">4. On the pop-up that appears, select either "Light Theme" or "Dark Theme".</string>
 
     <!-- Spinner dta for catagory -->
     <string-array name="event_cat">
