@@ -14,6 +14,7 @@ public final class EventsData {
     private static final String TAG = "EventsData";
     private static EventConnector ec;
     private List<Event> potentialEvents, confirmedEvents, myEvents;
+    private List<UserDAO> users;
 
     /**
      * Singleton constructor, effectively.
@@ -44,8 +45,15 @@ public final class EventsData {
         potentialEvents = new ArrayList<>();
         confirmedEvents = new ArrayList<>();
         myEvents = new ArrayList<>();
+        users = new ArrayList<>();
     }
 
+    /**
+     * updateEvents gets all users, then populates events tabs, then
+     *  populates the MyEvents tab.
+     *
+     * @author Littlesnowman88
+     */
     public void updateEvents(){
         clearEvents();
         ec.getUsers();
@@ -54,7 +62,7 @@ public final class EventsData {
     }
 
     /**
-     * placeEvent puts an event into its appropriate tab.
+     * placeEvent puts an event into its appropriate tab (ONLY POTENTIAL OR CONFIRMED).
      * called by DataConnection AsyncTask's GET request.
      *
      * @author Littlesnomwan88
@@ -65,15 +73,22 @@ public final class EventsData {
         } else {
             confirmedEvents.add(event);
         }
-        //TODO: if the event has interested button clicked, place the event in "my events"
     }
 
+    /**
+     * called by EventConnector, addToMyEvents adds events either created by or joined by
+     * the currently logged in user.
+     *
+     * @param event the event being added.
+     * @author Littlesnowman88
+     */
     public void addToMyEvents(@NonNull Event event) {
+        event.setInterest();
         myEvents.add(event);
     }
 
     /**
-     * clearEvents, called by DataConnection AsyncTask's GET request,
+     * clearEvents, called by updateEvents,
      * clears the Event data for all tabs in preparation for a GET request
      *
      * @author Littlesnowman88
@@ -82,6 +97,16 @@ public final class EventsData {
         potentialEvents.clear();
         confirmedEvents.clear();
         myEvents.clear();
+    }
+
+    /**
+     * clearUsers, called by EventConnector,
+     * clears the Users data in preparation for a GET request.
+     *
+     * @author Littlesnowman88
+     */
+    public void clearUsers() {
+        users.clear();
     }
 
     /**
@@ -94,6 +119,18 @@ public final class EventsData {
     public void addNewEvent(@NonNull Event event) {
         ec.postEvent(event, "TestUser", "TestPass");
         ec.getEvents();
+    }
+
+    /**
+     * adds a new user to the database
+     * called by EventConnector
+     *
+     * @param user, a UserDAO
+     * @author Littlesnowman88
+     */
+    public void addUser(@NonNull UserDAO user) {
+        //don't check to see if a user already exists, because users should be cleared before calling this the first time.
+        users.add(user);
     }
 
     /**
@@ -119,70 +156,29 @@ public final class EventsData {
         ec.getEvents();
     }
 
-
-    //TODO: move events will be erased and replaced Interest button press.
     /**
-     * moves an event from the potential tab to the confirmed tab.
-     *
-     * @param eventToMove the event moving from potentialEvents to confirmedEvents
-     * @author ???
-     */
-    public void movePotentialEvent(Event eventToMove) {
-        int num_events = potentialEvents.size();
-        for (int i = 0; i < num_events; i++) {
-            Event event = potentialEvents.get(i);
-            if (event == eventToMove) {
-                confirmedEvents.add(eventToMove);
-                potentialEvents.remove(event);
-                num_events--;
-            }
-        }
-    }
-
-    /**
-     * moves an event from the confirmed tab to the potential tab.
-     *
-     * @param eventToMove the event moving from confirmedEvents to potentialEvents
-     * @author ???
-     */
-    public void moveCompletedEvent(Event eventToMove) {
-        int num_events = confirmedEvents.size();
-        for (int i = 0; i < num_events; i++) {
-            Event event = confirmedEvents.get(i);
-            if (event == eventToMove) {
-                potentialEvents.add(eventToMove);
-                confirmedEvents.remove(event);
-                num_events--;
-            }
-        }
-    }
-
-    //TODO: join event.
-    /**
-     * Adds event to myEvents when user indicates interest
+     * Adds the currently logged in user to an event, thus updating MyEvents and an Event's interest count.
      *
      * @param eventInterested to add to myEvents
+     * @author Littlesnowman88
      * @author ksn7
      */
     public void addInterest(Event eventInterested) {
-        if (!myEvents.contains(eventInterested)) {
-            myEvents.add(eventInterested);
-        }
+        ec.joinEvent(eventInterested, "TestUser", "TestPass");
+        ec.getEvents();
     }
 
-    //TODO; unjoin event.
+
     /**
-     * Removes event from myEvents when user un-indicates interest
+     * Removes the currently logged in user from an event, thus updating MyEvents and an Event's interest count.
      *
      * @param eventNotInterested to remove from myEvents
+     * @author Littlesnowman88
      * @author ksn7
      */
     public void removeInterest(Event eventNotInterested) {
-        try {
-            myEvents.remove(eventNotInterested);
-        } catch (Exception e) {
-            throw new RuntimeException("ERROR: tried to remove interest from an event not in My Events");
-        }
+        ec.unjoinEvent(eventNotInterested, "TestUser", "TestPass");
+        ec.getEvents();
     }
 
     /* =========================== */
@@ -215,5 +211,39 @@ public final class EventsData {
      */
     public List<Event> getMyEventData() {
         return this.myEvents;
+    }
+
+
+    //Utility methods for EventConnector
+    /**
+     * getUsername takes a userId, finds the corresponding user, and returns the username.
+     * Translates an eventID to an eventHost.
+     *
+     * @param userId the unique id of a UserDAO user.
+     * @return a user's username if found, the stringified userid otherwise.
+     */
+    public String getUsername(@NonNull int userId) {
+        for (UserDAO user : users) {
+            if (user.getId() == userId) {
+                return user.getUsername();
+            }
+        }
+        return Integer.toString(userId);
+    }
+
+    /**
+     * getUserId takes a username, finds the corresponding user, and returns the userID.
+     * Translates an eventHost into an eventID.
+     *
+     * @param username the unique id of a UserDAO user.
+     * @return a user's id if found, 0 if otherwise.
+     */
+    public int getUserId(@NonNull String username) {
+        for (UserDAO user : users) {
+            if (user.getUsername().equals(username)) {
+                return user.getId();
+            }
+        }
+        return 0;
     }
 }

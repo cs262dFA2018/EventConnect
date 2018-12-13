@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -33,6 +34,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     private final String ExpandCard = "Expand Thy Card";
     private final String MoveCard = "Move Thy Card";
     private final String UnmoveCard = "Un-move Thy Card";
+    private final String EditCard = "Edit Event";
     private final String DeleteCard = "Delete Event";
     private final String MyCard = "Add to My Events";
     private final String NotMyCard = "Remove from My Events";
@@ -95,11 +97,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
          */
         @Override
         public void onClick(View view) {
-            Event event_clicked = cards.get(getAdapterPosition());
+            final Event event_clicked = cards.get(getAdapterPosition());
             if (view == interestedButton){
-
-                //TODO: refactor so TabFragment handles interest?
-                //TODO: DO NOT DELETE CARD.
                 /* If current interest is false, mark they're interested now
                  */
                 if (!event_clicked.getInterest()) {
@@ -136,9 +135,31 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                     click_handler.onClick(event_clicked, NotMyCard);
                 }
             } else if (view == eventMenu) {
+                /* thanks to Belal Khan for inspiration. See
+                 * https://www.simplifiedcoding.net/create-options-menu-recyclerview-item-tutorial/#Creating-Menu-Items
+                 * for algorithmic pattern.
+                 */
                 //Create the popup menu with Edit Event and Delete Event
-//                PopupMenu menu
-                //click_handler.onClick(event_clicked, DeleteCard);
+                PopupMenu menu = new PopupMenu(context, eventMenu);
+                menu.inflate(R.menu.menu_card);
+                //click handler for menu items
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                   @Override
+                   public boolean onMenuItemClick(MenuItem item) {
+                       switch (item.getItemId()) {
+                           case R.id.action_edit_event:
+                               click_handler.onClick(event_clicked, EditCard);
+                               break;
+                           case R.id.action_delete_event:
+                               click_handler.onClick(event_clicked, DeleteCard);
+                               break;
+                       }
+                       return false; //I'm not sure why... -LS88
+                   }
+                });
+                //display the popup menu
+                menu.show();
+                //
             } else if (view == eventTitle || view == eventDescription || view == eventCard) {
                 click_handler.onClick(event_clicked, ExpandCard);
             }

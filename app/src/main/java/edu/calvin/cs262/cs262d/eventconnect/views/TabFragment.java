@@ -149,6 +149,13 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 Toast.makeText(getActivity(), context.getString(R.string.Event_Unconfirmed),
                         Toast.LENGTH_LONG).show();
                 break;
+            case "Edit Event":
+                Intent mainToEdit = new Intent(context, EditEvent.class);
+                Bundle eventBundle = new Bundle();
+//                eventBundle.putString() FIXME: PUT EVENT PROPERTIES INTO THIS BUNDLE and fetch them from EditEvent.
+//                startActivity(mainToEdit);
+                Toast.makeText(getActivity(), "EDIT EVENT", Toast.LENGTH_LONG).show();
+                break;
             case "Delete Event":
                 //create the action for the alert Dialog's "delete" option
                 Runnable deleteRunnable = new Runnable() {
@@ -184,7 +191,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**
-     * called by onClick's runnable object, deleteEvent deletes an event from the database and the UI.
+     * called by onClick's runnable object, deleteEvent deletes an event from the database.
      *
      * @param clicked_event the event that a user confirmed to delete
      * @author ksn7
@@ -192,9 +199,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
      */
     public void deleteEvent(Event clicked_event) {
         dataSource.deleteEvent(clicked_event);
-
-        //still delete the event from the adapter, since a user clicked on an event's DELETE button.
-        card_container_adapter.deleteEvent(clicked_event);
         //display a message to the user, confirming the deletion of an event
         Toast.makeText(getActivity(),context.getString(R.string.Delete_Event_Worked),
                 Toast.LENGTH_LONG).show();
