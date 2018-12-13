@@ -132,6 +132,41 @@ public class EventConnector {
     }
 
     /**
+     * Does a GET request to get all events a user has joined and adds them to myEvents
+     * in EventsData
+     * Corresponds to /event/{id} described here:
+     * https://github.com/cs262dFA2018/EventConnectServer/wiki/Event-endpoints
+     *
+     * @author Theron Tjapkes (tpt3)
+     */
+    public void getMyEvents(String username, String password) {
+        String base64UsernamePassword = encodeBase64(username + ":" + password);
+        AndroidNetworking.get(BASE_URL + "user/events/" + base64UsernamePassword)
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(EventJsonDataHolder.class, new ParsedRequestListener<EventJsonDataHolder>() {
+                    @Override
+                    public void onResponse(EventJsonDataHolder events) {
+                        for (EventDAO event : events.EventsDAOList) {
+                            EventsData.getInstance(null).addToMyEvents(EventDAOtoEvent(event));
+                        }
+//                        postEvent(EventsData.getInstance().getPotentialEventData().get(0), "TestUser", "TestPass");
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                        Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                        Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                        throw new RuntimeException("ERROR: errorCode " + anError.getErrorCode()
+                                + " errorBody " + anError.getErrorBody()
+                                + " errorDetail " + anError.getErrorDetail());
+                    }
+                });
+    }
+
+    /**
      * POSTs an event to the API
      * Corresponds to /event/{token} described here:
      * https://github.com/cs262dFA2018/EventConnectServer/wiki/Event-endpoints
