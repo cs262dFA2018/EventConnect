@@ -15,21 +15,26 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.Locale;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 
 //based on android's documentation, https://developer.android.com/reference/android/app/DialogFragment
 public class ExpandedCard extends DialogFragment {
 
-    private TextView hostLabel, hostView, titleLabel, titleView, descriptionLabel, descriptionView,
-
-    dateLabel, dateView, locationLabel, locationView, costLabel, costView, catView, catLabel, timeLabel, timeView;
+    private TextView hostLabel, hostView, titleLabel, titleView, descriptionLabel, descriptionView;
+    private TextView dateLabel, dateView, locationLabel, locationView, costLabel, costView;
+    private TextView catView, catLabel, timeLabel, timeView, thresholdLabel, thresholdView;
+    private TextView capacityLabel, capacityView, interestLabel, interestView;
     private boolean interested;
     private String title, description, host, location, date, cat, time;
     private double cost;
+    private int threshold, capacity, interestCount;
+    private Toolbar toolbar;
 
     /**
      * Create a new instance of ExpandedCard, providing arguments from an Event
@@ -51,6 +56,9 @@ public class ExpandedCard extends DialogFragment {
         args.putString("cat", event.getCategory());
         args.putDouble("cost", event.getCost());
         args.putString("time", event.getTime());
+        args.putInt("threshold", event.getMinThreshold());
+        args.putInt("capacity", event.getMaxCapacity());
+        args.putInt("interest", event.getCurrentInterest());
 
         ec.setArguments(args);
 
@@ -112,6 +120,9 @@ public class ExpandedCard extends DialogFragment {
         } catch (java.lang.NullPointerException ne){
             cat ="";
         }
+        threshold = args.getInt("threshold");
+        capacity = args.getInt("capacity");
+        interestCount = args.getInt("interest");
     }
 
     /**
@@ -187,6 +198,12 @@ public class ExpandedCard extends DialogFragment {
         catView = view.findViewById(R.id.cat_text);
         timeLabel = (TextView) view.findViewById(R.id.time_label_text);
         timeView = (TextView) view.findViewById(R.id.time_text);
+        thresholdLabel = (TextView) view.findViewById(R.id.threshold_label_text);
+        thresholdView = (TextView) view.findViewById(R.id.threshold_text);
+        capacityLabel = (TextView) view.findViewById(R.id.capacity_label_text);
+        capacityView = (TextView) view.findViewById(R.id.capacity_text);
+        interestLabel = (TextView) view.findViewById(R.id.interest_label_text);
+        interestView = (TextView) view.findViewById(R.id.interest_text);
 
         //set UI text
         hostLabel.setText(getString(R.string.host_label));
@@ -204,24 +221,18 @@ public class ExpandedCard extends DialogFragment {
         costLabel.setText(getString(R.string.cost_label));
         costView.setText(String.format(Locale.getDefault(), Double.toString(cost), Double.toString(cost)));
         catView.setText(cat);
-
-        //TODO: click listener for a native copy of the "interested" button
-        //TODO: when TabFragment is refreshed, maybe the buttons will have to be updated?
-        //first access UI above
-       /*
-       button.setOnClickListener(new onClickListener() {
-           public void onClick(View v) {
-               if button is confirmed text:
-                   set denied text
-                   update calling activity with the change in data? or manipulate the db directly?
-               else:
-                   make button text positive
-                   update calling activity with the change in data? or manipulate the db directly?
-        */
-       /*
-       how to call up to the owning activity:
-       ((FragmentDialog)getActivity()).showDialog();
-        */
+        thresholdView.setText(Integer.toString(threshold));
+        capacityView.setText(Integer.toString(capacity));
+        interestView.setText(Integer.toString(interestCount));
+        //if I (currently logged in user) own this event, display threshold, capacity, and interest.
+        if (host.equals(EventsData.getInstance(null).getCredentials()[0])) {
+            thresholdLabel.setVisibility(View.VISIBLE);
+            thresholdView.setVisibility(View.VISIBLE);
+            capacityLabel.setVisibility(View.VISIBLE);
+            capacityView.setVisibility(View.VISIBLE);
+            interestLabel.setVisibility(View.VISIBLE);
+            interestView.setVisibility(View.VISIBLE);
+        }
     }
 
 

@@ -29,9 +29,9 @@
     <string name="cost_label"><b>Cost</b></string>
     <string name="cost_hint">$1.00</string>
     <string name="threshold_label"><b>Threshold</b></string>
-    <string name="threshold_hint">Minimum amount of people for event</string>
+    <string name="threshold_hint">Min. # of people for event (including you)</string>
     <string name="capacity_label"><b>Capacity</b></string>
-    <string name="capacity_hint">Max capacity for event</string>
+    <string name="capacity_hint">Max capacity for event (including you)</string>
     <string name="category_label"><b>Category</b></string>
     <string name="create_event">Create Event</string>
     <string name="failed_transaction_manager">Sorry, but fragment manager could not be found. Aborting expanded card view.</string>
@@ -69,7 +69,7 @@
     <string name="error_empty_date">Date was not in MM/dd/yy</string>
     <string name="error_empty_time">Time Cannot be empty</string>
     <string name="error_invalid_time">Invalid Start Time</string>
-    <string name="error_empty_title">Title cannot be empty</string>
+    <string name="error_faulty_title">Title cannot be empty or too long.</string>
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>

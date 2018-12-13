@@ -19,6 +19,7 @@ import java.util.List;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 
 
 /**an adapter class used by MainActivity's Fragments' Recycle Views.
@@ -159,6 +160,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     }
 
     /**onBindViewHolder takes data from Event items and places the data onto the card_UI.
+     * Now, onBindViewHolder takes into account whether the currently logged in user owns an event or not.
      * @param card_holder the viewholder defined in this adapter class
      * @param position the card at which the adapter is currently looking
      * Postcondition: the card's UI elements are set with its Event information.
@@ -168,11 +170,21 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         Event current_card = cards.get(position);
         card_holder.eventTitle.setText(current_card.getTitle());
         card_holder.eventDescription.setText(current_card.getDescription());
-        card_holder.interestedButton.setEnabled(true);
-        if(current_card.getInterest()){
-            card_holder.interestedButton.setText(context.getString(R.string.interested));
-        } else {
-            card_holder.interestedButton.setText(context.getString(R.string.not_interested));
+        //if I am this event's owner, hide the interested button but display the menu options.
+        if (current_card.getHost().equals(EventsData.getInstance(null).getCredentials()[0])) {
+            card_holder.interestedButton.setEnabled(false);
+            card_holder.interestedButton.setVisibility(View.GONE);
+            card_holder.eventMenu.setVisibility(View.VISIBLE);
+        }
+        //else, I am not this event's owner. Show the interested button but hide the menu options.
+        else {
+            card_holder.interestedButton.setEnabled(true);
+            if(current_card.getInterest()){
+                card_holder.interestedButton.setText(context.getString(R.string.interested));
+            } else {
+                card_holder.interestedButton.setText(context.getString(R.string.not_interested));
+            }
+            card_holder.eventMenu.setVisibility(View.GONE);
         }
     }
 

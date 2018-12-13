@@ -39,8 +39,6 @@
             android:layout_height="wrap_content"
             android:text="@string/host_label"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- host name -->
@@ -49,8 +47,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- title label -->
@@ -60,8 +56,6 @@
             android:layout_height="wrap_content"
             android:text="@string/title_label"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- title -->
@@ -70,8 +64,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- category label -->
@@ -81,8 +73,6 @@
             android:layout_height="wrap_content"
             android:text="@string/category"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- category -->
@@ -91,8 +81,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
 
@@ -103,8 +91,6 @@
             android:layout_height="wrap_content"
             android:text="@string/description_label"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- description -->
@@ -113,8 +99,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- date label -->
@@ -123,8 +107,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- date -->
@@ -133,8 +115,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- Time label-->
@@ -143,8 +123,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- time -->
@@ -153,8 +131,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- location label  -->
@@ -163,8 +139,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- location -->
@@ -173,8 +147,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- cost label -->
@@ -183,8 +155,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- cost -->
@@ -193,8 +163,62 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
+            />
+
+        <!--EVENT OWNER SPECIFICS-->
+
+        <!-- min threshold label -->
+        <TextView
+            android:id="@+id/threshold_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|normal"
+            android:visibility="gone"
+            />
+
+        <!-- min threshold -->
+        <TextView
+            android:id="@+id/threshold_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:visibility="gone"
+            />
+
+        <!-- max capacity label -->
+        <TextView
+            android:id="@+id/capacity_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|normal"
+            android:visibility="gone"
+            />
+
+        <!-- max capacity -->
+        <TextView
+            android:id="@+id/capacity_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:visibility="gone"
+            />
+
+        <!-- interest count label -->
+        <TextView
+            android:id="@+id/interest_label_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|normal"
+            android:visibility="gone"
+            />
+
+        <!-- interest count -->
+        <TextView
+            android:id="@+id/interest_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:visibility="gone"
             />
 
     </LinearLayout>

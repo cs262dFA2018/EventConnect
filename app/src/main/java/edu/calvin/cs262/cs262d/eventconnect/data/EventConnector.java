@@ -39,6 +39,7 @@ public class EventConnector {
     private static final String LOGIN_FETCH = "fetchUsers";
     private static final String LOGIN_POST = "postNewUser";
     private static final String LOGIN_ERROR = "failedLogin";
+    private EventsData localData = EventsData.getInstance(null);
 
     /**
      * This class holds the list of events
@@ -90,10 +91,9 @@ public class EventConnector {
                 .getAsObject(UserJsonDataHolder.class, new ParsedRequestListener<UserJsonDataHolder>() {
                     @Override
                     public void onResponse(UserJsonDataHolder users) {
-                        EventsData dataSource = EventsData.getInstance(null);
-                        dataSource.clearUsers();
+                        localData.clearUsers();
                         for (UserDAO user : users.UsersDAOList) {
-                            dataSource.addUser(user);
+                            localData.addUser(user);
                         }
                     }
 
@@ -170,9 +170,9 @@ public class EventConnector {
                 .getAsObject(EventJsonDataHolder.class, new ParsedRequestListener<EventJsonDataHolder>() {
                     @Override
                     public void onResponse(EventJsonDataHolder events) {
-                        EventsData dataSource = EventsData.getInstance(null);
                         for (EventDAO event : events.EventsDAOList) {
-                            dataSource.placeEvent(EventDAOtoEvent(event));
+                            localData.placeEvent(EventDAOtoEvent(event));
+
                         }
 
                         //send broadcast to main activity, telling it to update its UI. (See TabFragment)
@@ -209,7 +209,7 @@ public class EventConnector {
                 .getAsObject(EventDAO.class, new ParsedRequestListener<EventDAO>() {
                     @Override
                     public void onResponse(EventDAO event) {
-                        EventsData.getInstance(null).placeEvent(EventDAOtoEvent(event));
+                        localData.placeEvent(EventDAOtoEvent(event));
                     }
 
                     @Override
@@ -243,7 +243,7 @@ public class EventConnector {
                     @Override
                     public void onResponse(EventJsonDataHolder events) {
                         for (EventDAO event : events.EventsDAOList) {
-                            EventsData.getInstance(null).addToMyEvents(EventDAOtoEvent(event));
+                            localData.addToMyEvents(EventDAOtoEvent(event));
                         }
                     }
 
@@ -492,7 +492,7 @@ public class EventConnector {
         time.setTime(eventDAO.getTime());
         try {
             event.setId(eventDAO.getId());
-            event.setHost(EventsData.getInstance(null).getUsername(eventDAO.getUserId()));
+            event.setHost(localData.getUsername(eventDAO.getUserId()));
             event.setTitle(eventDAO.getTitle());
             event.setCalendar(time);
             event.setLocation(eventDAO.getLocation());
@@ -519,7 +519,7 @@ public class EventConnector {
     private EventDAO EventToEventDAO(Event event) {
         EventDAO eventDAO = new EventDAO();
         eventDAO.setId(event.getId());
-        eventDAO.setUserId(EventsData.getInstance(null).getUserId(event.getHost()));
+        eventDAO.setUserId(localData.getUserId(event.getHost()));
         eventDAO.setTitle(event.getTitle());
         eventDAO.setDescription(event.getDescription());
         eventDAO.setTime(new Timestamp(event.getCalendar().getTimeInMillis()));

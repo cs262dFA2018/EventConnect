@@ -15,11 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -204,11 +202,11 @@ public class AddEvent extends AppCompatActivity {
 
         //EVENT TITLE
         try{
-            if(!title.equals("")){
+            if(!title.equals("") && title.length() < 20){
                 event.setTitle(title);
             } else {
-                eventTitle.setError(getString(R.string.error_empty_title));
-                Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_title),
+                eventTitle.setError(getString(R.string.error_faulty_title));
+                Toast.makeText(AddEvent.this, context.getString(R.string.error_faulty_title),
                         Toast.LENGTH_SHORT).show();
                 errorFound=true;
             }
@@ -326,6 +324,7 @@ public class AddEvent extends AppCompatActivity {
 
         if (!errorFound) { //if all required event information is entered and information is validated:
             //access and update the database.
+            event.setInterest();
             EventsData.getInstance(null).addNewEvent(event);
             finish();
         }

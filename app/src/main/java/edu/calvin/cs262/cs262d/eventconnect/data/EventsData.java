@@ -129,6 +129,7 @@ public final class EventsData {
      */
     public void addNewEvent(@NonNull Event event) {
         ec.postEvent(event, userEmail, userPass);
+        ec.joinEvent(event, userEmail, userPass);
         ec.getEvents();
     }
 
@@ -153,6 +154,7 @@ public final class EventsData {
      */
     public void editEvent(@NonNull Event event) {
         ec.putEvent(event, userEmail, userPass);
+        ec.joinEvent(event, userEmail, userPass);
         ec.getEvents();
     }
 
