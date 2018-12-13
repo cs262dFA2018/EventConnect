@@ -174,7 +174,6 @@ public final class EventsData {
      * @author Littlesnowman88
      */
     public List<Event> getPotentialEventData() {
-        Log.d(TAG, potentialEvents.toString());
         return this.potentialEvents; }
 
 

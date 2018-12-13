@@ -23,7 +23,7 @@ public class EventsPoller extends Service {
     private static final int ONE_HOUR = ONE_MINUTE * 60;
     private static final int NEVER = -1;
 
-    private static final int TIMER_DELAY = ONE_SECOND * 5;
+    private static final int TIMER_DELAY = ONE_SECOND * 2;
 
     //assign queue here because only one ever needs to exist.
     //timer that triggers event GET requests every TIMER_DELAY seconds.

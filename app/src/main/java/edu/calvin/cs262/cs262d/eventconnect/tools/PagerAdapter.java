@@ -21,10 +21,10 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     }
 
     /**
-     * getItem sets up the potential, confirmed, hosted, and "my" events tab
+     * getItem sets up the potential, confirmed, and "my" events tab
      * @param position tells which tab should be open
      * @return the Fragment that contains the event cards
-     * @author ??
+     * @author Littlesnowman88
      * @author ksn7
      */
     @Override

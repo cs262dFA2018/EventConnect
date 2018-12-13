@@ -54,7 +54,10 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         context = getContext();
 
         //build the adapter for this fragment's recycler view
-        card_container_adapter = new CardContainerAdapter(this, context);
+        if (card_container_adapter == null) {
+            card_container_adapter = new CardContainerAdapter(this, context);
+        }
+
     }
 
     /**
@@ -73,7 +76,9 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
         //build the RecyclerView for this fragment and provide its adapter
         card_container = (RecyclerView) frag_layout.findViewById(R.id.tab_recycler_view);
         card_container.setLayoutManager(new LinearLayoutManager(getActivity()));
-        card_container.setAdapter(card_container_adapter);
+        if (card_container.getAdapter() != card_container_adapter) {
+            card_container.setAdapter(card_container_adapter);
+        }
         return frag_layout;
     }
 

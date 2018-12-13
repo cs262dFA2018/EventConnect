@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.addTab(tabs.newTab().setText(R.string.tab_label_confirmed));
         tabs.addTab(tabs.newTab().setText(R.string.tab_label_my));
         // Set the tabs to fill the entire layout.
-        tabs.setTabGravity(tabs.GRAVITY_FILL);
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
     }
 
     /** buildPagerAdapter is a helper function refactored from onCreate

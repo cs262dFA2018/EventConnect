@@ -200,7 +200,7 @@ public class EventConnector {
                     }
                 });
     }
-    
+
     /**
      * Does a GET request to get all events a user has joined and adds them to myEvents
      * in EventsData
