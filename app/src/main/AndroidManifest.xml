@@ -34,7 +34,8 @@
         <activity
             android:name=".views.MainActivity"
             android:launchMode="singleTask"
-            android:parentActivityName=".views.LoginActivity">
+            android:parentActivityName=".views.LoginActivity"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.calvin.cs262.cs262d.eventconnect.views.LoginActivity" />

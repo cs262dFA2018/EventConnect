@@ -15,23 +15,20 @@
     android:background="@drawable/expanded_card_background_light"
     >
 
-    <!-- back arrow -->
-    <ImageButton
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="32dp"
-        android:src="?attr/homeAsUpIndicator"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        />
-
     <!-- a container for the textviews in the expanded event view -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="32dp"
+            android:src="?attr/homeAsUpIndicator"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
         <!-- host label -->
         <TextView
             android:id="@+id/host_label_text"
@@ -39,8 +36,6 @@
             android:layout_height="wrap_content"
             android:text="@string/host_label"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- host name -->
@@ -49,8 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- title label -->
@@ -60,8 +53,6 @@
             android:layout_height="wrap_content"
             android:text="@string/title_label"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- title -->
@@ -70,8 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- category label -->
@@ -81,8 +70,6 @@
             android:layout_height="wrap_content"
             android:text="@string/category"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- category -->
@@ -91,8 +78,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
 
@@ -103,8 +88,6 @@
             android:layout_height="wrap_content"
             android:text="@string/description_label"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- description -->
@@ -113,8 +96,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- date label -->
@@ -123,8 +104,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- date -->
@@ -133,8 +112,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- Time label-->
@@ -143,8 +120,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- time -->
@@ -153,8 +128,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- location label  -->
@@ -163,8 +136,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- location -->
@@ -173,8 +144,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- cost label -->
@@ -183,8 +152,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold|normal"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
         <!-- cost -->
@@ -193,8 +160,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="center"
-            android:layout_gravity="center"
             />
 
     </LinearLayout>

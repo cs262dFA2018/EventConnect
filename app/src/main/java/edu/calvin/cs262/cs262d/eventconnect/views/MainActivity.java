@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         //setup action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         //then set up toolbar/actionbar's up navigation
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
