@@ -7,12 +7,20 @@
     tools:context="edu.calvin.cs262.cs262d.eventconnect.views.MainActivity"
     >
 
+    <!--Add Event button-->
+    <item
+        android:id="@+id/action_add_event"
+        android:title="@string/add_event"
+        android:icon="@drawable/ic_add_white"
+        app:showAsAction="ifRoom"
+        />
+
     <!--Settings button-->
     <item
         android:id="@+id/action_settings"
         android:title="@string/settings_label"
         android:icon="@drawable/ic_settings_white_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 
 </menu>

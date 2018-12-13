@@ -1,6 +1,7 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,6 +50,7 @@ import java.util.List;
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private String currentTheme;
+    private Intent backToMain;
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -175,6 +177,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         //handle the rest of onCreate
         super.onCreate(savedInstanceState);
         setupActionBar();
+        //create an intent for returning a result to MainActivity (used in logging out).
+        backToMain = new Intent(SettingsActivity.this, MainActivity.class);
     }
 
     /**
@@ -213,6 +217,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             if (!super.onMenuItemSelected(featureId, item)) {
+                setResult(Activity.RESULT_CANCELED, backToMain);
                 finish();
             }
             return true;
@@ -249,12 +254,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             target.get(0).iconRes = R.drawable.ic_info_black_24dp;
             target.get(1).iconRes = R.drawable.ic_notifications_black_24dp;
             target.get(2).iconRes = R.drawable.ic_sync_black_24dp;
+            target.get(3).iconRes = R.drawable.ic_logout_black_24dp;
         }
         //else if white is needed, set icons to white
         else if (night_mode.equals("Dark")) {
             target.get(0).iconRes = R.drawable.ic_info_white_24dp;
             target.get(1).iconRes = R.drawable.ic_notifications_white_24dp;
             target.get(2).iconRes = R.drawable.ic_sync_white_24dp;
+            target.get(3).iconRes = R.drawable.ic_logout_white_24dp;
         }
     }
 
@@ -271,6 +278,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName);
     }
 
+    /**
+     * If the logout header is pressed, log out of the app.
+     * Otherwise, open up the appropriate preference fragment.
+     * @param header the header clicked
+     * @param position the position of the header clicked.
+     *
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onHeaderClick(Header header, int position) {
+        if (header.id == R.id.action_logout) {
+            setResult(Activity.RESULT_OK, backToMain);
+            finish();
+            return;
+        }
+        super.onHeaderClick(header, position);
+    }
 
     /*NOTE FROM LITTLESNOWMAN88:
      * The following sections of code are used for multi-pane settings UIs (such as on tablets).

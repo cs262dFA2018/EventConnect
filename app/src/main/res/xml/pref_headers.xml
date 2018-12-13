@@ -17,4 +17,10 @@
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
 
+    <header
+        android:id="@+id/action_logout"
+        android:icon="@drawable/ic_logout_black_24dp"
+        android:title="@string/log_out"
+        />
+
 </preference-headers>

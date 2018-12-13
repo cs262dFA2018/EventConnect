@@ -1,5 +1,6 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,12 +69,6 @@ public class MainActivity extends AppCompatActivity {
         //setup action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //then set up toolbar/actionbar's up navigation
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setHomeButtonEnabled(true);
-        }
 
         //next three lines are helper functions to keep onCreate() readable
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -155,9 +150,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    /** called whenever the user presses the up button or any menu item on MainActivity's toolbar
-     * On the up button pressed, the app "returns" to the login activity
+    /** called whenever the user presses the back button or any menu item on MainActivity's toolbar
+     * On the back button pressed, the MainActivity finishes and the app closes.
      * On settings button pressed, the Settings activity is launched.
+     * On the addEvent button clicked, the AddEvent activity is launched.
+     *
      * @param item, the menu item clicked by the user
      * @return handled by AppCompatActivity
      * @author Littlesnowman88
@@ -169,34 +166,55 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 /*IMPORTANT:
                  * Because LoginActivity launches as singleTask (see manifest),
-                 * this will not create multiple copies of startActivity.
+                 * this will not create multiple copies of loginActivity.
                  * Furthermore, finish() will ensure that MainActivity is ended.
+                 * Update: b/c LoginActivity is singleTask, finishing MainActivity without
+                 *      starting LoginActivity exits the app. Neat!
                  */
-                startActivity(mainToLogin);
                 finish();
                 break;
-
             case R.id.action_settings:
                 //Open the settings activity
-                startActivity(mainToSettings);
+                startActivityForResult(mainToSettings, 1);
+                break;
+            case R.id.action_add_event:
+                Intent addEvent = new Intent(MainActivity.this, AddEvent.class);
+                startActivity(addEvent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * called when SettingsActivity finishes, this determines whether to log out of the app or stay on MainActivity.
+     * @param requestCode the code sent by startActivityForResult
+     * @param resultCode the code returned by SettingsActivity
+     * @param data the data packed in SettingsActivity
+     * @author Littlesnowman88
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //if this is the activity started by action_settings
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                startActivity(mainToLogin);
+                finish();
+            }
+            //else, do nothing, Settings Activity was backed out of with no logging out.
+        }
+        //else do nothing. the request code isn't recognized.
+
+
+    }
+
     /** called when the user presses the back button.
-     * On back button pressed, the app "returns" to the login activity
+     * On back button pressed, MainActivity finishes, thus closing the app
+     * (this happens because LoginActivity is a singleTask, I think. Neat!)
+     *
      * @author Littlesnowman88
      */
     @Override
     public void onBackPressed() {
-        startActivity(mainToLogin);
         finish();
-    }
-
-    /**starts up the AddEvent activity**/
-    public void addEventClicked(View view) {
-        Intent addEvent = new Intent(MainActivity.this, AddEvent.class);
-        MainActivity.this.startActivity(addEvent);
     }
 }
