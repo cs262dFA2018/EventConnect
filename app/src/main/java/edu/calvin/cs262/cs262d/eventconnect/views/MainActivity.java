@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         //if this is the activity started by action_settings
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                startActivity(mainToLogin);
+                setResult(Activity.RESULT_OK);
                 finish();
             }
             //else, do nothing, Settings Activity was backed out of with no logging out.
@@ -219,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        setResult(Activity.RESULT_CANCELED);
         finish();
     }
 }

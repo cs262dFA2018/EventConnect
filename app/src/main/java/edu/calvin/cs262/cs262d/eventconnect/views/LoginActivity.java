@@ -3,6 +3,7 @@ package edu.calvin.cs262.cs262d.eventconnect.views;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -274,8 +275,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Intent startMain = new Intent(context, MainActivity.class);
             startMain.putExtra("UserID", LoginID);
             startMain.putExtra("UserPass", userPass);
-            startActivity(startMain);
+            startActivityForResult(startMain, 2);
         }
+    }
+
+    /**
+     * called when MainActivity finishes. If MainActivity finishes because of the
+     *  Logout button, don't quit this activity.
+     *  If MainActivity finishes because of the Back gutton, quit this activity.
+     * @param requestCode 2, an activity identifier of sorts. See above.
+     * @param resultCode Activity.RESULT_OK or Activity.RESULT_CANCELED
+     * @param data, any actions set by MainActivity
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 2) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                finish();
+            }
+            //else, stay on this screen.
+        }
+
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
