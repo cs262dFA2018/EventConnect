@@ -54,6 +54,11 @@ public final class EventsData {
         userPass = password;
     }
 
+    public String[] getCredentials() {
+        String[] creds = {userEmail, userPass};
+        return creds;
+    }
+
     /**
      * updateEvents gets all users, then populates events tabs, then
      *  populates the MyEvents tab.

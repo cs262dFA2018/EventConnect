@@ -35,7 +35,7 @@ import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
  * @author therOn
  */
 public class AddEvent extends AppCompatActivity {
-    private EditText eventTitle, eventDescription, eventHost, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity, eventTime;
+    private EditText eventTitle, eventDescription, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity, eventTime;
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener date;
     private Spinner eventCat;
@@ -66,7 +66,6 @@ public class AddEvent extends AppCompatActivity {
         //access the UI Edit Texts
         eventTitle = (EditText) findViewById(R.id.title);
         eventDescription = (EditText) findViewById(R.id.description);
-        eventHost = (EditText) findViewById(R.id.host);
         eventDate = (EditText) findViewById(R.id.date);
         eventTime = (EditText) findViewById(R.id.time);
         eventLocation = (EditText) findViewById(R.id.location);
@@ -189,7 +188,6 @@ public class AddEvent extends AppCompatActivity {
         String title = eventTitle.getText().toString();
         String desc = eventDescription.getText().toString();
         String loc;
-        String host;
         String cat = eventCat.getSelectedItem().toString();
         boolean errorFound = false;
         String date = eventDate.getText().toString();
@@ -202,18 +200,7 @@ public class AddEvent extends AppCompatActivity {
         Event event = new Event();
 
         //EVENT HOST
-        try {
-            host = eventHost.getText().toString();
-            if (!host.equals("")) {
-                event.setHost(host);
-            } else {
-                eventHost.setError(getString(R.string.error_empty_host));
-                Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_host),
-                        Toast.LENGTH_SHORT).show();
-                errorFound=true;
-            }
-        } catch (RuntimeException e) {
-        } // remember this catch block if we ever throw a runtimeException in the Event class for event.setHost(host)
+        event.setHost(EventsData.getInstance(null).getCredentials()[0]);
 
         //EVENT TITLE
         try{
