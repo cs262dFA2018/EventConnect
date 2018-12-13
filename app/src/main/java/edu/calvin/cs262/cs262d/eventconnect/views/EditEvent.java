@@ -4,10 +4,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -29,10 +30,11 @@ import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
 
 /**
- * AddEvent is the activity for adding a new event
+ * EditEvent is the activity for adding a new event
  * @author therOn
+ *
  */
-public class AddEvent extends AppCompatActivity {
+public class EditEvent extends AppCompatActivity {
     private EditText eventTitle, eventDescription, eventDate, eventLocation, eventCost, eventThreshold, eventCapacity, eventTime;
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener date;
@@ -42,10 +44,11 @@ public class AddEvent extends AppCompatActivity {
     private String currentTheme;
 
     /**
-     * onCreate initializes the AddEvent activity
+     * onCreate initializes the EditEvent activity
      * @param savedInstanceState bundle passed in when the activity is created
      * @author OneTrueAsian (Time & Date Dialog fragments)
      * @author RickRilled (category spinner)
+     * @author Littlesnowman88
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class AddEvent extends AppCompatActivity {
         currentTheme = sharedPrefs.getString("theme_preference", "Light"); //default to Light theme
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_edit_event);
 
         context = getBaseContext();
 
@@ -71,6 +74,43 @@ public class AddEvent extends AppCompatActivity {
         eventThreshold = (EditText) findViewById(R.id.threshold);
         eventCapacity = (EditText) findViewById(R.id.capacity);
 
+        //Then, set the UI Edit Texts based on the provided Event (given in Intent args)
+        Bundle eventInfo = getIntent().getExtras();
+        try {
+            eventTitle.setText(eventInfo.getString("title"));
+        } catch (java.lang.NullPointerException ne) {
+            eventTitle.clearComposingText();
+        }
+        try {
+            eventDescription.setText(eventInfo.getString("description"));
+        } catch (java.lang.NullPointerException ne) {
+            eventDescription.clearComposingText();
+        }
+        try {
+            eventLocation.setText(eventInfo.getString("location"));
+        } catch (java.lang.NullPointerException ne) {
+            eventLocation.clearComposingText();
+        }
+        try {
+            eventDate.setText(eventInfo.getString("date"));
+        } catch (java.lang.NullPointerException ne) {
+            eventDate.clearComposingText();
+        }
+        try {
+            eventCost.setText(String.format(Locale.getDefault(), Double.toString(eventInfo.getDouble("cost"))));
+        } catch (java.lang.NullPointerException ne) {
+            eventCost.clearComposingText();
+        } catch (NumberFormatException nfe) {
+            eventCost.clearComposingText();
+        }
+        try {
+            eventTime.setText(eventInfo.getString("time"));
+        } catch (java.lang.NullPointerException ne){
+            eventTime.clearComposingText();
+        }
+        eventThreshold.setText(Integer.toString(eventInfo.getInt("threshold")));
+        eventCapacity.setText(Integer.toString(eventInfo.getInt("capacity")));
+
         // onClick listener for eventDate to pull up the calendar widget
         eventDate.setOnClickListener(new View.OnClickListener() {
             /**
@@ -81,7 +121,7 @@ public class AddEvent extends AppCompatActivity {
              */
             @Override
             public void onClick(View view) {
-                DatePickerDialog datepicker = new DatePickerDialog(AddEvent.this, date,
+                DatePickerDialog datepicker = new DatePickerDialog(EditEvent.this, date,
                         calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
                 datepicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
@@ -115,7 +155,7 @@ public class AddEvent extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Calendar CurrentTime = Calendar.getInstance();
-                TimePickerDialog timePicker = new TimePickerDialog(AddEvent.this, Time,
+                TimePickerDialog timePicker = new TimePickerDialog(EditEvent.this, Time,
                         CurrentTime.get(Calendar.HOUR_OF_DAY), CurrentTime.get(Calendar.MINUTE), true);
                 timePicker.show();
             }
@@ -132,6 +172,18 @@ public class AddEvent extends AppCompatActivity {
         };
 
         eventCat = (Spinner) findViewById(R.id.event_cat);
+        String[] categories = getResources().getStringArray(R.array.event_cat);
+        String prevCat = eventInfo.getString("category");
+        int categoryIndex = 0;
+        if (! prevCat.equals("")) {
+            for (int i=1; i < categories.length; i++) {
+                if (categories[i].equals(prevCat)) {
+                    categoryIndex = i;
+                    break;
+                }
+            }
+        }
+
 
         //https://developer.android.com/guide/topics/ui/controls/spinner#java
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -141,7 +193,7 @@ public class AddEvent extends AppCompatActivity {
         cat_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         eventCat.setAdapter(cat_adapter);
-
+        eventCat.setSelection(categoryIndex);
 
         //setup toolbar bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -171,22 +223,21 @@ public class AddEvent extends AppCompatActivity {
     }
 
     /**
-     * Onclick for creating a database event object when the "create event" button is clicked,
+     * Onclick for saving a database event object when the "save event" button is clicked,
      * setting the time, date, title, etc.
      *
      * @param view the viewholder for the event cards
-     * Onclick for creating a database event object when the "create event" button is clicked,
-     * setting the time, date, title, etc.
-     *
      * @author OneTrueAsian (SetError)
+     * @author Littlesnowman88
      */
-    public void onCreateEventClicked(View view) throws ParseException {
+    public void onSaveEventClicked(View view) throws ParseException {
 
         //access the data from the UI elements
         String title = eventTitle.getText().toString();
         String desc = eventDescription.getText().toString();
         String loc;
         String cat = eventCat.getSelectedItem().toString();
+        TextView CatError = (TextView)eventCat.getSelectedView();
         boolean errorFound = false;
         String date = eventDate.getText().toString();
         String time = eventTime.getText().toString();
@@ -196,6 +247,9 @@ public class AddEvent extends AppCompatActivity {
         final int capacity;
 
         Event event = new Event();
+        Bundle eventInfo = getIntent().getExtras();
+        event.setId(eventInfo.getInt("id"));
+        event.setCurrentInterest(eventInfo.getInt("currentInterest"));
 
         //EVENT HOST
         event.setHost(EventsData.getInstance(null).getCredentials()[0]);
@@ -206,7 +260,7 @@ public class AddEvent extends AppCompatActivity {
                 event.setTitle(title);
             } else {
                 eventTitle.setError(getString(R.string.error_faulty_title));
-                Toast.makeText(AddEvent.this, context.getString(R.string.error_faulty_title),
+                Toast.makeText(EditEvent.this, context.getString(R.string.error_faulty_title),
                         Toast.LENGTH_SHORT).show();
                 errorFound=true;
             }
@@ -220,13 +274,13 @@ public class AddEvent extends AppCompatActivity {
             eventDate.setError(null); //clear any possible error messages since EditText is hidden behind a dialog.
         } catch (ParseException e) {
             eventDate.setError(getString(R.string.error_empty_date));
-            Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_date),
+            Toast.makeText(EditEvent.this, context.getString(R.string.error_empty_date),
                     Toast.LENGTH_SHORT).show();
             errorFound=true;
         } catch (RuntimeException e) {
             // this should not run because previous dates are disabled
             eventDate.setError(getString(R.string.error_invalid_date));
-            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_date),
+            Toast.makeText(EditEvent.this, context.getString(R.string.error_invalid_date),
                     Toast.LENGTH_SHORT).show();
             errorFound=true;
         }
@@ -237,12 +291,12 @@ public class AddEvent extends AppCompatActivity {
             eventTime.setError(null); //clear any possible error messages since EditText is hidden behind a dialog.
         } catch (ParseException e) {
             eventTime.setError(getString(R.string.error_empty_time));
-            Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_time),
+            Toast.makeText(EditEvent.this, context.getString(R.string.error_empty_time),
                     Toast.LENGTH_SHORT).show();
             errorFound=true;
         } catch (RuntimeException e) {
             eventTime.setError(getString(R.string.error_invalid_time));
-            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_time), Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditEvent.this, context.getString(R.string.error_invalid_time), Toast.LENGTH_SHORT).show();
             errorFound=true;
         }
 
@@ -253,7 +307,7 @@ public class AddEvent extends AppCompatActivity {
                 event.setLocation(loc);
             } else {
                 eventLocation.setError(getString(R.string.error_empty_location));
-                Toast.makeText(AddEvent.this, context.getString(R.string.error_empty_location),
+                Toast.makeText(EditEvent.this, context.getString(R.string.error_empty_location),
                         Toast.LENGTH_SHORT).show();
                 errorFound=true;
             }
@@ -264,7 +318,7 @@ public class AddEvent extends AppCompatActivity {
         //EVENT COST
         try {
             cost = Double.parseDouble(eventCost.getText().toString());
-        } catch (java.lang.NumberFormatException e) {
+        } catch (NumberFormatException e) {
             cost = 0;
         }
         event.setCost(cost);
@@ -273,14 +327,14 @@ public class AddEvent extends AppCompatActivity {
         try {
             threshold = (int) Math.floor(Double.parseDouble(eventThreshold.getText().toString()));
             event.setMinThreshold(threshold);
-        } catch (java.lang.NumberFormatException e) {
+        } catch (NumberFormatException e) {
             eventThreshold.setError(getString(R.string.error_invalid_number));
-            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_number),
+            Toast.makeText(EditEvent.this, context.getString(R.string.error_invalid_number),
                     Toast.LENGTH_SHORT).show();
             errorFound=true;
         } catch (RuntimeException e) {
             eventThreshold.setError(getString(R.string.error_invalid_MinNumber));
-            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_MinNumber),
+            Toast.makeText(EditEvent.this, context.getString(R.string.error_invalid_MinNumber),
                     Toast.LENGTH_SHORT).show();
             errorFound=true;
         }
@@ -297,14 +351,14 @@ public class AddEvent extends AppCompatActivity {
                 capacity = -1;
             }
             event.setMaxCapacity(capacity);
-        } catch (java.lang.NumberFormatException e) {
+        } catch (NumberFormatException e) {
             eventCapacity.setError(getString(R.string.error_invalid_number));
-            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_number),
+            Toast.makeText(EditEvent.this, context.getString(R.string.error_invalid_number),
                     Toast.LENGTH_SHORT).show();
             errorFound=true;
         } catch (RuntimeException e) {
             eventCapacity.setError(getString(R.string.error_invalid_MaxNumber));
-            Toast.makeText(AddEvent.this, context.getString(R.string.error_invalid_MaxNumber),
+            Toast.makeText(EditEvent.this, context.getString(R.string.error_invalid_MaxNumber),
                     Toast.LENGTH_SHORT).show();
             errorFound=true;
         }
@@ -325,7 +379,7 @@ public class AddEvent extends AppCompatActivity {
         if (!errorFound) { //if all required event information is entered and information is validated:
             //access and update the database.
             event.setInterest();
-            EventsData.getInstance(null).addNewEvent(event);
+            EventsData.getInstance(null).editEvent(event);
             finish();
         }
 

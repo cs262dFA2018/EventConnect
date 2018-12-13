@@ -3,10 +3,13 @@ package edu.calvin.cs262.cs262d.eventconnect.views;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -14,7 +17,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -34,33 +36,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventConnector;
+import edu.calvin.cs262.cs262d.eventconnect.data.UserDAO;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
-import edu.calvin.cs262.cs262d.eventconnect.tools.LoginHandler;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, LoginHandler {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-
     //app theme setting string
-    String currentTheme;
+    private String currentTheme;
+
+    //login email and password strings
+    private String email, password;
+    //list of users who exist in the database. Used for event host features.
+    private List<UserDAO> users;
+    //used to get Users from the database.
+    private static final String BASE_URL = "https://calvincs262-fall2018-cs262d.appspot.com/eventconnect/v1/";
+    private static final String LOGIN_FETCH = "fetchUsers";
+    private static final String LOGIN_POST = "postNewUser";
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -120,63 +120,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-/**
- * Code for accessing contacts.
- * For the time being, we do not need this as of right now.
- */
-//    private void populateAutoComplete() {
-//        if (!mayRequestContacts()) {
-//            return;
-//        }
-//
-//        getLoaderManager().initLoader(0, null, this);
-//    }
 
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
+    /**
+     * Register the BroadcastManager here to receive messages from EventConnector.
+     *
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(context).registerReceiver(appMessageReceiver,
+                new IntentFilter(LOGIN_FETCH));
+        LocalBroadcastManager.getInstance(context).registerReceiver(appMessageReceiver,
+                new IntentFilter(LOGIN_POST));
+    }
 
-//    /**
-//     * Callback received when a permissions request has been completed.
-//     */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        if (requestCode == REQUEST_READ_CONTACTS) {
-//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                populateAutoComplete();
-//            }
-//        }
-//    }
-
-//    /**
-//     * Set up the {@link android.app.ActionBar}, if the API is available.
-//     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    private void setupActionBar() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-//            // Show the Up button in the action bar.
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        }
-//    }
+    /**
+     * Unregister the BroadcastManager here to stop receiving messages from EventConnector.
+     *
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(appMessageReceiver);
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -185,17 +153,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * @author Android Studio
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        email = mEmailView.getText().toString();
+        password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -226,8 +190,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(this, email, password);
-            mAuthTask.execute((Void) null);
+            if (users == null) {
+                users = new ArrayList<>();
+            }
+            EventConnector ec = new EventConnector(context);
+
+            EventConnector.getUsersForLogin(this, users, BASE_URL + "users");
         }
     }
 
@@ -240,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private boolean isEmailValid(String email) {
         //makes sure email ends with .com or .edu
-        return email.contains("@") && (email.endsWith(".com") || email.endsWith(".edu"));
+        return email.length() < 20 && email.contains("@") && (email.endsWith(".com") || email.endsWith(".edu"));
     }
 
     /**
@@ -252,8 +220,71 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private boolean isPasswordValid(String password) {
         //is a valid password before sending to server
-        if (password.length() > 4) return true;
+        if (password.length() > 4 && password.length() < 20) return true;
         return false;
+    }
+
+    /**
+     * handles Broadcasted Intents from EventConnector.
+     * If the intent really is from EventConnector, this broadcast receiver handles logging in and starting MainActivity.
+     * appMessageReceiver is initialized outside of onCreate because only one ever needs to be made.
+     *
+     * @author Littlesnowman88
+     */
+    private final BroadcastReceiver appMessageReceiver = new BroadcastReceiver() {
+        /**
+         * onReceive handles broadcasts received from EventConnector
+         *
+         * @param context the context that this receiver listens to.
+         * @param intent the message sent out by EventConnector
+         *
+         * @author Littlesnowman88
+         */
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null) {
+                if (intent.getAction().equals(LOGIN_FETCH)) {
+                    //once the users are fetched, see if the current login email already exists.
+                    for (UserDAO user : users) {
+                        //if the current login email already exists, start MainActivity.
+                        if (user.getUsername().equals(email)) {
+                            showProgress(false);
+                            completeLoginTask(Integer.toString(AppCompatActivity.RESULT_OK), email, password);
+                        }
+                    }
+                    //if the current login email doesn't already exist, post the current login email to the server.
+                    EventConnector.postUserFromLogin(context, BASE_URL + "user/", email, password);
+                }
+                //result from a login email posted to the database
+                else if (intent.getAction().equals(LOGIN_POST)) {
+                    //startMainActivity.
+                    showProgress(false);
+                    completeLoginTask(Integer.toString(AppCompatActivity.RESULT_OK), email, password);
+                }
+            }
+        }
+    };
+
+    /** starts main Activity when the AsyncTask Login completes
+     * @author Littlesnowman88
+     * @param result, whether the asynctask succeeded or failed
+     */
+    public void completeLoginTask(String result, String LoginID, String userPass) {
+        if (result.equals(Integer.toString(AppCompatActivity.RESULT_OK))) {
+            Intent startMain = new Intent(context, MainActivity.class);
+            startMain.putExtra("UserID", LoginID);
+            startMain.putExtra("UserPass", userPass);
+            startActivity(startMain);
+        }
+    }
+
+    /**
+     * closes the app when the user presses Android's back arrow
+     * @author Littlesnowman88
+     */
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     /**
@@ -355,7 +386,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
-
     /**
      * @author Android Studio
      */
@@ -367,87 +397,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     * @author Android Studio
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-        private LoginHandler taskFinisher;
-
-        UserLoginTask(LoginHandler taskCompleter, String email, String password) {
-            taskFinisher = taskCompleter;
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                taskFinisher.completeLoginTask(Integer.toString(AppCompatActivity.RESULT_OK), mEmail);
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-    /** starts main Activity when the AsyncTask Login completes
-     * @author Littlesnowman88
-     * @param result, whether the asynctask succeeded or failed
-     */
-    @Override
-    public void completeLoginTask(String result, String LoginID) {
-        if (result.equals(Integer.toString(AppCompatActivity.RESULT_OK))) {
-            Intent startMain = new Intent(context, MainActivity.class);
-            startMain.putExtra("UserID", LoginID);
-            startActivity(startMain);
-        }
-    }
-
-    /**
-     * closes the app when the user presses Android's back arrow
-     * @author Littlesnowman88
-     */
-    @Override
-    public void onBackPressed() {
-        finish();
     }
 }
 

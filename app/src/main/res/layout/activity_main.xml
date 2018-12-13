@@ -7,23 +7,6 @@
     android:layout_height="match_parent"
     >
 
-    <!--the AddEvent button-->
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_event_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="@dimen/button_margin"
-        android:layout_marginRight="@dimen/button_margin"
-        android:layout_marginBottom="@dimen/button_margin"
-        app:srcCompat="@drawable/ic_add_white"
-        app:backgroundTint="@color/colorPrimary"
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
-        android:onClick="addEventClicked" />
-
     <!--the toolbar for navigating to LoginActivity and SettingsActivity-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

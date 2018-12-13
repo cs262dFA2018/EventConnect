@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="edu.calvin.cs262.cs262d.eventconnect.views.AddEvent"
+    tools:context="edu.calvin.cs262.cs262d.eventconnect.views.EditEvent"
 
     >
     <android.support.v7.widget.Toolbar
@@ -180,8 +180,8 @@
                 android:id="@+id/create_event"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/create_event"
-                android:onClick="onCreateEventClicked"/>
+                android:text="@string/save_event"
+                android:onClick="onSaveEventClicked"/>
         </LinearLayout>
     </ScrollView>
 

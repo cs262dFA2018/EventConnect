@@ -1,5 +1,6 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,24 +8,26 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
-import edu.calvin.cs262.cs262d.eventconnect.data.MockDatabase;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 import edu.calvin.cs262.cs262d.eventconnect.tools.AppThemeChanger;
+import edu.calvin.cs262.cs262d.eventconnect.tools.EventsPoller;
 import edu.calvin.cs262.cs262d.eventconnect.tools.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     private Context context;
     private Intent mainToLogin, mainToSettings;
-    private String currentUser;
+    private String currentUser, currentPass;
     private String currentTheme;
+
+    //Received from EventConnector, this is the intent filter used in appBroadcastReceiver. (see TabFragment)
+    private static final String DATA_UPDATE = "processConnections";
 
     /**
      * creates the Main Activity:
@@ -48,22 +51,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
 
+        //save the currently logged-in user
+        currentUser = getIntent().getStringExtra("UserID");
+        currentPass = getIntent().getStringExtra("UserPass");
+        //give EventsData the currently logged in Username and Password.
+        EventsData.getInstance(null).setCredentials(currentUser, currentPass);
+
+        /*start EventsPoller, the service responsible for polling the server with get requests.
+         * EventsPoller also creates an EventConnector for MainActivity, here.
+         */
+        Intent mainToDataManager = new Intent(context, EventsPoller.class);
+        mainToDataManager.setAction(DATA_UPDATE);
+        startService(mainToDataManager);
+
+        mainToLogin = new Intent(MainActivity.this, LoginActivity.class);
+
         //establish connection with other activities
         mainToLogin  = new Intent(context, LoginActivity.class);
         mainToSettings = new Intent(context, SettingsActivity.class);
 
-        //save the currently logged-in user
-        currentUser = getIntent().getStringExtra("UserID");
-
         //setup action bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //then set up toolbar/actionbar's up navigation
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setHomeButtonEnabled(true);
-        }
 
         //next three lines are helper functions to keep onCreate() readable
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -92,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.addTab(tabs.newTab().setText(R.string.tab_label_confirmed));
         tabs.addTab(tabs.newTab().setText(R.string.tab_label_my));
         // Set the tabs to fill the entire layout.
-        tabs.setTabGravity(tabs.GRAVITY_FILL);
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
     }
 
     /** buildPagerAdapter is a helper function refactored from onCreate
@@ -145,9 +154,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    /** called whenever the user presses the up button or any menu item on MainActivity's toolbar
-     * On the up button pressed, the app "returns" to the login activity
+    /** called whenever the user presses the back button or any menu item on MainActivity's toolbar
+     * On the back button pressed, the MainActivity finishes and the app closes.
      * On settings button pressed, the Settings activity is launched.
+     * On the addEvent button clicked, the AddEvent activity is launched.
+     *
      * @param item, the menu item clicked by the user
      * @return handled by AppCompatActivity
      * @author Littlesnowman88
@@ -159,34 +170,55 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 /*IMPORTANT:
                  * Because LoginActivity launches as singleTask (see manifest),
-                 * this will not create multiple copies of startActivity.
+                 * this will not create multiple copies of loginActivity.
                  * Furthermore, finish() will ensure that MainActivity is ended.
+                 * Update: b/c LoginActivity is singleTask, finishing MainActivity without
+                 *      starting LoginActivity exits the app. Neat!
                  */
-                startActivity(mainToLogin);
                 finish();
                 break;
-
             case R.id.action_settings:
                 //Open the settings activity
-                startActivity(mainToSettings);
+                startActivityForResult(mainToSettings, 1);
+                break;
+            case R.id.action_add_event:
+                Intent addEvent = new Intent(MainActivity.this, AddEvent.class);
+                startActivity(addEvent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * called when SettingsActivity finishes, this determines whether to log out of the app or stay on MainActivity.
+     * @param requestCode the code sent by startActivityForResult
+     * @param resultCode the code returned by SettingsActivity
+     * @param data the data packed in SettingsActivity
+     * @author Littlesnowman88
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //if this is the activity started by action_settings
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                startActivity(mainToLogin);
+                finish();
+            }
+            //else, do nothing, Settings Activity was backed out of with no logging out.
+        }
+        //else do nothing. the request code isn't recognized.
+
+
+    }
+
     /** called when the user presses the back button.
-     * On back button pressed, the app "returns" to the login activity
+     * On back button pressed, MainActivity finishes, thus closing the app
+     * (this happens because LoginActivity is a singleTask, I think. Neat!)
+     *
      * @author Littlesnowman88
      */
     @Override
     public void onBackPressed() {
-        startActivity(mainToLogin);
         finish();
-    }
-
-    /**starts up the AddEvent activity**/
-    public void addEventClicked(View view) {
-        Intent addEvent = new Intent(MainActivity.this, AddEvent.class);
-        MainActivity.this.startActivity(addEvent);
     }
 }

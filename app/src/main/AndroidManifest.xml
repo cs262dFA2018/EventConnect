@@ -12,6 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".tools.EventsPoller"
+            >
+        </service>
         <activity
             android:name=".views.LoginActivity"
             android:label="@string/title_activity_login"
@@ -33,11 +37,19 @@
             android:parentActivityName=".views.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.calvin.cs262.cs262d.eventconnect.views.LoginActivity" />
+                android:value="edu.calvin.cs262.cs262d.eventconnect.views.LoginActivity"
+                />
         </activity>
         <activity
             android:name=".views.AddEvent"
             android:parentActivityName=".views.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.calvin.cs262.cs262d.eventconnect.views.MainActivity" />
+        </activity>
+        <activity
+            android:name=".views.EditEvent"
+            android:parentActivityName=".views.EditEvent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.calvin.cs262.cs262d.eventconnect.views.MainActivity" />

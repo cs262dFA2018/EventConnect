@@ -6,15 +6,20 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
-import java.util.ArrayList;
+
+import java.util.List;
+
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 
 
 /**an adapter class used by MainActivity's Fragments' Recycle Views.
@@ -23,13 +28,14 @@ import edu.calvin.cs262.cs262d.eventconnect.data.Event;
  */
 public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdapter.CardContainerAdapterViewHolder> {
 
-    private ArrayList<Event> cards;
+    private List<Event> cards;
 
     private final CardContainerAdapterOnClickHandler click_handler;
     private Context context;
     private final String ExpandCard = "Expand Thy Card";
-    private final String MoveCard = "Move Thy Card";
-    private final String UnmoveCard = "Un-move Thy Card";
+    private final String JoinEvent = "Join Event";
+    private final String LeaveEvent = "Leave Event";
+    private final String EditCard = "Edit Event";
     private final String DeleteCard = "Delete Event";
     private final String MyCard = "Add to My Events";
     private final String NotMyCard = "Remove from My Events";
@@ -54,10 +60,9 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      * handles clicks by expanding a card or marking interest
      */
     public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView eventTitle, eventDescription;
+        private TextView eventTitle, eventDescription, eventMenu;
         private Button interestedButton;
         private CardView eventCard;
-        private Button deleteButton;
         private final int animationTime = 500;
 
         /**
@@ -71,14 +76,13 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
             eventTitle = (TextView) view.findViewById(R.id.event_title);
             eventDescription = (TextView) view.findViewById(R.id.event_desc);
             interestedButton = (Button) view.findViewById(R.id.interested_button);
-            deleteButton = (Button) view.findViewById(R.id.delete_button);
+            eventMenu = (TextView) view.findViewById(R.id.event_options);
             eventCard.setOnClickListener(this);
             eventTitle.setOnClickListener(this);
             eventDescription.setOnClickListener(this);
             interestedButton.setOnClickListener(this);
             interestedButton.setEnabled(true);
-            deleteButton.setOnClickListener(this);
-            deleteButton.setEnabled(true);
+            eventMenu.setOnClickListener(this);
         }
 
         /**
@@ -90,81 +94,45 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
          */
         @Override
         public void onClick(View view) {
-            Event event_clicked = cards.get(getAdapterPosition());
+            final Event event_clicked = cards.get(getAdapterPosition());
             if (view == interestedButton){
-
-                /* If current interest is false, mark they're interested now
-                 */
+                /* If indicating interest, join the event */
                 if (!event_clicked.getInterest()) {
-                    event_clicked.setInterest();
-                    event_clicked.incrementCurrentInterest();
-                    click_handler.onClick(event_clicked, MyCard);
-                    interestedButton.setText(context.getString(R.string.interested));
-                    if (event_clicked.shouldMove()) {
-                        /*when we have enough interest, get data form data base and reset card
-                         */
-                        interestedButton.setEnabled(false);
-                        click_handler.onClick(event_clicked, MoveCard);
-                        event_clicked.clearMoved();
-
-                        //remove the event card from this UI
-                        deleteCard(event_clicked);
-                    }
+                    click_handler.onClick(event_clicked, JoinEvent);
                 }
-                /* If current interest is true, mark they're not interested anymore
+                /* Else, indicating disinterest, so leave the event */
+                else {
+                    click_handler.onClick(event_clicked, LeaveEvent);
+                }
+            } else if (view == eventMenu) {
+                /* thanks to Belal Khan for inspiration. See
+                 * https://www.simplifiedcoding.net/create-options-menu-recyclerview-item-tutorial/#Creating-Menu-Items
+                 * for algorithmic pattern.
                  */
-                else if (event_clicked.getInterest()) {
-                    event_clicked.clearInterest();
-                    event_clicked.decrementCurrentInterest();
-                    interestedButton.setText(context.getString(R.string.not_interested));
-                    if (event_clicked.shouldMove()) {
-                        /* If too little interest, move card back to potential event
-                         */
-                        interestedButton.setEnabled(false);
-                        click_handler.onClick(event_clicked, UnmoveCard);
-                        event_clicked.clearMoved();
-                        //remove the event card from this UI
-                        deleteCard(event_clicked);
-                    }
-                    click_handler.onClick(event_clicked, NotMyCard);
-                }
-            } else if (view == deleteButton) {
-                click_handler.onClick(event_clicked, DeleteCard);
+                //Create the popup menu with Edit Event and Delete Event
+                PopupMenu menu = new PopupMenu(context, eventMenu);
+                menu.inflate(R.menu.menu_card);
+                //click handler for menu items
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                   @Override
+                   public boolean onMenuItemClick(MenuItem item) {
+                       switch (item.getItemId()) {
+                           case R.id.action_edit_event:
+                               click_handler.onClick(event_clicked, EditCard);
+                               break;
+                           case R.id.action_delete_event:
+                               click_handler.onClick(event_clicked, DeleteCard);
+                               break;
+                       }
+                       return false; //I'm not sure why... -LS88
+                   }
+                });
+                //display the popup menu
+                menu.show();
+                //
             } else if (view == eventTitle || view == eventDescription || view == eventCard) {
-                /* show toast
-                 * also display the expanded event view
-                 */
                 click_handler.onClick(event_clicked, ExpandCard);
             }
-        }
-
-        /**
-         * deleteCard takes a corresponding Event object and removes the event's card from the current UI
-         * @param event_clicked the Event Object whose card needs to be removed
-         * @author Littlesnowman88
-         */
-        public void deleteCard(Event event_clicked) {
-            Animation animation = new AlphaAnimation(1.0f, 0.0f);
-            animation.setDuration(animationTime);
-            eventCard.startAnimation(animation);
-
-            //Wait to remove the event from UI until animation finishes
-            Runnable eventRemover = createRunnable(event_clicked);
-            new Handler().postDelayed(eventRemover, animationTime);
-        }
-
-        /**
-         * Runnable to remove a card
-         * @param e Event whose card to remove
-         * @return result of removeCard to affirm the card was removed
-         */
-        private Runnable createRunnable(final Event e){
-            //this runnable simply calls removeCard.
-            return new Runnable(){
-                public void run(){
-                    removeCard(e);
-                }
-            };
         }
     }
 
@@ -187,6 +155,7 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     }
 
     /**onBindViewHolder takes data from Event items and places the data onto the card_UI.
+     * Now, onBindViewHolder takes into account whether the currently logged in user owns an event or not.
      * @param card_holder the viewholder defined in this adapter class
      * @param position the card at which the adapter is currently looking
      * Postcondition: the card's UI elements are set with its Event information.
@@ -196,11 +165,21 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
         Event current_card = cards.get(position);
         card_holder.eventTitle.setText(current_card.getTitle());
         card_holder.eventDescription.setText(current_card.getDescription());
-        card_holder.interestedButton.setEnabled(true);
-        if(current_card.getInterest()){
-            card_holder.interestedButton.setText(context.getString(R.string.interested));
-        } else {
-            card_holder.interestedButton.setText(context.getString(R.string.not_interested));
+        //if I am this event's owner, hide the interested button but display the menu options.
+        if (current_card.getHost().equals(EventsData.getInstance(null).getCredentials()[0])) {
+            card_holder.interestedButton.setEnabled(false);
+            card_holder.interestedButton.setVisibility(View.GONE);
+            card_holder.eventMenu.setVisibility(View.VISIBLE);
+        }
+        //else, I am not this event's owner. Show the interested button but hide the menu options.
+        else {
+            card_holder.interestedButton.setEnabled(true);
+            if(current_card.getInterest()){
+                card_holder.interestedButton.setText(context.getString(R.string.interested));
+            } else {
+                card_holder.interestedButton.setText(context.getString(R.string.not_interested));
+            }
+            card_holder.eventMenu.setVisibility(View.GONE);
         }
     }
 
@@ -212,35 +191,8 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
     }
 
     /** set the cards in the adapter's data structure **/
-    public void setCards(ArrayList<Event> new_cards) {
+    public void setCards(List<Event> new_cards) {
         cards = new_cards;
         notifyDataSetChanged(); //a method inside of Recycler View.
-    }
-
-    private void addCard(Event event){
-        cards.add(event);
-        notifyDataSetChanged();
-    }
-
-    private void removeCard(Event event){
-        cards.remove(event);
-        notifyDataSetChanged();
-    }
-
-    /**
-     * Placeholder function for removing card that will work with animation in the future
-     * Currently not in use, only calls removeCard
-     * @param event Event to delete
-     * @author ksn7
-     */
-    public void deleteEvent(Event event) {
-        /*
-        TODO: find some way of telling this event's corresponding view holder to run deleteCard;
-        TODO: Then this call to removeCard(event) can be deleted.
-        Key problem: How to access an instance of View Holder; then, how to access the right instance?
-        Possible help: cards[index] might match the indexing of ViewHolder, if an array or list of
-        current view holders exists
-        */
-        removeCard(event);
     }
 }

@@ -1,30 +1,40 @@
 package edu.calvin.cs262.cs262d.eventconnect.views;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.Locale;
 
 import edu.calvin.cs262.cs262d.eventconnect.R;
 import edu.calvin.cs262.cs262d.eventconnect.data.Event;
+import edu.calvin.cs262.cs262d.eventconnect.data.EventsData;
 
 //based on android's documentation, https://developer.android.com/reference/android/app/DialogFragment
 public class ExpandedCard extends DialogFragment {
 
-    private TextView hostLabel, hostView, titleLabel, titleView, descriptionLabel, descriptionView,
-
-    dateLabel, dateView, locationLabel, locationView, costLabel, costView, catView, catLabel, timeLabel, timeView;
+    private TextView hostLabel, hostView, titleLabel, titleView, descriptionLabel, descriptionView;
+    private TextView dateLabel, dateView, locationLabel, locationView, costLabel, costView;
+    private TextView catView, catLabel, timeLabel, timeView, thresholdLabel, thresholdView;
+    private TextView capacityLabel, capacityView, interestLabel, interestView;
     private boolean interested;
     private String title, description, host, location, date, cat, time;
     private double cost;
+    private int threshold, capacity, interestCount;
+    private Toolbar toolbar;
 
     /**
      * Create a new instance of ExpandedCard, providing arguments from an Event
@@ -46,7 +56,9 @@ public class ExpandedCard extends DialogFragment {
         args.putString("cat", event.getCategory());
         args.putDouble("cost", event.getCost());
         args.putString("time", event.getTime());
-
+        args.putInt("threshold", event.getMinThreshold());
+        args.putInt("capacity", event.getMaxCapacity());
+        args.putInt("interest", event.getCurrentInterest());
 
         ec.setArguments(args);
 
@@ -61,12 +73,7 @@ public class ExpandedCard extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /**
-         *Create an application context to connect Expanded card to main
-         *Assign to the intent that connects expanded card view to main
-         */
-
-        //access the event Data
+        /* access the event Data */
         Bundle args = getArguments();
         try {
             title = args.getString("title");
@@ -113,9 +120,9 @@ public class ExpandedCard extends DialogFragment {
         } catch (java.lang.NullPointerException ne){
             cat ="";
         }
-
-
-
+        threshold = args.getInt("threshold");
+        capacity = args.getInt("capacity");
+        interestCount = args.getInt("interest");
     }
 
     /**
@@ -154,6 +161,26 @@ public class ExpandedCard extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //set a transparent background so rounded corners can show up. Rounded corners specified in Expanded Card's xml.
+        try {
+            getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        } catch (java.lang.NullPointerException ne) {
+            ne.printStackTrace();
+            //don't do anything else because this is just a UI Beautification.
+        }
+
+        ScrollView rootView = view.findViewById(R.id.expanded_root_layout);
+
+        // set the expanded card's background to correspond with light or dark mode.
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String darkMode = sharedPrefs.getString("theme_preference", "Light");
+        if (darkMode.equals("Light")) {
+            rootView.setBackground(getResources().getDrawable(R.drawable.expanded_card_background_light));
+        }
+        else if (darkMode.equals("Dark")) {
+            rootView.setBackground(getResources().getDrawable(R.drawable.expanded_card_background_dark));
+        }
+
         //access the UI
         hostLabel = (TextView) view.findViewById(R.id.host_label_text);
         hostView = (TextView) view.findViewById(R.id.host_text);
@@ -171,6 +198,12 @@ public class ExpandedCard extends DialogFragment {
         catView = view.findViewById(R.id.cat_text);
         timeLabel = (TextView) view.findViewById(R.id.time_label_text);
         timeView = (TextView) view.findViewById(R.id.time_text);
+        thresholdLabel = (TextView) view.findViewById(R.id.threshold_label_text);
+        thresholdView = (TextView) view.findViewById(R.id.threshold_text);
+        capacityLabel = (TextView) view.findViewById(R.id.capacity_label_text);
+        capacityView = (TextView) view.findViewById(R.id.capacity_text);
+        interestLabel = (TextView) view.findViewById(R.id.interest_label_text);
+        interestView = (TextView) view.findViewById(R.id.interest_text);
 
         //set UI text
         hostLabel.setText(getString(R.string.host_label));
@@ -188,24 +221,21 @@ public class ExpandedCard extends DialogFragment {
         costLabel.setText(getString(R.string.cost_label));
         costView.setText(String.format(Locale.getDefault(), Double.toString(cost), Double.toString(cost)));
         catView.setText(cat);
-
-        //TODO: click listener for a native copy of the "interested" button
-        //TODO: when TabFragment is refreshed, maybe the buttons will have to be updated?
-        //first access UI above
-       /*
-       button.setOnClickListener(new onClickListener() {
-           public void onClick(View v) {
-               if button is confirmed text:
-                   set denied text
-                   update calling activity with the change in data? or manipulate the db directly?
-               else:
-                   make button text positive
-                   update calling activity with the change in data? or manipulate the db directly?
-        */
-       /*
-       how to call up to the owning activity:
-       ((FragmentDialog)getActivity()).showDialog();
-        */
+        thresholdLabel.setText(getString(R.string.threshold_label));
+        thresholdView.setText(Integer.toString(threshold));
+        capacityLabel.setText(getString(R.string.capacity_label));
+        capacityView.setText(Integer.toString(capacity));
+        interestLabel.setText(getString(R.string.interest_label));
+        interestView.setText(Integer.toString(interestCount));
+        //if I (currently logged in user) own this event, display threshold, capacity, and interest.
+        if (host.equals(EventsData.getInstance(null).getCredentials()[0])) {
+            thresholdLabel.setVisibility(View.VISIBLE);
+            thresholdView.setVisibility(View.VISIBLE);
+            capacityLabel.setVisibility(View.VISIBLE);
+            capacityView.setVisibility(View.VISIBLE);
+            interestLabel.setVisibility(View.VISIBLE);
+            interestView.setVisibility(View.VISIBLE);
+        }
     }
 
 

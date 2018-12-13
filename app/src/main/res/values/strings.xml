@@ -15,6 +15,7 @@
     <string name="Delete_Event_Worked">Event Deleted</string>
 
     <!-- String related to create new event -->
+    <string name="add_event">Add Event</string>
     <string name="host_label"><b>Hosted By</b></string>
     <string name="host_hint">Host of event</string>
     <string name="title_label"><b>Title</b></string>
@@ -28,14 +29,15 @@
     <string name="cost_label"><b>Cost</b></string>
     <string name="cost_hint">$1.00</string>
     <string name="threshold_label"><b>Threshold</b></string>
-    <string name="threshold_hint">Minimum amount of people for event</string>
+    <string name="threshold_hint">Min. # of people for event (including you)</string>
     <string name="capacity_label"><b>Capacity</b></string>
-    <string name="capacity_hint">Max capacity for event</string>
+    <string name="capacity_hint">Max capacity for event (including you)</string>
     <string name="category_label"><b>Category</b></string>
     <string name="create_event">Create Event</string>
     <string name="failed_transaction_manager">Sorry, but fragment manager could not be found. Aborting expanded card view.</string>
     <string name="time_label"><b>Time Of Event</b></string>
     <string name="time_hint">Time of Event</string>
+    <string name="category">Category</string>
 
     <!-- String related to delete event -->
     <string name="delete_event">Delete Event</string>
@@ -53,6 +55,7 @@
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
        completions."</string>
+    <string name="log_out">Log Out</string>
 
     <!-- Invalid Entries messages -->
     <string name = "error_invalid_MaxNumber"> Capacity cannot be
@@ -66,7 +69,7 @@
     <string name="error_empty_date">Date was not in MM/dd/yy</string>
     <string name="error_empty_time">Time Cannot be empty</string>
     <string name="error_invalid_time">Invalid Start Time</string>
-    <string name="error_empty_title">Title cannot be empty</string>
+    <string name="error_faulty_title">Title cannot be empty or too long.</string>
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
@@ -136,7 +139,8 @@
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="category">Category</string>
+    <string name="save_event">Save Event</string>
+    <string name="edit_event">Edit Event</string>
 
   <!--FAQ string instructions for users-->
     <string name="faq">FAQ</string>
@@ -221,6 +225,7 @@
     <string name="dark_2">2. Click "General".</string>
     <string name="dark_3">3. Click "Dark Mode Settings".</string>
     <string name="dark_4">4. On the pop-up that appears, select either "Light Theme" or "Dark Theme".</string>
+    <string name="interest_label">Number of interested guests</string>
 
     <!-- Spinner dta for catagory -->
     <string-array name="event_cat">
