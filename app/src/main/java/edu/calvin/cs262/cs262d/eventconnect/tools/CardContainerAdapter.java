@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.List;
@@ -56,10 +57,10 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
      * handles clicks by expanding a card or marking interest
      */
     public class CardContainerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView eventTitle, eventDescription;
+        private TextView eventTitle, eventDescription, eventMenu;
         private Button interestedButton;
         private CardView eventCard;
-        private Button deleteButton;
+//        private Button deleteButton;
         private final int animationTime = 500;
 
         /**
@@ -73,14 +74,16 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
             eventTitle = (TextView) view.findViewById(R.id.event_title);
             eventDescription = (TextView) view.findViewById(R.id.event_desc);
             interestedButton = (Button) view.findViewById(R.id.interested_button);
-            deleteButton = (Button) view.findViewById(R.id.delete_button);
+            eventMenu = (TextView) view.findViewById(R.id.event_options);
+//            deleteButton = (Button) view.findViewById(R.id.delete_button);
             eventCard.setOnClickListener(this);
             eventTitle.setOnClickListener(this);
             eventDescription.setOnClickListener(this);
             interestedButton.setOnClickListener(this);
             interestedButton.setEnabled(true);
-            deleteButton.setOnClickListener(this);
-            deleteButton.setEnabled(true);
+            eventMenu.setOnClickListener(this);
+//            deleteButton.setOnClickListener(this);
+//            deleteButton.setEnabled(true);
         }
 
         /**
@@ -132,8 +135,10 @@ public class CardContainerAdapter extends RecyclerView.Adapter<CardContainerAdap
                     }
                     click_handler.onClick(event_clicked, NotMyCard);
                 }
-            } else if (view == deleteButton) {
-                click_handler.onClick(event_clicked, DeleteCard);
+            } else if (view == eventMenu) {
+                //Create the popup menu with Edit Event and Delete Event
+//                PopupMenu menu
+                //click_handler.onClick(event_clicked, DeleteCard);
             } else if (view == eventTitle || view == eventDescription || view == eventCard) {
                 click_handler.onClick(event_clicked, ExpandCard);
             }

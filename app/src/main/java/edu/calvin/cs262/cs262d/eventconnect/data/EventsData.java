@@ -66,6 +66,10 @@ public final class EventsData {
         //TODO: if the event has interested button clicked, place the event in "my events"
     }
 
+    public void addToMyEvents(@NonNull Event event) {
+        myEvents.add(event);
+    }
+
     /**
      * clearEvents, called by DataConnection AsyncTask's GET request,
      * clears the Event data for all tabs in preparation for a GET request

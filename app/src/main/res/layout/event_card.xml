@@ -49,6 +49,20 @@
                 android:ellipsize="end"
                 android:singleLine="false"/>
 
+            <!--a hack, but this serves as the clickable options menu-->
+            <TextView
+                android:id="@+id/event_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:text="⋮"
+                android:textAppearance="?android:textAppearanceLarge"
+                />
+
             <!--Event Interest button-->
             <Button
                 android:id="@+id/interested_button"
@@ -61,7 +75,7 @@
                 android:layout_alignParentRight="true"
                 android:textAllCaps="false"/>
 
-            <!--Delete Event Button-->
+            <!--Delete Event Button
             <Button
                 android:id="@+id/delete_button"
                 android:layout_width="wrap_content"
@@ -71,6 +85,7 @@
                 android:layout_marginTop="-1dp"
                 android:text="@string/delete_event"
                 android:textAllCaps="false"/>
+                -->
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
