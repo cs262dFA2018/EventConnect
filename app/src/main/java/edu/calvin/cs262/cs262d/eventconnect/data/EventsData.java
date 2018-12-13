@@ -82,10 +82,23 @@ public final class EventsData {
      * adds a brand new event to the potential events list.
      * called by the AddEvent activity.
      *
+     * @param event the new event created by AddEvent
      * @author Littlesnowman88
      */
     public void addNewEvent(@NonNull Event event) {
         ec.postEvent(event, "TestUser", "TestPass");
+        ec.getEvents();
+    }
+
+    /**
+     * edits an event.
+     * called by EditEvent activity
+     *
+     * @param event the edited event from EditEvent
+     * @author Littlesnomwan88
+     */
+    public void editEvent(@NonNull Event event) {
+        ec.putEvent(event, "Testuser", "TestPass");
         ec.getEvents();
     }
 
