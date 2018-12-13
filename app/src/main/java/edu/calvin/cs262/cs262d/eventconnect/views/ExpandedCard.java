@@ -52,7 +52,6 @@ public class ExpandedCard extends DialogFragment {
         args.putDouble("cost", event.getCost());
         args.putString("time", event.getTime());
 
-
         ec.setArguments(args);
 
         return ec;
@@ -66,12 +65,7 @@ public class ExpandedCard extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /**
-         *Create an application context to connect Expanded card to main
-         *Assign to the intent that connects expanded card view to main
-         */
-
-        //access the event Data
+        /* access the event Data */
         Bundle args = getArguments();
         try {
             title = args.getString("title");
@@ -118,9 +112,6 @@ public class ExpandedCard extends DialogFragment {
         } catch (java.lang.NullPointerException ne){
             cat ="";
         }
-
-
-
     }
 
     /**

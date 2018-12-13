@@ -158,10 +158,6 @@ public class AddEvent extends AppCompatActivity {
 
     }
 
-    /*unless access to the settings activity is added from here,
-     * onOptionItemSelected really needs to care about only the back arrow.
-     */
-
     /**
      * Calls the correct routine for the selected item or finishes the activity
      *
@@ -195,7 +191,6 @@ public class AddEvent extends AppCompatActivity {
         String loc;
         String host;
         String cat = eventCat.getSelectedItem().toString();
-        TextView CatError = (TextView)eventCat.getSelectedView();
         boolean errorFound = false;
         String date = eventDate.getText().toString();
         String time = eventTime.getText().toString();

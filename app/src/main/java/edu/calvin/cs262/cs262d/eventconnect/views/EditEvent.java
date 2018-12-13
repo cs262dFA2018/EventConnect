@@ -48,6 +48,7 @@ public class EditEvent extends AppCompatActivity {
      * @param savedInstanceState bundle passed in when the activity is created
      * @author OneTrueAsian (Time & Date Dialog fragments)
      * @author RickRilled (category spinner)
+     * @author Littlesnowman88
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,46 @@ public class EditEvent extends AppCompatActivity {
         eventCost = (EditText) findViewById(R.id.cost);
         eventThreshold = (EditText) findViewById(R.id.threshold);
         eventCapacity = (EditText) findViewById(R.id.capacity);
+
+        //Then, set the UI Edit Texts based on the provided Event (given in Intent args)
+        Bundle eventInfo = getIntent().getExtras();
+        try {
+            eventTitle.setText(eventInfo.getString("title"));
+        } catch (java.lang.NullPointerException ne) {
+            eventTitle.clearComposingText();
+        }
+        try {
+            eventDescription.setText(eventInfo.getString("description"));
+        } catch (java.lang.NullPointerException ne) {
+            eventDescription.clearComposingText();
+        }
+        try {
+            eventHost.setText(eventInfo.getString("host"));
+        } catch (java.lang.NullPointerException ne) {
+            eventHost.clearComposingText();
+        }
+        try {
+            eventLocation.setText(eventInfo.getString("location"));
+        } catch (java.lang.NullPointerException ne) {
+            eventLocation.clearComposingText();
+        }
+        try {
+            eventDate.setText(eventInfo.getString("date"));
+        } catch (java.lang.NullPointerException ne) {
+            eventDate.clearComposingText();
+        }
+        try {
+            eventCost.setText(String.format(Locale.getDefault(), Double.toString(eventInfo.getDouble("cost"))));
+        } catch (java.lang.NullPointerException ne) {
+            eventCost.clearComposingText();
+        } catch (NumberFormatException nfe) {
+            eventCost.clearComposingText();
+        }
+        try {
+            eventTime.setText(eventInfo.getString("time"));
+        } catch (java.lang.NullPointerException ne){
+            eventTime.clearComposingText();
+        }
 
         // onClick listener for eventDate to pull up the calendar widget
         eventDate.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +186,6 @@ public class EditEvent extends AppCompatActivity {
         // Apply the adapter to the spinner
         eventCat.setAdapter(cat_adapter);
 
-
         //setup toolbar bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -157,10 +197,6 @@ public class EditEvent extends AppCompatActivity {
         }
 
     }
-
-    /*unless access to the settings activity is added from here,
-     * onOptionItemSelected really needs to care about only the back arrow.
-     */
 
     /**
      * Calls the correct routine for the selected item or finishes the activity
@@ -178,14 +214,12 @@ public class EditEvent extends AppCompatActivity {
     }
 
     /**
-     * Onclick for creating a database event object when the "create event" button is clicked,
+     * Onclick for saving a database event object when the "save event" button is clicked,
      * setting the time, date, title, etc.
      *
      * @param view the viewholder for the event cards
-     * Onclick for creating a database event object when the "create event" button is clicked,
-     * setting the time, date, title, etc.
-     *
      * @author OneTrueAsian (SetError)
+     * @author Littlesnowman88
      */
     public void onSaveEventClicked(View view) throws ParseException {
 

@@ -52,13 +52,15 @@
             <!--a hack, but this serves as the clickable options menu-->
             <TextView
                 android:id="@+id/event_options"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:text="⋮"
                 android:textAppearance="?android:textAppearanceLarge"
                 />

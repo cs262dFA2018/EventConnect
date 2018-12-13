@@ -163,7 +163,7 @@ public final class EventsData {
      * @author Littlesnowman88
      * @author ksn7
      */
-    public void addInterest(Event eventInterested) {
+    public void join(Event eventInterested) {
         ec.joinEvent(eventInterested, "TestUser", "TestPass");
         ec.getEvents();
     }
@@ -176,7 +176,7 @@ public final class EventsData {
      * @author Littlesnowman88
      * @author ksn7
      */
-    public void removeInterest(Event eventNotInterested) {
+    public void leave(Event eventNotInterested) {
         ec.unjoinEvent(eventNotInterested, "TestUser", "TestPass");
         ec.getEvents();
     }

@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -139,22 +137,30 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
             case "Expand Thy Card":
                 showExpandedCard(clicked_event);
                 break;
-            case "Move Thy Card":
-                dataSource.movePotentialEvent(clicked_event);
+            case "Join Event":
+                dataSource.join(clicked_event);
                 Toast.makeText(getActivity(),context.getString(R.string.Event_Confirmed),
                         Toast.LENGTH_LONG).show();
                 break;
-            case "Un-move Thy Card":
-                dataSource.moveCompletedEvent(clicked_event);
+            case "Leave Event":
+                dataSource.leave(clicked_event);
                 Toast.makeText(getActivity(), context.getString(R.string.Event_Unconfirmed),
                         Toast.LENGTH_LONG).show();
                 break;
             case "Edit Event":
-                Intent mainToEdit = new Intent(context, EditEvent.class);
                 Bundle eventBundle = new Bundle();
-//                eventBundle.putString() FIXME: PUT EVENT PROPERTIES INTO THIS BUNDLE and fetch them from EditEvent.
-//                startActivity(mainToEdit);
-                Toast.makeText(getActivity(), "EDIT EVENT", Toast.LENGTH_LONG).show();
+                eventBundle.putString("title", clicked_event.getTitle());
+                eventBundle.putString("description", clicked_event.getDescription());
+                eventBundle.putBoolean("interested", clicked_event.getInterest());
+                eventBundle.putString("host", clicked_event.getHost());
+                eventBundle.putString("location", clicked_event.getLocation());
+                eventBundle.putString("date", clicked_event.getDate());
+                eventBundle.putString("cat", clicked_event.getCategory());
+                eventBundle.putDouble("cost", clicked_event.getCost());
+                eventBundle.putString("time", clicked_event.getTime());
+                Intent mainToEdit = new Intent(context, EditEvent.class);
+                mainToEdit.putExtras(eventBundle);
+                startActivity(mainToEdit);
                 break;
             case "Delete Event":
                 //create the action for the alert Dialog's "delete" option
@@ -175,15 +181,6 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 new ConfirmDialog("Are you sure you want to delete this event?", "delete",
                         getActivity(), deleteRunnable, cancelRunnable);
                 //wait to actually delete the event until the deleteRunnable calls deleteEvent
-                break;
-            //TODO: refactor these case statements?
-            case "Add to My Events":
-                dataSource.addInterest(clicked_event);
-                card_container_adapter.notifyDataSetChanged();
-                break;
-            case "Remove from My Events":
-                dataSource.removeInterest(clicked_event);
-                card_container_adapter.notifyDataSetChanged();
                 break;
             default:
                 throw new RuntimeException("Error: In TabFragment, Click Action Not Recognized");
