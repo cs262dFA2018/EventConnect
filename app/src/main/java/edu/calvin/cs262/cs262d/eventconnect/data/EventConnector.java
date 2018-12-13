@@ -2,6 +2,7 @@ package edu.calvin.cs262.cs262d.eventconnect.data;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.Base64;
@@ -14,9 +15,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jacksonandroidnetworking.JacksonParserFactory;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import edu.calvin.cs262.cs262d.eventconnect.views.LoginActivity;
 import edu.calvin.cs262.cs262d.eventconnect.views.MainActivity;
 
 /**
@@ -33,6 +36,9 @@ public class EventConnector {
     private final Context context;
     //This is the intent filter used in appBroadcastReceiver. (see MainActivity)
     private static final String DATA_UPDATE = "processConnections";
+    private static final String LOGIN_FETCH = "fetchUsers";
+    private static final String LOGIN_POST = "postNewUser";
+    private static final String LOGIN_ERROR = "failedLogin";
 
     /**
      * This class holds the list of events
@@ -42,7 +48,7 @@ public class EventConnector {
      */
     private static class EventJsonDataHolder {
         @JsonProperty("items")
-        public List<EventDAO> EventsDAOList;
+        public List<EventDAO> EventsDAOList = new ArrayList<>();
     }
 
     /**
@@ -53,7 +59,7 @@ public class EventConnector {
      */
     private static class UserJsonDataHolder {
         @JsonProperty("items")
-        public List<UserDAO> UsersDAOList;
+        public List<UserDAO> UsersDAOList = new ArrayList<>();
     }
 
     /**
@@ -96,6 +102,52 @@ public class EventConnector {
                         Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
                         Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
                         Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                        throw new RuntimeException("ERROR: errorCode " + anError.getErrorCode()
+                                + " errorBody " + anError.getErrorBody()
+                                + " errorDetail " + anError.getErrorDetail());
+                    }
+                });
+    }
+
+    /**
+     * Does a GET request and updates a given arrayList with existing users
+     * THIS ONE IS CALLED BY LOGIN ACTIVITY.
+     * Corresponds to /users described here:
+     * https://github.com/cs262dFA2018/EventConnectServer/wiki/User-endpoints
+     *
+     * @author Theron Tjapkes (tpt3)
+     */
+    public synchronized static void getUsersForLogin(@NonNull final Context context,
+                                                     @NonNull final List<UserDAO> existingUsers,
+                                                     @NonNull final String url) {
+        AndroidNetworking.get(url)
+                .setTag("EventConnector")
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(UserJsonDataHolder.class, new ParsedRequestListener<UserJsonDataHolder>() {
+                    @Override
+                    public void onResponse(UserJsonDataHolder users) {
+                        existingUsers.clear();
+                        for (UserDAO user : users.UsersDAOList) {
+                            existingUsers.add(user);
+                        }
+                        //send broadcast to LoginActivity, telling it to go ahead with Login.
+                        Intent loginHandler = new Intent(context, LoginActivity.class);
+                        loginHandler.setAction(LOGIN_FETCH);
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(loginHandler);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                        Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                        Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                        /*
+                        //send broadcast to LoginActivity, telling it to go ahead with Login.
+                        Intent loginHandler = new Intent(context, LoginActivity.class);
+                        loginHandler.setAction(LOGIN_ERROR);
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(loginHandler);
+                         */
                         throw new RuntimeException("ERROR: errorCode " + anError.getErrorCode()
                                 + " errorBody " + anError.getErrorBody()
                                 + " errorDetail " + anError.getErrorDetail());
@@ -209,6 +261,7 @@ public class EventConnector {
 
     /**
      * POSTs a user to the API
+     * CALLED FROM LOGIN ACTIVITY
      * Corresponds to /user described here:
      * https://github.com/cs262dFA2018/EventConnectServer/wiki/User-endpoints
      *
@@ -216,18 +269,25 @@ public class EventConnector {
      * @param password Password of the event creator
      * @author Theron Tjapkes (tpt3)
      */
-    public synchronized void postUser(String username, String password) {
+    public synchronized static void postUserFromLogin(@NonNull final Context context,
+                                                      @NonNull final String url,
+                                                      @NonNull final String username,
+                                                      @NonNull final String password) {
         UserDAO userDAO = new UserDAO();
         userDAO.setUsername(username);
         userDAO.setPassword(password);
-        AndroidNetworking.post(BASE_URL + "user/")
+        AndroidNetworking.post(url)
                 .addBodyParameter(userDAO) // posting java object
-                .setTag(this)
+                .setTag("EventConnector")
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsObject(UserDAO.class, new ParsedRequestListener<UserDAO>() {
                     @Override
                     public void onResponse(UserDAO user) {
+                        //send broadcast to LoginActivity, telling it to go ahead with Login.
+                        Intent loginHandler = new Intent(context, LoginActivity.class);
+                        loginHandler.setAction(LOGIN_POST);
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(loginHandler);
                     }
 
                     @Override

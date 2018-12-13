@@ -101,7 +101,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**
-     * Register the BroadcastManager here to receive messages from EventsPoller.
+     * Register the BroadcastManager here to receive messages from EventConnector.
      *
      * @author Littlesnowman88
      */
@@ -113,7 +113,7 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**
-     * Unregister the BroadcastManager here to stop receiving messages from EventsPoller.
+     * Unregister the BroadcastManager here to stop receiving messages from EventConnector.
      *
      * @author Littlesnowman88
      */
@@ -234,8 +234,8 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
     }
 
     /**
-     * handles Broadcasted Intents from EventsPoller.
-     * If the intent really is from EventsPoller, this broadcast receiver updates TabFragments' data.
+     * handles Broadcasted Intents from EventsConnector.
+     * If the intent really is from EventsConnector, this broadcast receiver updates TabFragments' data.
      * appMessageReceiver is initialized outside of onCreate because only one ever needs to be made.
      *
      * @author Littlesnowman88
