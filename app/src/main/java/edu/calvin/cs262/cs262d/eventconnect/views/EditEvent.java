@@ -108,6 +108,8 @@ public class EditEvent extends AppCompatActivity {
         } catch (java.lang.NullPointerException ne){
             eventTime.clearComposingText();
         }
+        eventThreshold.setText(Integer.toString(eventInfo.getInt("threshold")));
+        eventCapacity.setText(Integer.toString(eventInfo.getInt("capacity")));
 
         // onClick listener for eventDate to pull up the calendar widget
         eventDate.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +172,18 @@ public class EditEvent extends AppCompatActivity {
         };
 
         eventCat = (Spinner) findViewById(R.id.event_cat);
+        String[] categories = getResources().getStringArray(R.array.event_cat);
+        String prevCat = eventInfo.getString("category");
+        int categoryIndex = 0;
+        if (! prevCat.equals("")) {
+            for (int i=1; i < categories.length; i++) {
+                if (categories[i].equals(prevCat)) {
+                    categoryIndex = i;
+                    break;
+                }
+            }
+        }
+
 
         //https://developer.android.com/guide/topics/ui/controls/spinner#java
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -179,6 +193,7 @@ public class EditEvent extends AppCompatActivity {
         cat_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         eventCat.setAdapter(cat_adapter);
+        eventCat.setSelection(categoryIndex);
 
         //setup toolbar bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -232,6 +247,9 @@ public class EditEvent extends AppCompatActivity {
         final int capacity;
 
         Event event = new Event();
+        Bundle eventInfo = getIntent().getExtras();
+        event.setId(eventInfo.getInt("id"));
+        event.setCurrentInterest(eventInfo.getInt("currentInterest"));
 
         //EVENT HOST
         event.setHost(EventsData.getInstance(null).getCredentials()[0]);

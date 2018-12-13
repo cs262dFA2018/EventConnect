@@ -221,8 +221,11 @@ public class ExpandedCard extends DialogFragment {
         costLabel.setText(getString(R.string.cost_label));
         costView.setText(String.format(Locale.getDefault(), Double.toString(cost), Double.toString(cost)));
         catView.setText(cat);
+        thresholdLabel.setText(getString(R.string.threshold_label));
         thresholdView.setText(Integer.toString(threshold));
+        capacityLabel.setText(getString(R.string.capacity_label));
         capacityView.setText(Integer.toString(capacity));
+        interestLabel.setText(getString(R.string.interest_label));
         interestView.setText(Integer.toString(interestCount));
         //if I (currently logged in user) own this event, display threshold, capacity, and interest.
         if (host.equals(EventsData.getInstance(null).getCredentials()[0])) {

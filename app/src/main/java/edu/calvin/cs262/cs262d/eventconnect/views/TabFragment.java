@@ -137,9 +137,13 @@ public class TabFragment extends Fragment implements CardContainerAdapter.CardCo
                 eventBundle.putString("host", clicked_event.getHost());
                 eventBundle.putString("location", clicked_event.getLocation());
                 eventBundle.putString("date", clicked_event.getDate());
-                eventBundle.putString("cat", clicked_event.getCategory());
+                eventBundle.putString("category", clicked_event.getCategory());
                 eventBundle.putDouble("cost", clicked_event.getCost());
                 eventBundle.putString("time", clicked_event.getTime());
+                eventBundle.putInt("id", clicked_event.getId());
+                eventBundle.putInt("currentInterest", clicked_event.getCurrentInterest());
+                eventBundle.putInt("threshold", clicked_event.getMinThreshold());
+                eventBundle.putInt("capacity", clicked_event.getMaxCapacity());
                 Intent mainToEdit = new Intent(context, EditEvent.class);
                 mainToEdit.putExtras(eventBundle);
                 startActivity(mainToEdit);

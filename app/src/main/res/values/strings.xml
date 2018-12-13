@@ -225,6 +225,7 @@
     <string name="dark_2">2. Click "General".</string>
     <string name="dark_3">3. Click "Dark Mode Settings".</string>
     <string name="dark_4">4. On the pop-up that appears, select either "Light Theme" or "Dark Theme".</string>
+    <string name="interest_label">Number of interested guests</string>
 
     <!-- Spinner dta for catagory -->
     <string-array name="event_cat">
