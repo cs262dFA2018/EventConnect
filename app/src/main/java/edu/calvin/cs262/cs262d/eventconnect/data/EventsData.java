@@ -66,58 +66,42 @@ public final class EventsData {
      * @author Littlesnowman88
      */
     public void updateEvents(){
-        clearEvents();
         ec.getUsers();
         ec.getEvents();
         ec.getMyEvents(userEmail, userPass);
     }
 
     /**
-     * placeEvent puts an event into its appropriate tab (ONLY POTENTIAL OR CONFIRMED).
-     * called by DataConnection AsyncTask's GET request.
+     * called by EventConnector, setEvents sets the potential and confirmed events
      *
-     * @author Littlesnomwan88
+     * @param potentials, the list of potential events fetched from the server
+     * @param confirmed, the list of confirmed events fetched form the server
+     * @author Littlesnowman88
      */
-    public void placeEvent(Event event) {
-        if (!event.checkConfirmed()) {
-            potentialEvents.add(event);
-        } else {
-            confirmedEvents.add(event);
-        }
+    public void setEvents(@NonNull ArrayList<Event> potentials,
+                          @NonNull ArrayList<Event> confirmed) {
+        potentialEvents = potentials;
+        confirmedEvents = confirmed;
     }
 
     /**
-     * called by EventConnector, addToMyEvents adds events either created by or joined by
-     * the currently logged in user.
+     * called by EventConnector, setUsers sets the local data's user list
      *
-     * @param event the event being added.
+     * @param existingUsers, the list of users that exist in the database
      * @author Littlesnowman88
      */
-    public void addToMyEvents(@NonNull Event event) {
-        event.setInterest();
-        myEvents.add(event);
+    public void setUsers(@NonNull ArrayList<UserDAO> existingUsers) {
+        users = existingUsers;
     }
 
     /**
-     * clearEvents, called by updateEvents,
-     * clears the Event data for all tabs in preparation for a GET request
+     * called by EventConnector, setMyEvents sets the MyEvents tab's data.
      *
+     * @param my_events, the events fetched from getMyEvents
      * @author Littlesnowman88
      */
-    public void clearEvents() {
-        potentialEvents.clear();
-        confirmedEvents.clear();
-        myEvents.clear();
-    }
-
-    /**
-     * clearUsers, called by EventConnector,
-     * clears the Users data in preparation for a GET request.
-     *
-     * @author Littlesnowman88
-     */
-    public void clearUsers() {
-        users.clear();
+    public void setMyEvents(@NonNull ArrayList<Event> my_events) {
+        myEvents = my_events;
     }
 
     /**
@@ -131,18 +115,6 @@ public final class EventsData {
         ec.postEvent(event, userEmail, userPass);
         ec.joinEvent(event, userEmail, userPass);
         ec.getEvents();
-    }
-
-    /**
-     * adds a new user to the database
-     * called by EventConnector
-     *
-     * @param user, a UserDAO
-     * @author Littlesnowman88
-     */
-    public void addUser(@NonNull UserDAO user) {
-        //don't check to see if a user already exists, because users should be cleared before calling this the first time.
-        users.add(user);
     }
 
     /**

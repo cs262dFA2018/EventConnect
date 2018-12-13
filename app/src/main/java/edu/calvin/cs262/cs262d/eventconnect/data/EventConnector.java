@@ -91,10 +91,11 @@ public class EventConnector {
                 .getAsObject(UserJsonDataHolder.class, new ParsedRequestListener<UserJsonDataHolder>() {
                     @Override
                     public void onResponse(UserJsonDataHolder users) {
-                        localData.clearUsers();
+                        ArrayList<UserDAO> usersList = new ArrayList<>();
                         for (UserDAO user : users.UsersDAOList) {
-                            localData.addUser(user);
+                            usersList.add(user);
                         }
+                        localData.setUsers(usersList);
                     }
 
                     @Override
@@ -162,7 +163,7 @@ public class EventConnector {
      *
      * @author Theron Tjapkes (tpt3)
      */
-    public synchronized void getEvents() {
+    public void getEvents() {
         AndroidNetworking.get(BASE_URL + "events")
                 .setTag(this)
                 .setPriority(Priority.LOW)
@@ -170,10 +171,17 @@ public class EventConnector {
                 .getAsObject(EventJsonDataHolder.class, new ParsedRequestListener<EventJsonDataHolder>() {
                     @Override
                     public void onResponse(EventJsonDataHolder events) {
+                        ArrayList<Event> potentials = new ArrayList<>();
+                        ArrayList<Event> confirmed = new ArrayList<>();
                         for (EventDAO event : events.EventsDAOList) {
-                            localData.placeEvent(EventDAOtoEvent(event));
-
+                            Event retrievedEvent = EventDAOtoEvent(event);
+                            if (!retrievedEvent.checkConfirmed()) {
+                                potentials.add(retrievedEvent);
+                            } else {
+                                confirmed.add(retrievedEvent);
+                            }
                         }
+                        localData.setEvents(potentials, confirmed);
 
                         //send broadcast to main activity, telling it to update its UI. (See TabFragment)
                         Intent uiUpdater = new Intent(context, MainActivity.class);
@@ -192,39 +200,7 @@ public class EventConnector {
                     }
                 });
     }
-
-    /**
-     * UNTESTED since we won't be using it
-     * Does a GET request and updates EventsData using placeEvent()
-     * Corresponds to /event/{id} described here:
-     * https://github.com/cs262dFA2018/EventConnectServer/wiki/Event-endpoints
-     *
-     * @author Theron Tjapkes (tpt3)
-     */
-    public synchronized void getEvent(int id) {
-        AndroidNetworking.get(BASE_URL + "event/" + id)
-                .setTag(this)
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsObject(EventDAO.class, new ParsedRequestListener<EventDAO>() {
-                    @Override
-                    public void onResponse(EventDAO event) {
-                        localData.placeEvent(EventDAOtoEvent(event));
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                        Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                        Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                        throw new RuntimeException("ERROR: errorCode " + anError.getErrorCode()
-                                + " errorBody " + anError.getErrorBody()
-                                + " errorDetail " + anError.getErrorDetail());
-                    }
-                });
-    }
-
-
+    
     /**
      * Does a GET request to get all events a user has joined and adds them to myEvents
      * in EventsData
@@ -242,9 +218,11 @@ public class EventConnector {
                 .getAsObject(EventJsonDataHolder.class, new ParsedRequestListener<EventJsonDataHolder>() {
                     @Override
                     public void onResponse(EventJsonDataHolder events) {
+                        ArrayList<Event> myEvents = new ArrayList<>();
                         for (EventDAO event : events.EventsDAOList) {
-                            localData.addToMyEvents(EventDAOtoEvent(event));
+                            myEvents.add(EventDAOtoEvent(event));
                         }
+                        localData.setMyEvents(myEvents);
                     }
 
                     @Override
@@ -493,6 +471,7 @@ public class EventConnector {
         try {
             event.setId(eventDAO.getId());
             event.setHost(localData.getUsername(eventDAO.getUserId()));
+            if (event.getHost().equals(localData.getCredentials()[0])) event.setInterest();
             event.setTitle(eventDAO.getTitle());
             event.setCalendar(time);
             event.setLocation(eventDAO.getLocation());
