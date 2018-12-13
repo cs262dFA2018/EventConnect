@@ -13,8 +13,8 @@ public final class EventsData {
 
     private static final String TAG = "EventsData";
     private static EventConnector ec;
-    private List<Event> potentialEvents, confirmedEvents, myEvents;
-    private List<UserDAO> users;
+    private ArrayList<Event> potentialEvents, confirmedEvents, myEvents;
+    private ArrayList<UserDAO> users;
     private String userEmail, userPass;
 
     /**
@@ -67,8 +67,9 @@ public final class EventsData {
      */
     public void updateEvents(){
         ec.getUsers();
-        ec.getEvents();
         ec.getMyEvents(userEmail, userPass);
+        ec.getEvents();
+
     }
 
     /**
@@ -173,7 +174,7 @@ public final class EventsData {
      * @return a reference to MockDatabases' potential events.
      * @author Littlesnowman88
      */
-    public List<Event> getPotentialEventData() {
+    public ArrayList<Event> getPotentialEventData() {
         return this.potentialEvents; }
 
 
@@ -183,7 +184,7 @@ public final class EventsData {
      * @return a reference to MockDatabases' confirmed events.
      * @author Littlesnowman88
      */
-    public List<Event> getConfirmedEventData() {
+    public ArrayList<Event> getConfirmedEventData() {
         return this.confirmedEvents;
     }
 
@@ -193,7 +194,7 @@ public final class EventsData {
      * @return a reference to MockDatabases' list of events the device owner has indicated interest in
      * @author ksn7
      */
-    public List<Event> getMyEventData() {
+    public ArrayList<Event> getMyEventData() {
         return this.myEvents;
     }
 

@@ -173,8 +173,19 @@ public class EventConnector {
                     public void onResponse(EventJsonDataHolder events) {
                         ArrayList<Event> potentials = new ArrayList<>();
                         ArrayList<Event> confirmed = new ArrayList<>();
+                        ArrayList<Event> mine = localData.getMyEventData();
+                        //iterate through all the events retrieved from the server
                         for (EventDAO event : events.EventsDAOList) {
                             Event retrievedEvent = EventDAOtoEvent(event);
+
+                            //if I have joined this retrievedEvent, mark its interest so the app can respond.
+                            for (Event myEvent : mine) {
+                                if (retrievedEvent.isSameAs(myEvent)) {
+                                    retrievedEvent.setInterest();
+                                }
+                            }
+
+                            //then, place the event in its appropriate tab.
                             if (!retrievedEvent.checkConfirmed()) {
                                 potentials.add(retrievedEvent);
                             } else {

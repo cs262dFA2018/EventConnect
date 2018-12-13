@@ -297,6 +297,26 @@ public class Event {
         confirmed = (current_interest >= min_threshold);
         return confirmed;
     }
+
+    /**
+     * Comparison operator for events
+     *
+     * @param otherEvent
+     * @author Littlesnowman88
+     */
+    public boolean isSameAs(Event otherEvent) {
+        if (!this.host.equals(otherEvent.getHost()) ||
+            !this.title.equals(otherEvent.getTitle()) ||
+            !this.description.equals(otherEvent.getDescription()) ||
+            !this.location.equals(otherEvent.getLocation()) ||
+            !this.category.equals(otherEvent.getCategory()) ||
+            this.cost != otherEvent.getCost() ||
+            !getDate().equals(otherEvent.getDate()) ||
+            !getTime().equals(otherEvent.getTime())
+            ) return false;
+        return true;
+
+    }
 }
 
 
