@@ -41,6 +41,7 @@ public class ExpandedCard extends DialogFragment {
      * @param event event data to put on expanded card
      * @author Littlesnowman88
      * @author OneTrueAsian (back arrow)
+     * @author RickRilled (research)
      */
     static ExpandedCard newInstance(Event event) {
         ExpandedCard ec = new ExpandedCard();

@@ -247,6 +247,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * These are found in pref_headers.xml under res -> xml
      * Then, adjusts header icons to contrast with dark or light mode.
      * @author Littlesnowman88
+     * @author RickRilled
      */
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -475,6 +476,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     /**This class create the FAQ fragment,
      *containing in-app documentation.
+     * @author RickRilled
      */
     public static class FAQFragment extends DialogFragment {
         /**
